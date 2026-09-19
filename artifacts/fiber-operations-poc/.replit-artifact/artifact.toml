@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Fiber Operations POC"
+description = "A functional field-to-office project tracker for managing fiber construction projects through eight standardized stages, with handoff ownership, status, dates, blockers, and evidence records."
+version = "1.0.0"
+id = "artifacts/fiber-operations-poc"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 21402
+
+[services.development]
+run = "pnpm --filter @workspace/fiber-operations-poc run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/fiber-operations-poc", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/fiber-operations-poc/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "21402"
+BASE_PATH = "/"

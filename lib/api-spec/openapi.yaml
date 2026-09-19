@@ -1,22 +1,19 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Fiber operations project tracking API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
-    description: Health operations
+  - name: projects
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
-      summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,13 +21,159 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /projects:
+    get:
+      operationId: listProjects
+      tags: [projects]
+      responses:
+        "200":
+          description: All fiber projects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Project"
+    post:
+      operationId: createProject
+      tags: [projects]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProjectInput"
+      responses:
+        "201":
+          description: Created project
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+  /projects/{projectId}:
+    get:
+      operationId: getProject
+      tags: [projects]
+      parameters:
+        - $ref: "#/components/parameters/ProjectId"
+      responses:
+        "200":
+          description: Project detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+        "404":
+          description: Not found
+    patch:
+      operationId: updateProject
+      tags: [projects]
+      parameters:
+        - $ref: "#/components/parameters/ProjectId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProjectUpdate"
+      responses:
+        "200":
+          description: Updated project
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+  /projects/{projectId}/stages/{stageNumber}:
+    patch:
+      operationId: updateStage
+      tags: [projects]
+      parameters:
+        - $ref: "#/components/parameters/ProjectId"
+        - name: stageNumber
+          in: path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 8
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StageUpdate"
+      responses:
+        "200":
+          description: Updated project
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
 components:
+  parameters:
+    ProjectId:
+      name: projectId
+      in: path
+      required: true
+      schema:
+        type: integer
   schemas:
     HealthStatus:
       type: object
+      required: [status]
       properties:
         status:
           type: string
-      required:
-        - status
-
+    StageStatus:
+      type: string
+      enum: [not_started, in_progress, blocked, complete]
+    Stage:
+      type: object
+      required: [number, name, phase, description, status, owner, note, evidenceName]
+      properties:
+        number: { type: integer }
+        name: { type: string }
+        phase: { type: string }
+        description: { type: string }
+        status: { $ref: "#/components/schemas/StageStatus" }
+        owner: { type: string }
+        completedAt: { type: ["string", "null"] }
+        note: { type: string }
+        evidenceName: { type: string }
+    Project:
+      type: object
+      required: [id, name, location, client, dueDate, createdAt, stages]
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        location: { type: string }
+        client: { type: string }
+        dueDate: { type: string }
+        createdAt: { type: string }
+        stages:
+          type: array
+          items:
+            $ref: "#/components/schemas/Stage"
+    ProjectInput:
+      type: object
+      required: [name, location, client, dueDate]
+      properties:
+        name: { type: string, minLength: 1 }
+        location: { type: string, minLength: 1 }
+        client: { type: string, minLength: 1 }
+        dueDate: { type: string, minLength: 1 }
+    ProjectUpdate:
+      type: object
+      properties:
+        name: { type: string, minLength: 1 }
+        location: { type: string, minLength: 1 }
+        client: { type: string, minLength: 1 }
+        dueDate: { type: string, minLength: 1 }
+    StageUpdate:
+      type: object
+      properties:
+        status: { $ref: "#/components/schemas/StageStatus" }
+        owner: { type: string }
+        completedAt: { type: ["string", "null"] }
+        note: { type: string }
+        evidenceName: { type: string }

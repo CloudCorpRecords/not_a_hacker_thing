@@ -1,6 +1,12 @@
 # Locate API v2 — for the Walk the Line front end
 
-> **For Rene.** Live now, no key needed. The short version: the API changed shape and the
+> **For Rene — start here.** Live now, no key needed, CORS open (`access-control-allow-origin: *`,
+> verified). Your Replit app can fetch these directly from the browser.
+>
+> **If you only read one section, read [Adjudication](#adjudication--the-part-that-matters-to-you).**
+> Your evidence screen says *"This evidence is not linked to a production proposal. Adjudication
+> cannot be performed directly."* We serve both halves already joined: a proposal, and evidence
+> carrying that proposal's id. The short version: the API changed shape and the
 > headline number went from **53 locate marks to 0**. That is not a bug — the detector was
 > wrong and we caught it. Read the breaking-change table, then the `verdict` section.
 > Questions: John.
@@ -160,3 +166,116 @@ opposite.
 
 Full write-up: https://claude.ai/artifact/7zpNEbGd88rbQGuLsEFFBJ
 Pipeline source: https://github.com/jymiller/milbird-walk-the-line
+
+
+---
+
+# Adjudication — the part that matters to you
+
+Your queue at `/projects/1/evidence` currently holds four items badged **Evidence Only / UNLINKED**,
+with blank images, `CONFIDENCE 0.0500`, and an extraction note saying the evidence is unreadable.
+The right-hand panel refuses to act:
+
+> This evidence is not linked to a production proposal. Adjudication cannot be performed directly.
+
+That is the exact gap this API closes. **`/api/evidence.json` serves 49 evidence items that are
+already linked to a production proposal** — every one carries `linkedTo`, the proposal's
+`externalId`. They are adjudicable on arrival, not evidence-only.
+
+## `GET /api/evidence.json`
+
+```jsonc
+{
+  "proposal": {
+    "externalId": "wtl-3167e83ea982483c",
+    "stage": 2, "stageName": "Utility Locates",
+    "status": "proposed", "quantity": 0, "unit": "each",
+    "requiresHumanDecision": true
+  },
+  "summary": { "evidenceItems": 49, "framesPublished": 49,
+               "framesWithACandidate": 2, "humanConfirmed": 0 },
+  "items": [ /* 49 of these */ ]
+}
+```
+
+One item — this is the USPS mailbox the first detector called potable water:
+
+```jsonc
+{
+  "id": "wtl-ev-0359",
+  "kind": "image",
+  "url": "https://jymiller.github.io/milbird-walk-the-line/frames/t0359.jpg",
+  "linkedTo": "wtl-3167e83ea982483c",     // <-- the proposal. This is what unblocks adjudication.
+  "linkedToStage": 2,
+  "linkedToStageName": "Utility Locates",
+  "videoOffsetSeconds": 359,
+  "source": "IMG_2104.MOV",
+  "verdict": "rejected",                   // "candidate" | "rejected"
+  "extraction": {
+    "method": "deterministic — HSV colour match against the APWA Uniform Color Code, then seven geometric and statistical classifiers",
+    "colour": "blue",
+    "utilityClass": "potable water",
+    "areaPx": 37076,
+    "rulesFired": ["stroke_width", "pigment_coherence", "ground_band"],
+    "measurements": { "stroke_px": 194.9, "extent": 0.67, "pavement_surround": 0.55,
+                      "hue_std": 0.58, "sat_mean": 96.1, "exg": -0.1035,
+                      "value_cv": 0.223, "centroid_y_frac": 0.608 }
+  },
+  "explanation": "Rejected: too thick to be a paint stroke (194.9 px inscribed radius, against a limit of 15.1); colour too dull or too mixed for marking paint (96.1 mean saturation, marking paint is above 110); too high in frame to be on the ground (0.608 down the frame, must be below 0.62).",
+  "confidence": null,
+  "confidenceNote": "No confidence score is published. Every verdict is a named rule and the measurement that triggered it, which a human can check."
+}
+```
+
+**The images are real and they load.** `https://jymiller.github.io/milbird-walk-the-line/frames/tNNNN.jpg`
+— 49 frames, 720px wide, ~70KB each, `image/jpeg`, verified 200. Each one is the actual video frame
+with the detected region outlined.
+
+## Drop-in
+
+```tsx
+const BASE = 'https://jymiller.github.io/milbird-walk-the-line';
+
+const { proposal, summary, items } = await (await fetch(`${BASE}/api/evidence.json`)).json();
+
+// These are NOT evidence-only. Render them as linked.
+items.forEach(it => {
+  it.linkedTo === proposal.externalId;  // true for all 49
+});
+```
+
+For your extraction panel, swap the two fields:
+
+| Your panel shows today | Serve this instead |
+|---|---|
+| `CONFIDENCE 0.0500` | `item.verdict` — `"candidate"` or `"rejected"`, plus `item.extraction.rulesFired.length` rules |
+| `IDENTITY MATCH 0.0500` | `item.extraction.colour` + `item.extraction.utilityClass` |
+| `AI EXPLANATION: "The provided evidence is unreadable/blank…"` | `item.explanation` — a derived sentence naming each rule and the number that triggered it |
+
+`confidence` is deliberately `null`. A reviewer can argue with *"194.9px against a limit of 15.1"*.
+Nobody can argue with `0.05`.
+
+## What the adjudicator is being asked to decide
+
+The proposal is `quantity: 0` — **this block has not been marked.** The 49 items are the evidence
+behind that zero: 124 colour-matched regions examined, 122 rejected by named rule, 2 escalated to a
+human, none confirmed. The decision in front of the reviewer is *"do you accept that no utility
+locate marking exists on this segment?"* — and every frame that produced that answer is one click away.
+
+**Watch out:** a `quantity: 0` proposal is easy to render as nothing. If your card logic does
+`{qty && <Badge/>}` or filters `quantity > 0`, our entire finding disappears from the UI. The zero
+is the point — it has to be visible.
+
+## Endpoint summary
+
+| URL | What |
+|---|---|
+| `/api/evidence.json` | **49 adjudicable evidence items**, each linked to the proposal |
+| `/api/stage2.json` | the production proposal itself — `quantity: 0`, `requiresHumanDecision: true` |
+| `/api/summary.json` | the funnel: 124 → 122 rejected → 2 to human → 0 confirmed |
+| `/api/rules.json` | the seven classifiers, thresholds, and how many each rejected |
+| `/api/locates.json` | GeoJSON, all 124 regions with geometry + measurements (for a map layer) |
+| `/frames/tNNNN.jpg` | the frame images, 720px, ~70KB |
+
+Ping John with anything that does not fit your schema — the generator is a 120-line Python file and
+the shape can change in minutes.

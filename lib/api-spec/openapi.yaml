@@ -9,6 +9,7 @@ servers:
 tags:
   - name: health
   - name: projects
+  - name: operations
 paths:
   /healthz:
     get:
@@ -109,10 +110,122 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Project"
+  /projects/{projectId}/field-context:
+    get:
+      operationId: getFieldContext
+      tags: [operations]
+      parameters:
+        - $ref: "#/components/parameters/ProjectId"
+      responses:
+        "200":
+          description: Sites, crews, work types and plans available for capture
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FieldContext"
+  /projects/{projectId}/captures:
+    post:
+      operationId: submitCapture
+      tags: [operations]
+      parameters:
+        - $ref: "#/components/parameters/ProjectId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CaptureInput"
+      responses:
+        "201":
+          description: Capture accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CaptureResult"
+        "200":
+          description: Existing capture returned after idempotent retry
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CaptureResult"
+        "409":
+          description: External identifier conflicts with another capture
+        "422":
+          description: Capture failed deterministic validation
+  /projects/{projectId}/proposals:
+    get:
+      operationId: listProposals
+      tags: [operations]
+      parameters:
+        - $ref: "#/components/parameters/ProjectId"
+      responses:
+        "200":
+          description: Production items that have not reached a final decision
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProductionItem"
+  /projects/{projectId}/facts:
+    get:
+      operationId: listConfirmedFacts
+      tags: [operations]
+      parameters:
+        - $ref: "#/components/parameters/ProjectId"
+      responses:
+        "200":
+          description: Confirmed production facts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProductionItem"
+  /projects/{projectId}/progress-summary:
+    get:
+      operationId: getProgressSummary
+      tags: [operations]
+      parameters:
+        - $ref: "#/components/parameters/ProjectId"
+      responses:
+        "200":
+          description: Planned and confirmed production grouped by work type
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProgressSummary"
+  /production-items/{productionItemId}/review:
+    patch:
+      operationId: reviewProductionItem
+      tags: [operations]
+      parameters:
+        - $ref: "#/components/parameters/ProductionItemId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReviewInput"
+      responses:
+        "200":
+          description: Reviewed production item
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductionItem"
+        "409":
+          description: Item was already finalized
 components:
   parameters:
     ProjectId:
       name: projectId
+      in: path
+      required: true
+      schema:
+        type: integer
+    ProductionItemId:
+      name: productionItemId
       in: path
       required: true
       schema:
@@ -177,3 +290,180 @@ components:
         completedAt: { type: ["string", "null"] }
         note: { type: string }
         evidenceName: { type: string }
+    ProductionUnit:
+      type: string
+      enum: [each, metres]
+    ProductionStatus:
+      type: string
+      enum: [captured, queued, proposed, needs_review, confirmed, refused]
+    Site:
+      type: object
+      required: [id, projectId, code, name]
+      properties:
+        id: { type: integer }
+        projectId: { type: integer }
+        code: { type: string }
+        name: { type: string }
+        latitude: { type: ["string", "null"] }
+        longitude: { type: ["string", "null"] }
+    Subcontractor:
+      type: object
+      required: [id, code, name]
+      properties:
+        id: { type: integer }
+        code: { type: string }
+        name: { type: string }
+    Crew:
+      type: object
+      required: [id, subcontractorId, code, name, foremanName, headcount]
+      properties:
+        id: { type: integer }
+        subcontractorId: { type: integer }
+        code: { type: string }
+        name: { type: string }
+        foremanName: { type: string }
+        headcount: { type: integer }
+        certifiedWorkTypeIds:
+          type: array
+          items: { type: integer }
+    WorkType:
+      type: object
+      required: [id, code, name, stageNumber, unit, maxPerCrewDay]
+      properties:
+        id: { type: integer }
+        code: { type: string }
+        name: { type: string }
+        stageNumber: { type: integer, minimum: 1, maximum: 8 }
+        unit: { $ref: "#/components/schemas/ProductionUnit" }
+        maxPerCrewDay: { type: string }
+    ProductionPlan:
+      type: object
+      required: [id, projectId, siteId, workTypeId, plannedQuantity]
+      properties:
+        id: { type: integer }
+        projectId: { type: integer }
+        siteId: { type: integer }
+        workTypeId: { type: integer }
+        plannedQuantity: { type: string }
+    FieldContext:
+      type: object
+      required: [project, sites, subcontractors, crews, workTypes, plans]
+      properties:
+        project: { $ref: "#/components/schemas/Project" }
+        sites:
+          type: array
+          items: { $ref: "#/components/schemas/Site" }
+        subcontractors:
+          type: array
+          items: { $ref: "#/components/schemas/Subcontractor" }
+        crews:
+          type: array
+          items: { $ref: "#/components/schemas/Crew" }
+        workTypes:
+          type: array
+          items: { $ref: "#/components/schemas/WorkType" }
+        plans:
+          type: array
+          items: { $ref: "#/components/schemas/ProductionPlan" }
+    CaptureItemInput:
+      type: object
+      required: [externalId, workTypeId, quantity, unit]
+      properties:
+        externalId: { type: string, minLength: 1, maxLength: 120 }
+        workTypeId: { type: integer }
+        quantity: { type: number, exclusiveMinimum: 0, multipleOf: 0.01 }
+        unit: { $ref: "#/components/schemas/ProductionUnit" }
+        note: { type: string, maxLength: 2000 }
+    CaptureInput:
+      type: object
+      required: [externalId, siteId, crewId, workDate, capturedAt, items]
+      properties:
+        externalId: { type: string, minLength: 1, maxLength: 120 }
+        siteId: { type: integer }
+        crewId: { type: integer }
+        workDate: { type: string, format: date }
+        capturedAt: { type: string, format: date-time }
+        items:
+          type: array
+          minItems: 1
+          maxItems: 20
+          items: { $ref: "#/components/schemas/CaptureItemInput" }
+    AuditEvent:
+      type: object
+      required: [id, decision, actor, nextStatus, metadata, createdAt]
+      properties:
+        id: { type: integer }
+        decision:
+          type: string
+          enum: [submitted, proposed, routed_to_review, confirmed, corrected, refused]
+        actor: { type: string }
+        reason: { type: ["string", "null"] }
+        previousStatus:
+          anyOf:
+            - $ref: "#/components/schemas/ProductionStatus"
+            - type: "null"
+        nextStatus: { $ref: "#/components/schemas/ProductionStatus" }
+        metadata: { type: object, additionalProperties: true }
+        createdAt: { type: string, format: date-time }
+    ProductionItem:
+      type: object
+      required: [id, crewDayId, projectId, siteId, crewId, workDate, workTypeId, externalId, quantity, unit, status, note, createdAt, updatedAt, auditEvents]
+      properties:
+        id: { type: integer }
+        crewDayId: { type: integer }
+        projectId: { type: integer }
+        siteId: { type: integer }
+        crewId: { type: integer }
+        workDate: { type: string, format: date }
+        workTypeId: { type: integer }
+        externalId: { type: string }
+        quantity: { type: string }
+        unit: { $ref: "#/components/schemas/ProductionUnit" }
+        status: { $ref: "#/components/schemas/ProductionStatus" }
+        note: { type: string }
+        refusalReason: { type: ["string", "null"] }
+        confirmedAt: { type: ["string", "null"], format: date-time }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+        auditEvents:
+          type: array
+          items: { $ref: "#/components/schemas/AuditEvent" }
+    CaptureResult:
+      type: object
+      required: [crewDayId, idempotentReplay, items]
+      properties:
+        crewDayId: { type: integer }
+        idempotentReplay: { type: boolean }
+        items:
+          type: array
+          items: { $ref: "#/components/schemas/ProductionItem" }
+    ReviewInput:
+      type: object
+      required: [decision, actor]
+      properties:
+        decision:
+          type: string
+          enum: [confirm, correct, refuse]
+        actor: { type: string, minLength: 1, maxLength: 120 }
+        reason: { type: string, maxLength: 1000 }
+        quantity: { type: number, exclusiveMinimum: 0, multipleOf: 0.01 }
+    ProgressRow:
+      type: object
+      required: [workTypeId, code, name, stageNumber, unit, plannedQuantity, confirmedQuantity, remainingQuantity]
+      properties:
+        workTypeId: { type: integer }
+        code: { type: string }
+        name: { type: string }
+        stageNumber: { type: integer }
+        unit: { $ref: "#/components/schemas/ProductionUnit" }
+        plannedQuantity: { type: string }
+        confirmedQuantity: { type: string }
+        remainingQuantity: { type: string }
+    ProgressSummary:
+      type: object
+      required: [projectId, rows]
+      properties:
+        projectId: { type: integer }
+        rows:
+          type: array
+          items: { $ref: "#/components/schemas/ProgressRow" }

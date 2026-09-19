@@ -170,3 +170,276 @@ export const UpdateStageResponse = zod.object({
 })
 
 
+export const GetFieldContextParams = zod.object({
+  "projectId": zod.coerce.number().int()
+})
+
+export const getFieldContextResponseWorkTypesItemStageNumberMax = 8;
+
+
+
+export const GetFieldContextResponse = zod.object({
+  "project": zod.object({
+  "id": zod.number().int(),
+  "name": zod.string(),
+  "location": zod.string(),
+  "client": zod.string(),
+  "dueDate": zod.string(),
+  "createdAt": zod.string(),
+  "stages": zod.array(zod.object({
+  "number": zod.number().int(),
+  "name": zod.string(),
+  "phase": zod.string(),
+  "description": zod.string(),
+  "status": zod.enum(['not_started', 'in_progress', 'blocked', 'complete']),
+  "owner": zod.string(),
+  "completedAt": zod.string().nullish(),
+  "note": zod.string(),
+  "evidenceName": zod.string()
+}))
+}),
+  "sites": zod.array(zod.object({
+  "id": zod.number().int(),
+  "projectId": zod.number().int(),
+  "code": zod.string(),
+  "name": zod.string(),
+  "latitude": zod.string().nullish(),
+  "longitude": zod.string().nullish()
+})),
+  "subcontractors": zod.array(zod.object({
+  "id": zod.number().int(),
+  "code": zod.string(),
+  "name": zod.string()
+})),
+  "crews": zod.array(zod.object({
+  "id": zod.number().int(),
+  "subcontractorId": zod.number().int(),
+  "code": zod.string(),
+  "name": zod.string(),
+  "foremanName": zod.string(),
+  "headcount": zod.number().int(),
+  "certifiedWorkTypeIds": zod.array(zod.number().int()).optional()
+})),
+  "workTypes": zod.array(zod.object({
+  "id": zod.number().int(),
+  "code": zod.string(),
+  "name": zod.string(),
+  "stageNumber": zod.number().int().min(1).max(getFieldContextResponseWorkTypesItemStageNumberMax),
+  "unit": zod.enum(['each', 'metres']),
+  "maxPerCrewDay": zod.string()
+})),
+  "plans": zod.array(zod.object({
+  "id": zod.number().int(),
+  "projectId": zod.number().int(),
+  "siteId": zod.number().int(),
+  "workTypeId": zod.number().int(),
+  "plannedQuantity": zod.string()
+}))
+})
+
+
+export const SubmitCaptureParams = zod.object({
+  "projectId": zod.coerce.number().int()
+})
+
+export const submitCaptureBodyExternalIdMax = 120;
+
+export const submitCaptureBodyItemsItemExternalIdMax = 120;
+
+export const submitCaptureBodyItemsItemQuantityExclusiveMin = 0;
+export const submitCaptureBodyItemsItemQuantityMultipleOf = 0.01;
+
+export const submitCaptureBodyItemsItemNoteMax = 2000;
+
+export const submitCaptureBodyItemsMax = 20;
+
+
+
+export const SubmitCaptureBody = zod.object({
+  "externalId": zod.string().min(1).max(submitCaptureBodyExternalIdMax),
+  "siteId": zod.number().int(),
+  "crewId": zod.number().int(),
+  "workDate": zod.coerce.date(),
+  "capturedAt": zod.coerce.date(),
+  "items": zod.array(zod.object({
+  "externalId": zod.string().min(1).max(submitCaptureBodyItemsItemExternalIdMax),
+  "workTypeId": zod.number().int(),
+  "quantity": zod.number().gt(submitCaptureBodyItemsItemQuantityExclusiveMin).multipleOf(submitCaptureBodyItemsItemQuantityMultipleOf),
+  "unit": zod.enum(['each', 'metres']),
+  "note": zod.string().max(submitCaptureBodyItemsItemNoteMax).optional()
+})).min(1).max(submitCaptureBodyItemsMax)
+})
+
+export const SubmitCaptureResponse = zod.object({
+  "crewDayId": zod.number().int(),
+  "idempotentReplay": zod.boolean(),
+  "items": zod.array(zod.object({
+  "id": zod.number().int(),
+  "crewDayId": zod.number().int(),
+  "projectId": zod.number().int(),
+  "siteId": zod.number().int(),
+  "crewId": zod.number().int(),
+  "workDate": zod.coerce.date(),
+  "workTypeId": zod.number().int(),
+  "externalId": zod.string(),
+  "quantity": zod.string(),
+  "unit": zod.enum(['each', 'metres']),
+  "status": zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),
+  "note": zod.string(),
+  "refusalReason": zod.string().nullish(),
+  "confirmedAt": zod.coerce.date().nullish(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date(),
+  "auditEvents": zod.array(zod.object({
+  "id": zod.number().int(),
+  "decision": zod.enum(['submitted', 'proposed', 'routed_to_review', 'confirmed', 'corrected', 'refused']),
+  "actor": zod.string(),
+  "reason": zod.string().nullish(),
+  "previousStatus": zod.union([zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),zod.null()]).optional(),
+  "nextStatus": zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),
+  "metadata": zod.record(zod.string(), zod.unknown()),
+  "createdAt": zod.coerce.date()
+}))
+}))
+})
+
+
+export const ListProposalsParams = zod.object({
+  "projectId": zod.coerce.number().int()
+})
+
+export const ListProposalsResponseItem = zod.object({
+  "id": zod.number().int(),
+  "crewDayId": zod.number().int(),
+  "projectId": zod.number().int(),
+  "siteId": zod.number().int(),
+  "crewId": zod.number().int(),
+  "workDate": zod.coerce.date(),
+  "workTypeId": zod.number().int(),
+  "externalId": zod.string(),
+  "quantity": zod.string(),
+  "unit": zod.enum(['each', 'metres']),
+  "status": zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),
+  "note": zod.string(),
+  "refusalReason": zod.string().nullish(),
+  "confirmedAt": zod.coerce.date().nullish(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date(),
+  "auditEvents": zod.array(zod.object({
+  "id": zod.number().int(),
+  "decision": zod.enum(['submitted', 'proposed', 'routed_to_review', 'confirmed', 'corrected', 'refused']),
+  "actor": zod.string(),
+  "reason": zod.string().nullish(),
+  "previousStatus": zod.union([zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),zod.null()]).optional(),
+  "nextStatus": zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),
+  "metadata": zod.record(zod.string(), zod.unknown()),
+  "createdAt": zod.coerce.date()
+}))
+})
+export const ListProposalsResponse = zod.array(ListProposalsResponseItem)
+
+
+export const ListConfirmedFactsParams = zod.object({
+  "projectId": zod.coerce.number().int()
+})
+
+export const ListConfirmedFactsResponseItem = zod.object({
+  "id": zod.number().int(),
+  "crewDayId": zod.number().int(),
+  "projectId": zod.number().int(),
+  "siteId": zod.number().int(),
+  "crewId": zod.number().int(),
+  "workDate": zod.coerce.date(),
+  "workTypeId": zod.number().int(),
+  "externalId": zod.string(),
+  "quantity": zod.string(),
+  "unit": zod.enum(['each', 'metres']),
+  "status": zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),
+  "note": zod.string(),
+  "refusalReason": zod.string().nullish(),
+  "confirmedAt": zod.coerce.date().nullish(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date(),
+  "auditEvents": zod.array(zod.object({
+  "id": zod.number().int(),
+  "decision": zod.enum(['submitted', 'proposed', 'routed_to_review', 'confirmed', 'corrected', 'refused']),
+  "actor": zod.string(),
+  "reason": zod.string().nullish(),
+  "previousStatus": zod.union([zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),zod.null()]).optional(),
+  "nextStatus": zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),
+  "metadata": zod.record(zod.string(), zod.unknown()),
+  "createdAt": zod.coerce.date()
+}))
+})
+export const ListConfirmedFactsResponse = zod.array(ListConfirmedFactsResponseItem)
+
+
+export const GetProgressSummaryParams = zod.object({
+  "projectId": zod.coerce.number().int()
+})
+
+export const GetProgressSummaryResponse = zod.object({
+  "projectId": zod.number().int(),
+  "rows": zod.array(zod.object({
+  "workTypeId": zod.number().int(),
+  "code": zod.string(),
+  "name": zod.string(),
+  "stageNumber": zod.number().int(),
+  "unit": zod.enum(['each', 'metres']),
+  "plannedQuantity": zod.string(),
+  "confirmedQuantity": zod.string(),
+  "remainingQuantity": zod.string()
+}))
+})
+
+
+export const ReviewProductionItemParams = zod.object({
+  "productionItemId": zod.coerce.number().int()
+})
+
+export const reviewProductionItemBodyActorMax = 120;
+
+export const reviewProductionItemBodyReasonMax = 1000;
+
+export const reviewProductionItemBodyQuantityExclusiveMin = 0;
+export const reviewProductionItemBodyQuantityMultipleOf = 0.01;
+
+
+
+export const ReviewProductionItemBody = zod.object({
+  "decision": zod.enum(['confirm', 'correct', 'refuse']),
+  "actor": zod.string().min(1).max(reviewProductionItemBodyActorMax),
+  "reason": zod.string().max(reviewProductionItemBodyReasonMax).optional(),
+  "quantity": zod.number().gt(reviewProductionItemBodyQuantityExclusiveMin).multipleOf(reviewProductionItemBodyQuantityMultipleOf).optional()
+})
+
+export const ReviewProductionItemResponse = zod.object({
+  "id": zod.number().int(),
+  "crewDayId": zod.number().int(),
+  "projectId": zod.number().int(),
+  "siteId": zod.number().int(),
+  "crewId": zod.number().int(),
+  "workDate": zod.coerce.date(),
+  "workTypeId": zod.number().int(),
+  "externalId": zod.string(),
+  "quantity": zod.string(),
+  "unit": zod.enum(['each', 'metres']),
+  "status": zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),
+  "note": zod.string(),
+  "refusalReason": zod.string().nullish(),
+  "confirmedAt": zod.coerce.date().nullish(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date(),
+  "auditEvents": zod.array(zod.object({
+  "id": zod.number().int(),
+  "decision": zod.enum(['submitted', 'proposed', 'routed_to_review', 'confirmed', 'corrected', 'refused']),
+  "actor": zod.string(),
+  "reason": zod.string().nullish(),
+  "previousStatus": zod.union([zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),zod.null()]).optional(),
+  "nextStatus": zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),
+  "metadata": zod.record(zod.string(), zod.unknown()),
+  "createdAt": zod.coerce.date()
+}))
+})
+
+

@@ -73,3 +73,203 @@ export interface StageUpdate {
   evidenceName?: string;
 }
 
+export type ProductionUnit = typeof ProductionUnit[keyof typeof ProductionUnit];
+
+
+export const ProductionUnit = {
+  each: 'each',
+  metres: 'metres',
+} as const;
+
+export type ProductionStatus = typeof ProductionStatus[keyof typeof ProductionStatus];
+
+
+export const ProductionStatus = {
+  captured: 'captured',
+  queued: 'queued',
+  proposed: 'proposed',
+  needs_review: 'needs_review',
+  confirmed: 'confirmed',
+  refused: 'refused',
+} as const;
+
+export interface Site {
+  id: number;
+  projectId: number;
+  code: string;
+  name: string;
+  /** @nullable */
+  latitude?: string | null;
+  /** @nullable */
+  longitude?: string | null;
+}
+
+export interface Subcontractor {
+  id: number;
+  code: string;
+  name: string;
+}
+
+export interface Crew {
+  id: number;
+  subcontractorId: number;
+  code: string;
+  name: string;
+  foremanName: string;
+  headcount: number;
+  certifiedWorkTypeIds?: number[];
+}
+
+export interface WorkType {
+  id: number;
+  code: string;
+  name: string;
+  /**
+     * @minimum 1
+     * @maximum 8
+     */
+  stageNumber: number;
+  unit: ProductionUnit;
+  maxPerCrewDay: string;
+}
+
+export interface ProductionPlan {
+  id: number;
+  projectId: number;
+  siteId: number;
+  workTypeId: number;
+  plannedQuantity: string;
+}
+
+export interface FieldContext {
+  project: Project;
+  sites: Site[];
+  subcontractors: Subcontractor[];
+  crews: Crew[];
+  workTypes: WorkType[];
+  plans: ProductionPlan[];
+}
+
+export interface CaptureItemInput {
+  /**
+     * @minLength 1
+     * @maxLength 120
+     */
+  externalId: string;
+  workTypeId: number;
+  /** @exclusiveMinimum 0 */
+  quantity: number;
+  unit: ProductionUnit;
+  /** @maxLength 2000 */
+  note?: string;
+}
+
+export interface CaptureInput {
+  /**
+     * @minLength 1
+     * @maxLength 120
+     */
+  externalId: string;
+  siteId: number;
+  crewId: number;
+  workDate: string;
+  capturedAt: string;
+  /**
+     * @minItems 1
+     * @maxItems 20
+     */
+  items: CaptureItemInput[];
+}
+
+export type AuditEventDecision = typeof AuditEventDecision[keyof typeof AuditEventDecision];
+
+
+export const AuditEventDecision = {
+  submitted: 'submitted',
+  proposed: 'proposed',
+  routed_to_review: 'routed_to_review',
+  confirmed: 'confirmed',
+  corrected: 'corrected',
+  refused: 'refused',
+} as const;
+
+export type AuditEventMetadata = { [key: string]: unknown };
+
+export interface AuditEvent {
+  id: number;
+  decision: AuditEventDecision;
+  actor: string;
+  /** @nullable */
+  reason?: string | null;
+  previousStatus?: ProductionStatus | null;
+  nextStatus: ProductionStatus;
+  metadata: AuditEventMetadata;
+  createdAt: string;
+}
+
+export interface ProductionItem {
+  id: number;
+  crewDayId: number;
+  projectId: number;
+  siteId: number;
+  crewId: number;
+  workDate: string;
+  workTypeId: number;
+  externalId: string;
+  quantity: string;
+  unit: ProductionUnit;
+  status: ProductionStatus;
+  note: string;
+  /** @nullable */
+  refusalReason?: string | null;
+  /** @nullable */
+  confirmedAt?: string | null;
+  createdAt: string;
+  updatedAt: string;
+  auditEvents: AuditEvent[];
+}
+
+export interface CaptureResult {
+  crewDayId: number;
+  idempotentReplay: boolean;
+  items: ProductionItem[];
+}
+
+export type ReviewInputDecision = typeof ReviewInputDecision[keyof typeof ReviewInputDecision];
+
+
+export const ReviewInputDecision = {
+  confirm: 'confirm',
+  correct: 'correct',
+  refuse: 'refuse',
+} as const;
+
+export interface ReviewInput {
+  decision: ReviewInputDecision;
+  /**
+     * @minLength 1
+     * @maxLength 120
+     */
+  actor: string;
+  /** @maxLength 1000 */
+  reason?: string;
+  /** @exclusiveMinimum 0 */
+  quantity?: number;
+}
+
+export interface ProgressRow {
+  workTypeId: number;
+  code: string;
+  name: string;
+  stageNumber: number;
+  unit: ProductionUnit;
+  plannedQuantity: string;
+  confirmedQuantity: string;
+  remainingQuantity: string;
+}
+
+export interface ProgressSummary {
+  projectId: number;
+  rows: ProgressRow[];
+}
+

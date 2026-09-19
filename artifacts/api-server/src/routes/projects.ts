@@ -14,6 +14,7 @@ import {
   UpdateStageParams,
   UpdateStageResponse,
 } from "@workspace/api-zod";
+import { ensureProjectOperationalFoundation } from "../lib/operational-foundation";
 
 const router: IRouter = Router();
 
@@ -53,7 +54,14 @@ router.post("/projects", async (req, res): Promise<void> => {
     res.status(400).json({ error: parsed.error.message });
     return;
   }
-  const [project] = await db.insert(projectsTable).values({ ...parsed.data, stages: emptyStages() }).returning();
+  const project = await db.transaction(async (tx) => {
+    const [created] = await tx
+      .insert(projectsTable)
+      .values({ ...parsed.data, stages: emptyStages() })
+      .returning();
+    await ensureProjectOperationalFoundation(tx, created);
+    return created;
+  });
   res.status(201).json(CreateProjectResponse.parse(serialize(project)));
 });
 

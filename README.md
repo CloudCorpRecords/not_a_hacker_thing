@@ -11,6 +11,7 @@ Built at [The Executable World](https://luma.com/exruwpkp), San Francisco, 19 Se
 |---|---|
 | **Live app** | https://walkthelin3.replit.app/ |
 | **Write-up** | https://claude.ai/artifact/7zpNEbGd88rbQGuLsEFFBJ |
+| **Locate inventory + API** | https://jymiller.github.io/milbird-walk-the-line/ |
 | **Capture pipeline** | https://github.com/jymiller/milbird-walk-the-line |
 
 A fibre contractor runs eight build stages across hundreds of sites. Seven of the eight reach no
@@ -103,6 +104,24 @@ disagree, a human looks — that disagreement *is* the review queue.
 The integration is built and tested against the live API. It did not run on the day: the account
 balance was `$0` and every billed call returns `quota_exceeded`. The 53 marks above are therefore
 **uncorroborated** — one detector is an assertion, two that agree is evidence.
+
+### The capture as an API
+
+The detections are served as data, so a front end reads facts rather than being told about them:
+
+| Endpoint | Returns |
+|---|---|
+| [`/`](https://jymiller.github.io/milbird-walk-the-line/) | the locate inventory — 53 marks, each with its frame, filterable by APWA colour |
+| [`/api/locates.json`](https://jymiller.github.io/milbird-walk-the-line/api/locates.json) | GeoJSON FeatureCollection, 53 features, each carrying its own provenance |
+| [`/api/summary.json`](https://jymiller.github.io/milbird-walk-the-line/api/summary.json) | tallies by colour and utility class, plus what is measured and what is derived |
+| [`/api/stage2.json`](https://jymiller.github.io/milbird-walk-the-line/api/stage2.json) | the proposed Stage 2 record, marked `requiresHumanDecision` |
+
+This was built for **Tencent EdgeOne Makers** — Blob for the frames, Cloud Functions for the API — and
+that implementation is in the pipeline repo under `makers/`, correct against their documented SDK. A
+free-tier account reaches none of it: Blob and Cloud Functions need credits, and the CLI uploads through
+`cos.accelerate`, a paid acceleration endpoint that times out. Regular Tencent COS answered in 0.9s from
+the same laptop; the accelerated one never answered. Served from GitHub Pages instead — blocked on
+billing, not on build.
 
 Detection, the GeoJSON API, the agreement analysis and the bridge into this repo's capture endpoint
 live in [jymiller/milbird-walk-the-line](https://github.com/jymiller/milbird-walk-the-line).

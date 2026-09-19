@@ -1,0 +1,1697 @@
+<!doctype html>
+<html data-theme="dark" style="color-scheme: dark;"><head><!-- frame-runtime --><script>window.__FRAME_PREAMBLE={"v":1,"cred":"cookie","capabilities":{"artifact":"artifact.Kiow93e4.js","assets":"assets.DOAjpBS9.js","comments":"comments.DrhK3r8W.js","db":"db.zFlAA4qL.js","downloads":"downloads.axDW2QAi.js","embed":"embed.DcZf-TSv.js","endpoints":"endpoints.BPfoKaE1.js","mcp":"mcp.C8qKIFvQ.js","network":"network.B5UA9Su4.js","permissions":"permissions.DWFFeHI0.js","room":"room.BF1j0KPr.js","sample":"sample.C7KQQdQj.js","self":"artifact.Kiow93e4.js","user":"user.CCh6oTS_.js"},"transforms":"_transforms.DeQ5QuJ7.js","comments":"_comments.DUaNQZcg.js","translate":"_translate.DqxC5ek1.js","ldx":"_ldx.CqNtBrkk.js"}                                                                                                                       </script><script>(function(){"use strict";var Un=3e5;function ar(t,e){try{const r=t("navigation")[0],n=[r.responseStart,r.redirectEnd-r.redirectStart,r.domContentLoadedEventStart,e(),r.connectEnd-r.domainLookupStart,r.responseStart-r.requestStart];r.requestStart>0||(n.length=4);for(let a=0;a<n.length;a++)if(n[a]>=0&&n[a]<=3e5)n[a]=n[a]|0;else{if(a<4)return;n.length=4}return n}catch{return}}var sr=["light","dark","system"],ir=/^[A-Za-z0-9_-]{1,64}$/,bt=/^[a-zA-Z_:][a-zA-Z0-9_:.-]{0,127}$/,lr=new Set(["class","hidden","value","checked","style","title","alt","placeholder","lang","dir","role","tabindex","disabled","readonly","contenteditable","open","colspan","rowspan"]);function cr(t){const e=t.toLowerCase();return e.startsWith("data-")||e.startsWith("aria-")||lr.has(e)}var Et="data-ldx-props";function ur(t,e){if(e.toLowerCase()===Et)return!0;const r=t.getAttribute(Et);if(r===null)return!1;try{const n=JSON.parse(r);if(n===null||typeof n!="object"||Array.isArray(n))return!0;const a=e.toLowerCase();return Object.keys(n).some(s=>s.toLowerCase()===a)}catch{return!0}}var Kn="http://www.w3.org/1999/xhtml",fr="http://www.w3.org/2000/svg",dr=new Set(["script","style","iframe","noscript","noframes","noembed","xmp","plaintext","template","title","textarea","object","embed"]),hr=new Set(["script","style"]);function pr(t){const e=t.localName.toLowerCase();return t.namespaceURI==="http://www.w3.org/1999/xhtml"?!dr.has(e):t.namespaceURI===fr?!hr.has(e):!1}function Ve(t,e){return t===e||(t===160||t===32)&&(e===160||e===32)}function mr(t,e){const r=t.length,n=e.length;let a=0;for(;a<r&&a<n&&Ve(t.charCodeAt(a),e.charCodeAt(a));)a++;let s=0;for(;s<r-a&&s<n-a&&Ve(t.charCodeAt(r-1-s),e.charCodeAt(n-1-s));)s++;return{p:a,s}}function vr(t,e){const r=t.firstChild;if(t.childNodes.length!==1||r===null||r.nodeType!==Node.TEXT_NODE){t.textContent=e;return}const n=r.data,a=n.length,s=e.length,{p:c,s:d}=mr(n,e);c===a&&d===0&&a===s||r.replaceData(c,a-c-d,e.slice(c,s-d));const O=r.data,w=t.ownerDocument.getSelection?.()??null,b=w!==null&&w.rangeCount>0&&(w.anchorNode===r||w.focusNode===r)?{anchor:w.anchorNode,anchorOffset:w.anchorOffset,focus:w.focusNode,focusOffset:w.focusOffset}:null;let m=-1,R=-1;for(let h=0;h<O.length&&h<e.length;h++){const p=O.charCodeAt(h),D=e.charCodeAt(h);p!==D&&Ve(p,D)&&(m<0&&(m=h),R=h)}const M=m>=0;if(M&&r.replaceData(m,R-m+1,e.slice(m,R+1)),M&&b!==null&&b.anchor!==null&&b.focus!==null)try{w.setBaseAndExtent(b.anchor,b.anchorOffset,b.focus,b.focusOffset)}catch{}}var _r=new Set(["html","head","body","frameset"]);function yr(t){return t.namespaceURI==="http://www.w3.org/1999/xhtml"&&_r.has(t.localName)}function gr(t){if(t===null||typeof t!="object")return!1;const e=t;if(typeof e.target!="string"||!ir.test(e.target)||e.text!==void 0&&typeof e.text!="string")return!1;if(e.attrsSet!==void 0){if(e.attrsSet===null||typeof e.attrsSet!="object")return!1;for(const[r,n]of Object.entries(e.attrsSet))if(!bt.test(r)||typeof n!="string")return!1}if(e.attrsRemoved!==void 0){if(!Array.isArray(e.attrsRemoved))return!1;for(const r of e.attrsRemoved)if(typeof r!="string"||!bt.test(r))return!1}return!0}function wr(t,e){if(t===null||typeof t!="object")return!1;const{seq:r,elements:n}=t;if(typeof r!="number"||!Number.isSafeInteger(r)||!Array.isArray(n)||n.length===0||n.length>64)return!1;for(let a=0;a<n.length;a++)if(!e(n[a]))return!1;return!0}function br(t){return t===null||typeof t!="object"?!1:wr(t.__frame_patch,gr)}function Er(t){if(t===null||typeof t!="object")return!1;const e=t.__frame_init;return e!==null&&typeof e=="object"}function Sr(t){return t!==null&&typeof t=="object"&&t.__frame_size_poke===!0}function Ar(t){if(t===null||typeof t!="object")return!1;const e=t.__frame_host_visible;return e!==null&&typeof e=="object"&&typeof e.visible=="boolean"}function kr(t){if(t===null||typeof t!="object")return!1;const e=t.__frame_theme;if(e===null||typeof e!="object")return!1;const r=e.theme;return typeof r=="string"&&sr.includes(r)}var Rr=["ok","empty","snapshot_error","snapshot_timeout","unclonable","oversize","unavailable","restore_error","withheld"],Tr=["TypeError","RangeError","ReferenceError","SyntaxError","DataCloneError","QuotaExceededError","AbortError","TimeoutError","SecurityError","Error","other"];function Lr(t){return typeof t=="string"&&Tr.includes(t)?t:"other"}var Or=Object.freeze({until:null,now:!1}),Mr="__claude_hot",Pr="__claude_hot_in",Nr=/^__claude_hot(?:_in)?(?::|$)/,St=/^[0-9a-z]{1,32}$/,Xe=t=>t===void 0?Mr:"__claude_hot:"+t,be=t=>t===void 0?Pr:"__claude_hot_in:"+t;function Cr(t,e){const r=[];for(let n=0;n<t.length;n++){const a=t.key(n);a!==null&&a!==e&&Nr.test(a)&&r.push(a)}for(const n of r)t.removeItem(n)}function jr(t){let e=null;try{e=q(JSON.parse(t)?.hot)}catch{return null}return e===null||typeof e.k!="string"||!St.test(e.k)?null:le(e.g)?{k:e.k,g:e.g}:{k:e.k}}var Gn=262144,Fr=3e3,Ir=5e3,At=/^[a-z0-9._:-]{1,64}$/,Dr=["none","hot-restart","hard-reload"],xr=["asset","doc","added","removed"],Hr=1500,qr=/^[0-9a-f]{64}$/;function q(t){return t!==null&&typeof t=="object"?t:null}function le(t){return typeof t=="number"&&Number.isInteger(t)&&t>=0&&t<2**31}function kt(t){return t===void 0||typeof t=="number"&&Number.isFinite(t)}function Br(t){return t===void 0||typeof t=="string"&&At.test(t)}function Rt(t){const e=q(t);return e!==null&&(e.until===null||typeof e.until=="number"&&Number.isFinite(e.until))&&typeof e.now=="boolean"}function Ye(t){const e=q(t);return e!==null&&typeof e.ver=="string"&&e.ver.length<=128&&kt(e.seq)&&typeof e.handoff=="string"&&Rr.includes(e.handoff)&&Br(e.note)}function Ur(t){const e=q(t);return e!==null&&le(e.gen)&&(e.phase==="final"||e.phase==="pending")&&(e.from===null||Ye(e.from))}function Kr(t){const e=q(t);return e!==null&&e.kv===1&&le(e.gen)&&Ye(e.from)&&Object.hasOwn(e,"data")}function Gr(t){const e=q(t);return e!==null&&e.__frame_hot_snapshot===!0&&le(e.gen)&&typeof e.timeoutMs=="number"&&e.timeoutMs>=0&&e.timeoutMs<=6e4&&(e.handoff===void 0||typeof e.handoff=="boolean")&&(e.deadline===void 0||Rt(e.deadline))&&kt(e.seq)&&(e.note===void 0||typeof e.note=="string")&&(e.key===void 0||typeof e.key=="string")}function zr(t){const e=q(t);return e!==null&&e.__frame_hot_start===!0&&le(e.gen)&&Ye(e.from)}function $r(t){return typeof t=="string"&&t.length>=1&&t.length<=128}function Tt(t){return q(t)!==null&&!Array.isArray(t)}function Wr(t){const e=q(t);return e!==null&&e.__frame_cap_grant===!0&&typeof e.cap=="string"&&$r(e.ver)&&(e.grant===void 0||Tt(e.grant))&&(e.budgets===void 0||Tt(e.budgets)&&Object.values(e.budgets).every(Number.isFinite))&&(e.brokerGen===void 0||le(e.brokerGen))}function Vr(t){const e=q(t);return e!==null&&e.__frame_cap_rewired===!0&&(e.caps===void 0||Array.isArray(e.caps)&&e.caps.every(r=>typeof r=="string"))&&(e.brokerGen===void 0||le(e.brokerGen))}function Lt(t){const e=q(t);return e!==null&&typeof e.ver=="string"&&e.ver.length<=128&&Number.isFinite(e.seq)}function Ot(t){if(t==null||typeof t=="string")return!0;const e=q(t);return e!==null&&typeof e.doc=="string"&&typeof e.profile=="string"}function Xr(t){const e=q(t);return e!==null&&typeof e.path=="string"&&xr.includes(e.kind)&&Ot(e.from)&&Ot(e.to)}function Yr(t){return t===null?null:Object.freeze(t.filter(Xr))}function Jr(t){const e=q(t);return e!==null&&e.__frame_hot_update===!0&&Number.isFinite(e.id)&&Lt(e.from)&&Lt(e.to)&&(e.changed===null||Array.isArray(e.changed))&&Dr.includes(e.required)&&Rt(e.deadline)&&typeof e.verdictTimeoutMs=="number"&&e.verdictTimeoutMs>=0&&e.verdictTimeoutMs<=6e4&&(e.preflight===void 0||typeof e.preflight=="string"&&qr.test(e.preflight))}var ce=/^[\w.-]+\.js$/;function Zr(t,e,r){return r?"inert":typeof e=="string"&&ce.test(e)?t?[e]:"inert":t?"inert":"framed"}var Mt=Object.freeze({[Symbol("claude.hot.restart")]:!0});function Pt(t,e){let r;try{r=t??sessionStorage}catch{return null}const n=Xe(e?.k),a=be(e?.k);let s=null;try{s=r.getItem(n)}catch{}try{r.removeItem(n)}catch{}try{Cr(r,a)}catch{}let c=null;if(s!==null&&!(e!==null&&e.g===void 0))try{const d=JSON.parse(s);Kr(d)&&(e===null||d.gen===e.g)&&(c=d)}catch{}if(c===null)try{r.removeItem(a)}catch{}return c}function Nt(){const t=/^\/_f\/([^/]{1,128})\//.exec(location.pathname);return t?t[1]:""}var Qr=/^[^/\\?#]{1,128}$/,Ct=t=>Qr.test(t)&&t!=="."&&t!=="..";function jt(t,e,r){const n=new URL(t),a="/_f/"+e+"/";if(!e||!n.pathname.startsWith(a)||!Ct(r))return null;const s=n.search.slice(1).split("&").filter(c=>!/^__frame_t(?:=|$)/.test(c)).join("&");return n.origin+"/_f/"+r+"/"+n.pathname.slice(a.length)+(s?"?"+s:"")+n.hash}var Fe="{}";function Ee(t){if(!t)return null;const e={ver:t.ver,handoff:t.handoff};return t.seq!==void 0&&(e.seq=t.seq),t.note!==void 0&&(e.note=t.note),e}function Ft(t,e){return t!==null&&t.note===void 0&&e?.note!==void 0?{...t,note:e.note}:t}function It(t){const e=t?.k;return e!==null&&typeof e=="object"?e:void 0}function en(t,e,r,n=null){const a=setTimeout,s=clearTimeout,c=queueMicrotask,d=performance.now.bind(performance),O=new TextEncoder;let w=null,b=null;try{w=history,b=w.replaceState.bind(w)}catch{}const m=(...o)=>{try{console.warn(...o)}catch{}};let R=Nt(),M=null;try{M=sessionStorage}catch{}const h={storage:M,fetch:typeof fetch=="function"?fetch.bind(globalThis):null,entry:location.origin+location.pathname+location.search,ver:R,key:n?.k};let p=n?.k;const D=typeof requestAnimationFrame=="function"?requestAnimationFrame:o=>a(()=>o(d()),16);let _=e?.data??{},C=Ee(e?.from),P=e?.gen??0,x=e!==null,W=!1,J=!1,X=null,Te=!1;const Le=new AbortController;let Oe=null,H=null,me=null,qe=!1,oe=()=>{};const l=new Promise(o=>{oe=o});let v=!1,E=!1,I=!1,j,L=null,K=!1,Me=!1,Z=!1,Be=!1,ae=!1,de=!1;const Pe=o=>{for(const u of[Xe(o),be(o)])try{M?.removeItem(u)}catch{}},V=(o,u)=>{try{u!==null&&r.post(o,u)}catch{}},se=()=>ae||=Z&&(H===null||Be),B=()=>{const o={__frame_hot:!0,ready:H!==null,accept:me!==null,demand:!0};de=!ae,de&&(o.booting=!0),v&&(o.readData=!0),I&&(o.threw=!0),L?.assess&&(o.preflight=!0),V(o,X)};let ve=!1,Ne=!1,ie=!1,Ce=!1;const i=()=>{ve||!Te||ie||(ve=!0,V({__frame_reveal_hold:!0},"*"))},g=()=>new Promise(o=>{let u,f=0;const S=F=>{if(u===void 0)u=F;else if(F!==u||++f>=8){o();return}try{D(S)}catch{o()}};try{D(S)}catch{o()}}),y=()=>{ie=!0,V({__frame_reveal_ready:!0},"*")},k=o=>{Ne||(Ne=!0,o.then(u=>{if(u===!1)return;let f=null;try{f=L?.settle?.()??null}catch{}return(f===null?g():new Promise(S=>{a(S,50),Promise.resolve(f).then(S,S)}).then(g)).then(y)}))},Q=()=>{if(Ce||!ie)return;Ce=!0;const o=()=>{try{L?.afterReveal?.()}catch{}};o(),g().then(()=>{o(),y()})},G=(o=!1)=>{if(qe||H===null||!x||!J)return;qe=!0;const u=H,f=_;c(()=>{let S;try{S=u(f)}catch(U){throw oe(!1),U}let F=!1;try{F=typeof S?.then=="function"}catch{}if(!F){oe(!0);return}Promise.resolve(S).then(()=>oe(!0),U=>{oe(!1),c(()=>{throw U})})}),k(o?l:r.dcl.then(()=>l))},ee=o=>typeof o=="string"&&At.test(o)?o:void 0,ut=o=>{const u={__frame_hot_restart:!0},f=ee(o?.note);f!==void 0&&(u.note=f),o?.required==="hard-reload"&&(u.required="hard-reload"),V(u,X)},Jt=Object.freeze({get data(){return J||(E=!0),!x&&!v&&(v=!0,J&&B()),_},get from(){return C},get gen(){return P},signal:Le.signal,snapshot(o){typeof o=="function"&&(Oe=o)},ready(o){typeof o!="function"||H!==null||(H=o,i(),B(),W&&V({__frame_hot_ready:!0,gen:P},X),G())},accept(o){typeof o=="function"&&(me=o,B())},restart(o){const u={note:o?.note,required:o?.required};if(J){ut(u);return}const f=j;j={note:ee(f?.note)??u.note,required:f?.required==="hard-reload"||u.required==="hard-reload"?"hard-reload":void 0}}});let Ue=null,Zt=()=>{};const jn=new Promise(o=>{Zt=o});let Fn=null;const Qt=()=>Fn??=r.dcl.then(()=>{let o=!1;try{o=Ue!==null&&Ue.expect()}catch{}if(!o)return;const u=Ue.maxMs;return new Promise(f=>{jn.then(f),a(f,u)})}),er=()=>{if(!K||Me||L===null)return;Me=!0;const o=L;Qt().then(()=>{try{ie||o.afterStart(It(e),!1)}catch{}})},tr=o=>{e!==null&&E&&(v=!0),_={},C=null,P=0;try{M?.removeItem(be(n?.k))}catch{}e!==null&&!o&&k(r.dcl.then(()=>H!==null?l:void 0))},In=()=>{K=!0,k(Qt().then(()=>H!==null?l:void 0)),er()};try{addEventListener("error",()=>{I||H!==null||(I=!0,B())})}catch{}const rr=()=>{a(()=>{!ae&&se()&&de&&B()},0)};try{Z=document.readyState==="complete",Z||addEventListener("load",()=>{Z=!0,rr()},{once:!0})}catch{Z=!0}se(),l.then(()=>{Be=!0,rr()});let he=-1,ft,dt,je=!0,ht=!1,pt,Ke=null;const mt=o=>{const u=Ke===null;Ke=je&&o[0]!=="withheld"?o:["withheld",o[1],Fe];let f=o[0];if(je&&f!=="withheld"){const F={ver:R,handoff:f};ft!==void 0&&(F.seq=ft),dt!==void 0&&(F.note=dt);try{if(M===null)throw new Error("no storage");M.setItem(Xe(p),'{"kv":1,"gen":'+he+',"from":'+JSON.stringify(F)+(pt!==void 0?',"k":'+JSON.stringify(pt):"")+',"data":'+(f==="ok"?o[2]:Fe)+"}")}catch{f="unavailable"}}else{f="withheld",Pe(p);try{L?.release?.()}catch{}}const S={__frame_hot_snapshotted:!0,gen:he,handoff:f,bytes:o[1]};o[3]!==void 0&&(S.errName=o[3]),V(S,X),u&&(f==="snapshot_error"||f==="unclonable"||f==="oversize")&&m("claude.hot: snapshot",f,o[3])},_e=o=>{try{return Lr(o?.name)}catch{return"other"}},ye=(o,u,f=0)=>mt(u===void 0?[o,f,Fe]:[o,f,Fe,_e(u)]),Dn=o=>{if(o.gen<=he)return;const u=he>=0;if(he=o.gen,ft=o.seq,dt=ee(o.note),typeof o.key=="string"&&St.test(o.key)&&o.key!==p&&(Pe(p),p=o.key),je&&=o.handoff!==!1,u){Ke!==null?mt(Ke):ht&&V({__frame_hot_held:!0,gen:he},X);return}Le.abort();const f=Object.freeze({handoff:je,timeoutMs:o.timeoutMs,deadline:o.deadline??Or}),S=Oe,F=()=>{if(je)try{pt=L?.capture()}catch{}if(S===null){ye("empty");return}let T=!1;const z=a(()=>{T||(T=!0,ye("snapshot_timeout"))},Math.max(0,f.timeoutMs));Promise.resolve().then(()=>S(f)).then(ge=>{if(T)return;T=!0,s(z);let re;try{re=JSON.stringify(ge)}catch(vt){ye("unclonable",vt);return}if(typeof re!="string"){ye("unclonable");return}let ne=re.length;try{ne=O.encode(re).length}catch{}if(ne>262144){ye("oversize",void 0,ne);return}mt(["ok",ne,re])},ge=>{T||(T=!0,s(z),ye("snapshot_error",ge))})};let U=null;try{U=L?.holdForIme()??null}catch{}if(U===null)F();else{ht=!0,V({__frame_hot_held:!0,gen:he},X);const T=()=>{ht=!1,F()};U.then(T,T)}},xn=o=>{if(!W||x||H===null||o.gen!==P)return;let u=null;try{u=Pt(M,n&&{k:n.k,g:o.gen})}catch{}if(u!==null&&u.gen!==o.gen){u=null;try{M?.removeItem(be(n?.k))}catch{}}_=u?.data??{},C=Ft(Ee(u?.from??o.from),Ee(o.from)),u!==null&&(P=u.gen),x=!0,W=!1;const f=It(u);l.then(S=>{try{S&&L?.afterStart(f,!0)}catch{}}),G(!0)};let Ge=0;const Hn=o=>{const u=me;if(u===null||o.id<=Ge)return;Ge=o.id;const f=L?.assess;if(o.preflight===void 0||f===void 0){nr(o,u);return}let S=!1;const F=z=>{S||(S=!0,s(T),o.id===Ge&&nr(o,u,z))},U=()=>F(f.timeout(o)),T=a(U,Hr+100);f.run(o,window).then(F,U)},nr=(o,u,f)=>{let S,F=!1,U=!1,T,z,ge=null;const re=A=>{if(U)return!1;if(T!==void 0&&T!==A)return m(`claude.hot: u.${A}() ignored - u.${T}() was called first`),!1;const te=T===void 0;return T=A,te},ne=A=>{T="restart",m(`claude.hot: ${A} - restarting`)},vt=()=>{if(!re("adopt")||o.id!==Ge)return;const A=o.to.ver;if(ze.required!=="none"){ne(`u.adopt() needs required 'none', it is '${ze.required}'`);return}if(!Ct(A)){ne("u.adopt() cannot address this version");return}if(!R||A===R)return;const te=R,Y=h.entry;let $e="",yt,we=null,We;try{$e=location.href,yt=w.state,we=jt($e,te,A),we!==null&&(b(yt,"",we),location.pathname.startsWith("/_f/"+A+"/")?we=location.href:We="navigate event canceled")}catch(wt){We=_e(wt)}if(We!==void 0){z="adopt_failed",ne(`adopt_failed ${We}; URL not changed`);return}we===null?(z="adopt_skipped",m(`claude.hot: adopt_skipped - page already left /_f/${te}/; URL not changed, update still applied`)):z="adopted",R=h.ver=A;try{h.entry=jt(Y,te,A)??Y}catch{}const gt=we;ge=()=>{if(R===A){if(gt!==null)try{if(location.href!==gt)m("claude.hot: adopt_revert_skipped - update not applied; URL left where the page navigated");else{if(b(yt,"",$e),location.href!==$e){m("claude.hot: adopt_revert_failed navigate event canceled - URL still at the new version");return}z="adopt_reverted",m("claude.hot: adopt_reverted - adopt() was called but the handler threw; URL restored")}}catch(wt){m(`claude.hot: adopt_revert_failed ${_e(wt)} - URL still at the new version`);return}R=h.ver=te,h.entry=Y,gt===null&&(z=void 0)}}},ze=Object.freeze({from:{ver:o.from.ver,seq:o.from.seq},to:{ver:o.to.ver,seq:o.to.seq},changed:Yr(o.changed),required:o.required,deadline:o.deadline,adopt:vt,defer(){return re("defer")&&ze.deadline.now&&ne("u.defer() past the deadline"),Mt},restart(A){return re("restart"),T==="restart"&&!U&&(S??=ee(A?.note),F||=A?.required==="hard-reload"),Mt},...f?.update}),qn=(A,te)=>{U=!0,A==="threw"?(ge?.(),S??=_e(te).toLowerCase()):T===void 0&&m(A==="timeout"?"claude.hot: accept handler did not answer in time - restarting":"claude.hot: accept handler settled without defer/restart/adopt - restarting");const Y={__frame_hot_verdict:!0,id:o.id};Y.verdict=A==="threw"||T===void 0||T==="restart"?"restart":T==="adopt"?"applied":"deferred",Y.verdict==="restart"&&(F&&(Y.required="hard-reload"),S!==void 0&&(Y.note=S)),z!==void 0&&(Y.verdict==="applied"||z!=="adopted")&&(Y.adopt=z),V(Object.assign(Y,f?.verdict),X)};let or=!1;const _t=(A,te)=>or?!1:(or=!0,s(Bn),qn(A,te),!0),Bn=a(()=>_t("timeout"),o.verdictTimeoutMs);Promise.resolve().then(()=>u(ze)).then(()=>_t("settled"),A=>{!_t("threw",A)&&T==="adopt"&&ut({note:_e(A).toLowerCase()}),m("claude.hot: accept",_e(A))})};try{t.hot===void 0&&Object.defineProperty(t,"hot",{value:Jt,writable:!1,configurable:!1,enumerable:!1})}catch{}return{hot:Jt,boot:h,afterConnect(){Te=!0,(e!==null||H!==null)&&i()},onInit(o,u){X=u,J=!0;const f=Ur(o)?o:null;f?.phase==="final"&&e!==null&&e.gen===f.gen?(x=!0,C=Ft(C,Ee(f.from)),In()):(W=f?.phase==="pending",tr(W),x=!W,P=f?.gen??0,C=Ee(f?.from)),B(),de&&a(()=>{ae||(ae=!0,B())},Ir),W&&H!==null&&V({__frame_hot_ready:!0,gen:P},u),j!==void 0&&(ut(j),j=void 0),G()},onNoInit(){J=!0,tr(!1),x=!0,G()},onShell(o){return o?.__frame_revealed===!0?(Q(),!1):Gr(o)?(Dn(o),!0):zr(o)?(xn(o),!0):Jr(o)?(Hn(o),!0):!1},attachExtras(o){L=o,er(),o.assess&&B()},inSlot:()=>be(p),hydration(o,u){Ue??={expect:o,maxMs:u}},hydrated(){Zt()},carried(){return x?_:{}},presented:()=>ie}}var zn="frame_ldx_runtime",tn="frame_ldx_build",$n="script#an-form",rn=256;function Dt(t,e,r){for(const n of t)r(n)&&t.delete(n);t.size>=rn&&!t.has(e)&&t.delete(t.values().next().value),t.add(e)}function Je(t,e,r){try{const n=t[e];if(typeof n!="function")return;t[e]=function(...a){const s=n.apply(this,a);try{r(this)}catch{}return s}}catch{}}var Ze;function nn(){if(Ze)return Ze;const t={media:new Set,contexts:new Set,onStart:null,onPause:null};Ze=t;const e=window.HTMLMediaElement?.prototype;e&&(Je(e,"play",a=>{Dt(t.media,a,s=>s.paused),t.onStart?.(a)}),Je(e,"pause",a=>t.onPause?.(a)));const r=window.AudioContext,n=window.AudioNode?.prototype;return r&&n&&Je(n,"connect",a=>{const s=a.context;s instanceof r&&(Dt(t.contexts,s,c=>c.state==="closed"),t.onStart?.(s))}),t}function on(t){let e=window;for(let r=0;e.parent&&e.parent!==e&&r<8;r++)if(e=e.parent,t(e))return!0;return!1}function an(){let t=null;const e=()=>t??parent,r=n=>t?n===t:on(a=>a===n);return{post(n,a){if(t){e().postMessage(n,a);return}let s=parent;for(let c=0;c<8&&(s.postMessage(n,a),!(!s.parent||s.parent===s));c++)s=s.parent},on(n){const a=s=>{const c=s.source;r(c)&&n(s.data,s.origin,s.isTrusted,()=>{t??=c})};return addEventListener("message",a),()=>removeEventListener("message",a)},port:n=>({post(a,s){if(s?.activation){e().postMessage(a,{targetOrigin:n,includeUserActivation:!0});return}if(s?.transfer){e().postMessage(a,n,s.transfer);return}e().postMessage(a,n)},on(a,s){const c=d=>{r(d.source)&&d.origin===n&&a(d.data,d)};return addEventListener("message",c,s),()=>removeEventListener("message",c,s)}})}}function sn(){const t={post:()=>{},on:()=>()=>{}};return{...t,port:()=>t}}var ln=500,cn=2e4,un="data-token-reads",fn="data-frame-refused-watch",dn="data-frame-unsupported",hn=/(?:^|\s)stylesheet(?:\s|$)/i;function pn(t,e){let r="";if(t instanceof HTMLScriptElement?r=t.src:t instanceof HTMLLinkElement&&hn.test(t.rel)&&(r=t.href),!r)return null;try{const n=new URL(r);return n.origin===location.origin&&n.pathname.startsWith(e)?n.origin+n.pathname:null}catch{return null}}function mn(t,e,r){if(!t||e!=="query")return;const n="/_f/"+t+"/";document.documentElement.setAttribute(fn,"");const a=location.href,s=fetch,c=setTimeout,d={method:"HEAD",cache:"no-store",credentials:"same-origin"},O=h=>h.ok||h.status===304;let w=!1,b=!1;const m=()=>removeEventListener("error",M,!0),R=async h=>{const p=await s(h,d);if(O(p))b=!0;else if(p.status===403){const D=await s(a,d);if(O(D)){const _=(await s(h,d)).status;_===403?(b=!0,document.documentElement.setAttribute(dn,""),r()):_<500&&(b=!0)}else D.status>=400&&D.status<500&&(b=!0)}},M=h=>{if(b||w)return;if(document.documentElement.hasAttribute(un)){b=!0,m();return}const p=pn(h.target,n);p&&(w=!0,c(()=>{R(p).catch(()=>{}).finally(()=>{w=!1,b&&m()})},ln))};addEventListener("error",M,!0),addEventListener("load",m,{once:!0}),c(m,cn)}var Qe="__frame_scroll",vn=150,_n=310,yn=160,gn=3e4;function wn(){let t=0,e=!1,r=!1,n=!1,a=0,s=null;const c=_=>{try{sessionStorage.setItem(Qe,JSON.stringify({y:_}))}catch{}},d=()=>{if(clearTimeout(t),s===null)return;const _=s;s=null,c(_)},O=()=>{if(e){e=!1;return}r=!0,s=scrollY,clearTimeout(t),t=setTimeout(d,vn)};try{addEventListener("scroll",O,{passive:!0}),addEventListener("pagehide",d)}catch{}const w=()=>{let _;try{_=sessionStorage.getItem(Qe)}catch{return null}if(_===null)return null;let C;try{C=JSON.parse(_)}catch{C=null}const P=C?.y;if(!(typeof P=="number"&&Number.isFinite(P)&&P>=0)){try{sessionStorage.removeItem(Qe)}catch{}return null}return P};let b=!1;const m=_=>{try{const C=scrollY;scrollTo({top:_,left:0,behavior:"instant"}),a=_,n=!0,clearTimeout(t),s=null,c(_);const P=scrollY;P!==C&&(e=!0),P!==_&&!b&&(b=!0,addEventListener("load",()=>{try{if(scrollY===P){const x=w();m(x!==null?x:a)}}catch{}},{once:!0}))}catch{}},R=()=>{try{return!!location.hash}catch{return!0}};let M=!1;const h=()=>{try{if(M||innerWidth>_n||innerHeight>yn)return;M=!0;const _=Date.now(),C=()=>{try{removeEventListener("resize",C)}catch{}if(Date.now()-_>gn||r||R())return;const P=w();m(P!==null?P:a)};addEventListener("resize",C)}catch{}};let p=!1,D=!1;return{restore(){if(p||(p=!0,R()))return;const _=w();_!==null&&(m(_),h())},promoted(){if(D||(D=!0,R()))return;const _=w();_!==null?(m(_),h()):n&&m(a)}}}function bn(t,e,r,n){let a=null;try{a=window.trustedTypes?.createPolicy("frame-runtime",{createScriptURL:O=>O})??null}catch{}const s=window.Worker,c=s?.prototype,d=Object.freeze({Worker:s,workerOn:c?.addEventListener,workerPost:c?.postMessage,workerTerminate:c?.terminate,fetch:window.fetch.bind(window),preventDefault:Event.prototype.preventDefault,now:Date.now,policy:a,origins:e});r(t).then(O=>O?.bootTopLevel?O.bootTopLevel(d,n):n.settle()).catch(()=>n.settle())}var Wn="modulepreload",Vn=function(t){return"/"+t},Xn={},En=function(e,r,n){let a=Promise.resolve();function s(c){const d=new Event("vite:preloadError",{cancelable:!0});if(d.payload=c,window.dispatchEvent(d),!d.defaultPrevented)throw c}return a.then(c=>{for(const d of c||[])d.status==="rejected"&&s(d.reason);return e().catch(s)})},Sn=window===top,xt=Object.getOwnPropertyDescriptor(window,"claude"),Ie=Zr(Sn,window.__FRAME_PREAMBLE?.topLevel,xt?.writable===!1),et=typeof Ie=="object"&&Ie[0],N=et?sn():an();(function(){const t=Object.defineProperty,e=globalThis,r=["RTCPeerConnection","webkitRTCPeerConnection","RTCDataChannel","RTCIceCandidate","RTCSessionDescription","RTCRtpSender","RTCRtpReceiver"];let n=0;for(let a=0;a<r.length;a++){const s=r[a];try{t(e,s,{value:void 0,writable:!1,configurable:!1})}catch{try{delete e[s]}catch{}try{t(e,s,{value:void 0,writable:!1,configurable:!0})}catch{}}typeof e[s]=="function"&&n++}if(n&&Ie==="framed")try{N.post({__frame_rtc_lockdown_failed:n},"*")}catch{}})();var Ht=1e4,An=2e3,tt=2e3,qt=Object.freeze([...window.__FRAME_PREAMBLE?.origins??["https://claude.ai","https://preview.claude.ai"]]);function Bt(t){for(const e of qt)if(e.endsWith(":*"))try{const r=new URL(t);if(`${r.protocol}//${r.hostname}:*`===e)return!0}catch{}else if(t===e)return!0;return!1}var Se=Object.freeze({...window.__FRAME_PREAMBLE?.capabilities}),Ae=window.__FRAME_PREAMBLE?.transforms,rt=window.__FRAME_PREAMBLE?.comments,nt=window.__FRAME_PREAMBLE?.translate,ke=window.__FRAME_PREAMBLE?.ldx,kn=window.__FRAME_PREAMBLE?.cred;function Ut(t){return En(()=>import("/_runtime/"+t),void 0)}var Re=new Set,Kt=setTimeout,Rn=fetch,Tn=AbortController,Ln=800+800*Math.random(),On=3e3,De=null,Gt=new Map;function Mn(t,e){let r=Gt.get(t);return r||Gt.set(t,r=Pn(t,e)),r}function Pn(t,e){if(De?.has(t))return Promise.resolve("csp");if(navigator.onLine===!1)return Promise.resolve("offline");const r=new Tn;let n=!1;return Kt(()=>{n=!0,r.abort()},On),Rn("/_runtime/"+t,{signal:r.signal}).then(a=>(r.abort(),a.ok?/javascript/i.test(a.headers.get("content-type")??"")?e instanceof Error&&/:\d+:\d+\)?$/m.test(e.stack??"")?"eval":"served":"mime":"http"),()=>n?"timeout":De?.has(t)?"csp":"net")}function ue(t){if(!De){const e=De=new Set;try{document.addEventListener("securitypolicyviolation",r=>{const n=/\/_runtime\/([^/?#]+)/.exec(r.blockedURI);n&&r.disposition!=="report"&&e.add(n[1])})}catch{}}return Ut(t).catch(()=>new Promise(e=>Kt(e,Ln)).then(()=>Ut(t+"?r=1")).then(e=>(e!==void 0&&Re.add(t),e)))}function zt(t,e,r){return{contract:t.contract,changes:new Set(t.changes??[]),flags:new Set(t.flags??[]),capabilities:t.capabilities??{},capBudgets:t.capBudgets??{},brokerGen:t.brokerGen,transforms:new Map,shellOrigin:e,shell:r,mount:ct,hooks:xe,pipe:()=>({wrap:(n,a)=>(...s)=>{try{return a(...s)}catch(c){return Promise.reject(c)}}})}}var pe=null,$=null;function $t(t,e,r){try{Object.defineProperty(t,e,{value:r,writable:!1,configurable:!1,enumerable:!0})}catch{try{Object.defineProperty(t,e,{value:r,writable:!1,configurable:!0,enumerable:!0})}catch{}}}var ot=!1,xe={editBefore:null,edit:null};function Nn(t,e,r=!1){const n=[];let a;if(r)try{xe.editBefore?.(t)}catch{}for(const s of t.elements){const c=document.querySelector(`[data-id="${s.target}"]`);if(!c){a=s.target;break}if([...Object.keys(s.attrsSet??{}),...s.attrsRemoved??[]].some(d=>!cr(d)||ur(c,d))){a=s.target;break}if(s.text!==void 0&&(!pr(c)||yr(c))){a=s.target;break}for(const[d,O]of Object.entries(s.attrsSet??{}))if(!Vt(c,d)){try{c.setAttribute(d,O)}catch{}Wt(c,d,O)}for(const d of s.attrsRemoved??[])Vt(c,d)||(c.removeAttribute(d),Wt(c,d,null));typeof s.text=="string"&&vr(c,s.text),n.push(s.target)}if(r)try{xe.edit?.(t.seq,n,a)}catch{}if(a!==void 0){N.post({__frame_patch_miss:{seq:t.seq}},e);return}try{document.dispatchEvent(new CustomEvent("claude:edit",{detail:{seq:t.seq,targets:n}}))}catch{}}function Wt(t,e,r){if(!(t instanceof HTMLInputElement))return;const n=e.toLowerCase();n==="checked"?t.checked=r!==null:n==="value"&&t.type!=="file"&&(t.value=r??"")}function Vt(t,e){const r=e.toLowerCase(),n=t;return r==="data-id"||(r==="value"||r==="checked")&&(n.__artifactSecret===!0||/^(password|hidden|file)$/.test(n.type??"")||/(^|\s)(cc-|one-time-code|current-password|new-password)/i.test(`${t.getAttribute("autocomplete")??""} ${n.autocomplete??""}`))}function Xt(t){const e=document.documentElement;t==="light"||t==="dark"?(e.dataset.theme=t,e.style.colorScheme=t,ot=!0):ot&&(delete e.dataset.theme,e.style.colorScheme="",ot=!1)}var fe=new Map,at=null;function st(){let t;const e={u:new Promise(r=>{t=r}),r:r=>{e.done=!0,t(r)},done:!1,nulled:!1};return e}function He(t,e){t.nulled=!0,t.ver=e,t.r(null)}function it(t,e){for(const[r,n]of fe)n.done||(e&&n.asked?e(r,n):He(n,t))}var Cn=Object.freeze(Object.assign(Object.create(null),{call:Function.prototype.call,apply:Function.prototype.apply,bind:Function.prototype.bind})),lt=!1,ct=(t,e)=>{let r=fe.get(t);if(r?.nulled&&lt)r=st(),fe.set(t,r);else if(!r||r.done){r?.nulled&&$&&N.post({__frame_cap_telemetry:{kind:"cap-load-error",cap:t,phase:"install"}},$);return}const n=typeof e=="function"?Object.setPrototypeOf(e,Cn):Object.assign(Object.create(null),e);typeof n.then=="function"&&delete n.then,r.want=void 0,r.r(Object.freeze(n))};function Yt(){const t=xt?.value??{};$t(window,"claude",t);for(const e of Object.keys(Se)){if(t[e]!==void 0){$t(t,e,t[e]);continue}fe.set(e,st())}if(t.use===void 0){const e=r=>{if(typeof r!="string"||!Object.hasOwn(Se,r))return Promise.resolve(null);let n=fe.get(r);return n?(at&&(n.nulled||n.want!==void 0)&&(n=at(r,n)),n.asked=!0,n.u):Promise.resolve(t[r]??null)};try{Object.defineProperty(t,"use",{value:e,writable:!0,configurable:!0,enumerable:!1})}catch{}}return t}if(Ie==="framed"){let t;const e=Ae&&ce.test(Ae)?ue(Ae).catch(l=>{t={f:Ae,e:l}}):Promise.resolve(void 0),r=l=>{if(l.type==="auxclick"&&l.button!==1)return;const v=l.target,E=v&&v.closest?v.closest("a[href],area[href]"):null;if(!E)return;const I=E.getAttribute("href");if(!I)return;let j;try{j=new URL(I,document.baseURI)}catch{return}if((j.protocol==="http:"||j.protocol==="https:")&&j.origin!==location.origin){l.preventDefault();const L=(E.getAttribute("target")??"").toLowerCase(),K=l.type==="auxclick"||l.metaKey||l.ctrlKey||l.shiftKey||l.altKey||!["","_self","_top","_parent"].includes(L);N.post({__frame_nav:!0,url:j.href,newTab:K},"*")}};addEventListener("click",r,!0),addEventListener("auxclick",r,!0);const n={},a=l=>{l.isTrusted&&(n.pointer=!0)},s=l=>{l.isTrusted&&(n.click=!0)};addEventListener("pointermove",a,{capture:!0,passive:!0}),addEventListener("click",s,{capture:!0,passive:!0});const c={cb:null};addEventListener("keydown",l=>c.cb?.(l),!0);const d={cb:null};addEventListener("keydown",l=>d.cb?.(l));const O=nn();e.then(l=>l?.installEscapeForward?.(c,v=>{$&&N.post(v,$)})),e.then(l=>{try{l?.installFocusKeep?.()}catch{}}),e.then(l=>{if(!l?.wireNav)return;const v=N.port("*");l.wireNav(v),removeEventListener("click",r,!0),removeEventListener("auxclick",r,!0),removeEventListener("pointermove",a,!0),removeEventListener("click",s,!0),l.wireEngagement?.(n,v,O)});let w=null;try{w=wn()}catch{}const b=document.readyState==="loading"?new Promise(l=>document.addEventListener("DOMContentLoaded",()=>l(),{once:!0})):Promise.resolve();let m=null,R=null;try{R=jr(window.name),m=Pt(null,R)}catch{}const M=Yt();let h=null;try{h=en(M,m,{post:(l,v)=>N.post(l,v),dcl:b},R)}catch{}e.then(l=>{try{h&&l?.installHotExtras?.(h)}catch{}});let p=null;const D=()=>Array.isArray(p?.flags)&&p.flags.includes("frame_ldx_runtime")&&!!ke&&ce.test(ke)&&document.querySelector("script#an-form")!==null;try{h?.hydration(D,Fr)}catch{}let _=null,C=0;const P=N.on((l,v,E,I)=>{Bt(v)&&Er(l)&&(I(),p=l.__frame_init,$=v,P(),clearTimeout(C),_?.())});N.post({__frame_connect:!0},"*");try{h?.afterConnect()}catch{}const x=setTimeout,W=clearTimeout;let J=()=>NaN,X=()=>[];try{J=performance.now.bind(performance),X=performance.getEntriesByType.bind(performance)}catch{}let Te=0;const Le=()=>{try{N.post({__frame_alive:!0},"*")}catch{}Te=x(Le,An)},Oe=()=>W(Te);Le(),addEventListener("load",Oe,{once:!0});const H=new Promise(l=>{_=l,C=setTimeout(()=>{P(),l()},Ht)}),me=new WeakSet;addEventListener("error",l=>{l.target&&me.add(l.target)},!0);try{mn(Nt(),kn,()=>{e.then(l=>{try{l?.drawRefusedNotice?.()}catch{}})})}catch{}const qe=()=>{let l=[];try{l=[...document.querySelectorAll("link[rel~=stylesheet]:not([rel~=alternate])")].filter(E=>!E.sheet&&!E.disabled&&!me.has(E)&&E.getAttribute("href")&&URL.canParse(E.href)&&(!E.media||matchMedia(E.media).matches))}catch{}let v=l.length;return v===0?Promise.resolve():new Promise(E=>{try{const I=tt-J(),j=x(E,I>0?I<tt?I:tt:0),L=()=>{--v===0&&(W(j),E())};for(const K of l)K.addEventListener("load",L,{once:!0}),K.addEventListener("error",L,{once:!0})}catch{E()}})};b.then(()=>{try{w?.restore()}catch{}}),Promise.all([H,b,e]).then(([,,l])=>{if(p?.hostOverlays!==!0||!$)return;let v=!1;try{v=l?.declaresCover?.()===!0}catch{}N.post({__frame_layout:{cover:v}},$)});const oe={cb:null};N.on((l,v)=>{if(Bt(v)&&Sr(l)){try{w?.promoted()}catch{}oe.cb?.()}}),H.then(async()=>{if(!p||!$){it();try{h?.onNoInit()}catch{}return}if(Xt(p.theme),p.hostVisible===!1&&e.then(i=>i?.applyHostVisible?.(!1,O)),p.hostKeys!==void 0){const i=$,g=p.hostKeys;e.then(y=>y?.installHostKeyForward?.(d,g,k=>N.post(k,i)))}try{h?.onInit(p.hot,$)}catch{}const l=$,v=N.port(l),E=(i,g)=>N.post({__frame_cap_telemetry:{kind:"cap-load-error",cap:i,phase:g}},l),I=(i,g,y)=>{new Promise(k=>k(Mn(g,y))).then(k=>E(i,k),()=>E(i))},j=i=>N.post({__frame_cap_recovered:{cap:i}},l);let L=p.brokerGen;const K=()=>h?.boot.ver??"",Me=K(),Z=(i,g)=>{const y=K();W(g.t),g.want=y,g.t=x(()=>{g.done||He(g,y)},Ht),N.post({__frame_cap_want:!0,cap:i,ver:y},l)},Be=(i,g)=>{const y=fe.get(i.cap),k=Se[i.cap];if(!g||!y||y.done||y.want!==i.ver||!ce.test(k))return;if(W(y.t),y.want=void 0,L=i.brokerGen??L,i.ver!==K()){Z(i.cap,y);return}if(!i.grant||i.cap==="network"){He(y,i.ver);return}const Q=pe,G=pe={...Q,capabilities:{...Q.capabilities,[i.cap]:i.grant},capBudgets:{...Q.capBudgets,[i.cap]:{...Q.capBudgets[i.cap],...i.budgets}}};ue(k).then(ee=>{Re.has(k)&&j(i.cap),G.brokerGen=L,lt=!0;try{ee?.install?.(G)}catch{E(i.cap,"install")}finally{lt=!1}},ee=>I(i.cap,k,ee)).then(()=>{y.done||He(y,i.ver)})};let ae=!1,de=!1;N.on((i,g,y)=>{if(g!==l)return;try{if(h?.onShell(i))return}catch{}if(kr(i)&&Xt(i.__frame_theme.theme),Wr(i)&&Be(i,y),y&&Vr(i)&&(L=i.brokerGen??L),Ar(i)){const G=i.__frame_host_visible.visible;e.then(ee=>ee?.applyHostVisible?.(G,O))}br(i)&&Nn(i.__frame_patch,l,y);const k=i?.__fc_mode;k&&typeof k=="object"&&!ae&&rt&&ce.test(rt)&&(ae=!0,ue(rt).then(G=>G.install?.(l,k.on===!0,v)).catch(()=>{}));const Q=i?.__ft_cmd;Q&&typeof Q=="object"&&!de&&nt&&ce.test(nt)&&(de=!0,ue(nt).then(G=>G.install?.(l,Q,v)).catch(()=>{}))});const Pe=Object.keys(p.capabilities??{}).filter(i=>Object.hasOwn(Se,i)).map(i=>[i,Se[i]]).filter(i=>typeof i[1]=="string"&&ce.test(i[1])),V=await Promise.allSettled(Pe.map(([,i])=>ue(i))),se=await e,B=l;if(se?.buildBoot||(t?I("_transforms",t.f,t.e):E("_transforms")),se?.buildBoot)try{pe=se.buildBoot(p,se.TRANSFORMS??{},{shellOrigin:B,mount:ct,hooks:xe,shell:v},i=>N.post({__frame_cap_telemetry:i},B))}catch{E("_transforms","install"),pe=zt(p,B,v)}else pe=zt(p,B,v);se?.buildBoot&&Re.has(Ae??"")&&j("_transforms");const ve=pe;ve.brokerGen=L,V.forEach((i,g)=>{const[y,k]=Pe[g];if(i.status!=="fulfilled"){I(y,k,i.reason);return}Re.has(k)&&j(y);try{i.value?.install?.(ve)}catch{E(y,"install")}});const Ne=p.capWants===!0;Ne&&(at=(i,g)=>{const y=K();if(!y)return g;if(!g.nulled)return g.want!==y&&Z(i,g),g;if(y===g.ver)return g;const k=st();return fe.set(i,k),Z(i,k),k}),it(Me,Ne&&K()!==Me?Z:void 0),await b,await qe(),Oe();const ie=ar(X,J);N.post(ie?{__frame_ready:!0,nav:ie}:{__frame_ready:!0},$),e.then(i=>{i?.installSizeReporter?.(B,oe,v),i?.installPaintReporter?.(v)});let Ce=!1;try{Ce=D()}catch{}ke&&Ce?ue(ke).then(i=>i?.boot?.({shellOrigin:l,build:ve.flags.has(tn),hot:h?.hot??null,carried:h?.carried(),presented:()=>h?.presented()??!0})).catch(()=>!1).then(i=>{h?.hydrated(),i!==!0?E("_ldx"):Re.has(ke)&&j("_ldx")}):h?.hydrated()})}else et&&(Yt(),bn(et,qt,ue,{settle:it,mount:ct}))})();</script><!-- /frame-runtime --><meta charset="utf8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>The Last Mile of Data (Copy)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&amp;display=swap">
+
+<style>
+:root{
+  --paper:#FAF8F5; --surface:#FFFFFF; --sunk:#F2EEE8;
+  --ink:#1A1714; --ink-2:#4A433C; --muted:#8A8178;
+  --line:#E2DBD1; --line-strong:#C9BFB2;
+
+  /* utility locate-marking vocabulary — this client's own colour language */
+  --comms:#D4621E;   /* orange — communications. the accent. */
+  --comms-soft:#FBEDE3;
+  --elec:#C8102E;    /* red — electric. blocked / fatal. */
+  --elec-soft:#FBE9EC;
+  --gas:#B8860B;     /* yellow — gas. caution. */
+  --gas-soft:#FAF2DE;
+  --sewer:#2F6B46;   /* green — verified / present. */
+  --sewer-soft:#E7F1EA;
+  --water:#2B5C8A;   /* blue — reference / method. */
+  --water-soft:#E8EFF6;
+  --survey:#A8447F;  /* pink — temporary survey. unverified. */
+  --survey-soft:#F8EAF2;
+
+  --display:'Bricolage Grotesque','Helvetica Neue',Arial,sans-serif;
+  --body:'IBM Plex Sans','Helvetica Neue',Arial,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,monospace;
+  --shadow:0 1px 2px rgba(26,23,20,.05), 0 8px 24px -16px rgba(26,23,20,.25);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#15130F; --surface:#1D1A16; --sunk:#221E19;
+    --ink:#F2EDE6; --ink-2:#C6BDB2; --muted:#8D8378;
+    --line:#312B24; --line-strong:#474036;
+    --comms:#F08A48; --comms-soft:#33210F;
+    --elec:#F06B7F; --elec-soft:#331219;
+    --gas:#DBB454; --gas-soft:#2E2510;
+    --sewer:#6FBF8E; --sewer-soft:#122519;
+    --water:#78AEDD; --water-soft:#10202E;
+    --survey:#DD90BE; --survey-soft:#2B1424;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#15130F; --surface:#1D1A16; --sunk:#221E19;
+  --ink:#F2EDE6; --ink-2:#C6BDB2; --muted:#8D8378;
+  --line:#312B24; --line-strong:#474036;
+  --comms:#F08A48; --comms-soft:#33210F;
+  --elec:#F06B7F; --elec-soft:#331219;
+  --gas:#DBB454; --gas-soft:#2E2510;
+  --sewer:#6FBF8E; --sewer-soft:#122519;
+  --water:#78AEDD; --water-soft:#10202E;
+  --survey:#DD90BE; --survey-soft:#2B1424;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.8);
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);
+  font-size:16.5px;line-height:1.62;-webkit-font-smoothing:antialiased}
+
+.wrap{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:0}
+.col{max-width:70ch}
+
+/* ---- top rail ---- */
+.rail{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;
+  background:color-mix(in srgb, var(--paper) 92%, transparent);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.rail .wrap{display:flex;align-items:center;gap:18px;padding-block:9px;flex-wrap:wrap}
+.rail .mark{font-family:var(--display);font-weight:800;font-size:15px;letter-spacing:-.01em;
+  white-space:nowrap}
+.rail .mark em{font-style:normal;color:var(--comms)}
+.rail nav{display:flex;gap:2px;flex-wrap:wrap;margin-left:auto}
+.rail a{font-family:var(--mono);font-size:11.5px;letter-spacing:.02em;text-decoration:none;
+  color:var(--muted);padding:4px 8px;border-radius:5px;white-space:nowrap}
+.rail a:hover{color:var(--ink);background:var(--sunk)}
+
+/* ---- masthead ---- */
+.mast{padding-block:60px 44px;border-bottom:2px solid var(--ink)}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--comms);margin:0 0 20px}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(46px,8.5vw,92px);line-height:.94;
+  letter-spacing:-.035em;margin:0 0 6px;text-wrap:balance}
+.sub{font-family:var(--display);font-weight:500;font-size:clamp(19px,2.6vw,27px);line-height:1.22;
+  color:var(--ink-2);margin:0 0 26px;max-width:26ch;text-wrap:balance}
+.standfirst{font-size:18.5px;line-height:1.58;max-width:62ch;margin:0;color:var(--ink-2)}
+.standfirst strong{color:var(--ink);font-weight:600}
+
+.runstrip{display:flex;flex-wrap:wrap;gap:0;margin-top:34px;
+  border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
+.runstrip div{flex:1 1 130px;padding:11px 14px;border-right:1px solid var(--line)}
+.runstrip div:last-child{border-right:0}
+.runstrip b{display:block;font-family:var(--mono);font-size:19px;font-weight:600;
+  font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.runstrip span{font-family:var(--mono);font-size:10px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--muted)}
+
+/* ---- sections ---- */
+section{padding-block:56px;border-bottom:1px solid var(--line)}
+.snum{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--comms);
+  display:block;margin-bottom:9px}
+h2{font-family:var(--display);font-weight:700;font-size:clamp(28px,4.4vw,40px);line-height:1.06;
+  letter-spacing:-.025em;margin:0 0 16px;text-wrap:balance;max-width:20ch}
+h3{font-family:var(--display);font-weight:700;font-size:21px;line-height:1.2;letter-spacing:-.015em;
+  margin:36px 0 10px;text-wrap:balance}
+h4{font-family:var(--body);font-weight:600;font-size:15.5px;margin:22px 0 6px}
+p{margin:0 0 16px;max-width:70ch}
+a{color:var(--comms)}
+strong{font-weight:600}
+code,.m{font-family:var(--mono);font-size:.885em;background:var(--sunk);padding:1px 5px;
+  border-radius:3px;border:1px solid var(--line)}
+
+/* ---- callouts: the four roles Milbird's pages already use ---- */
+.cal{border-left:3px solid var(--line-strong);background:var(--surface);padding:16px 20px;
+  margin:24px 0;border-radius:0 7px 7px 0;max-width:74ch;box-shadow:var(--shadow)}
+.cal .lab{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+  margin:0 0 7px;font-weight:600}
+.cal p:last-child{margin-bottom:0}
+.cal.position{border-left-color:var(--comms)} .cal.position .lab{color:var(--comms)}
+.cal.risk{border-left-color:var(--elec)} .cal.risk .lab{color:var(--elec)}
+.cal.question{border-left-color:var(--gas)} .cal.question .lab{color:var(--gas)}
+.cal.evidence{border-left-color:var(--sewer)} .cal.evidence .lab{color:var(--sewer)}
+
+/* ---- plan sheet ---- */
+.sheet{background:var(--surface);border:1px solid var(--line-strong);border-radius:10px;
+  margin:28px 0;overflow:hidden;box-shadow:var(--shadow)}
+.sheet .head{display:flex;justify-content:space-between;gap:14px;align-items:baseline;
+  padding:11px 16px;border-bottom:1px solid var(--line);background:var(--sunk);flex-wrap:wrap}
+.sheet .head b{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  font-weight:600}
+.sheet .head span{font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+.sheet .body{overflow-x:auto;padding:8px}
+.sheet svg{display:block;min-width:720px;width:100%;height:auto}
+.sheet .foot{padding:11px 16px;border-top:1px solid var(--line);font-size:13.5px;
+  color:var(--ink-2);background:var(--sunk)}
+.sheet .foot p{margin:0;max-width:none}
+
+/* svg type */
+.sv-t{font-family:var(--display);font-weight:700;letter-spacing:-.01em}
+.sv-l{font-family:var(--mono);letter-spacing:.06em}
+.sv-b{font-family:var(--body)}
+
+
+
+/* ---- reading guide ---- */
+.guide{margin-top:34px;background:var(--surface);border:1px solid var(--line-strong);
+  border-radius:10px;padding:20px 24px;max-width:66ch;box-shadow:var(--shadow)}
+.guide .gl{font-family:var(--mono);font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--comms);margin:0 0 12px;font-weight:600}
+.guide ol{margin:0;padding-left:20px;font-size:15px;line-height:1.5}
+.guide li{margin-bottom:9px;color:var(--ink-2)}
+.guide li b{color:var(--ink)}
+.guide a{text-decoration:none;border-bottom:1px solid var(--comms)}
+.guide .gn{font-size:13.5px;color:var(--muted);margin:14px 0 0;line-height:1.5}
+
+/* ---- hero section ---- */
+.hero{background:var(--sunk);border-bottom:2px solid var(--ink);
+  margin-inline:calc(50% - 50vw);padding-inline:max(20px, calc(50vw - 590px))}
+.hero h2{font-size:clamp(30px,5vw,46px);max-width:24ch}
+.hero .lead{font-size:17.5px;line-height:1.55;color:var(--ink-2);max-width:66ch}
+.hero .lead strong{color:var(--ink)}
+.sheet.big svg{min-width:1000px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:8px}
+.two .cal{margin:0;max-width:none}
+
+/* ---- gap map ---- */
+.hm{display:flex;flex-direction:column;gap:5px}
+.hmrow{display:flex;align-items:center;gap:12px}
+.hmlab{flex:0 0 168px;font-size:13.5px;font-weight:500;text-align:right;color:var(--ink-2)}
+.hmbar{flex:1;display:flex;height:30px;border-radius:5px;overflow:hidden;min-width:220px;
+  border:1px solid var(--line)}
+.hmbar i{display:flex;align-items:center;justify-content:center;font-style:normal;min-width:0}
+.hmbar i b{font-family:var(--mono);font-size:11.5px;font-weight:600}
+.hmbar i.has{background:var(--sewer-soft)} .hmbar i.has b{color:var(--sewer)}
+.hmbar i.part{background:var(--gas-soft)} .hmbar i.part b{color:var(--gas)}
+.hmbar i.none{background:var(--sunk)} .hmbar i.none b{color:var(--muted)}
+.hmbar i.unk{background:var(--survey-soft)} .hmbar i.unk b{color:var(--survey)}
+.hmn{flex:0 0 26px;font-family:var(--mono);font-size:12px;color:var(--muted);
+  font-variant-numeric:tabular-nums;text-align:right}
+.hmhead .hmlab,.hmhead .hmbar,.hmhead .hmn{font-family:var(--mono);font-size:10px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.hmhead .hmbar{border:0;height:auto;display:block;padding-left:2px}
+.hmkey{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin:16px 0 8px;
+  line-height:2.1;max-width:none}
+.hmnote{font-size:14px;color:var(--ink-2);margin:0;max-width:74ch}
+@media (max-width:640px){.hmlab{flex:0 0 96px;font-size:12px}.hmbar{min-width:150px}}
+
+/* ---- planes ---- */
+.planes{display:grid;grid-template-columns:repeat(auto-fit,minmax(252px,1fr));gap:12px;margin:26px 0}
+.plane{background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--pc,var(--line-strong));
+  border-radius:8px;padding:15px 17px}
+.plane .v{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--pc,var(--muted));font-weight:600}
+.plane h4{font-family:var(--display);font-weight:700;font-size:20px;margin:3px 0 7px;letter-spacing:-.015em}
+.plane p{font-size:14px;line-height:1.5;margin:0 0 10px;color:var(--ink-2)}
+.plane ul{margin:0;padding-left:0;list-style:none;font-family:var(--mono);font-size:11.5px;line-height:1.75}
+.plane li{color:var(--ink-2);display:flex;gap:7px}
+.plane li::before{content:"";flex:0 0 5px;height:5px;margin-top:8px;border-radius:50%;
+  background:var(--dot,var(--line-strong))}
+.plane li.has::before{background:var(--sewer)} .plane li.part::before{background:var(--gas)}
+.plane li.none::before{background:var(--line-strong)}
+
+/* ---- tables ---- */
+.tw{overflow-x:auto;margin:22px 0;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:600px;font-size:14.5px}
+th{text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);font-weight:600;padding:10px 14px;border-bottom:1px solid var(--line-strong);
+  background:var(--sunk);vertical-align:bottom}
+td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.48}
+tr:last-child td{border-bottom:0}
+td.k{font-weight:600;color:var(--ink)}
+
+.pill{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.06em;
+  padding:2px 7px;border-radius:999px;white-space:nowrap;font-weight:600;text-transform:uppercase}
+.pill.has{background:var(--sewer-soft);color:var(--sewer)}
+.pill.part{background:var(--gas-soft);color:var(--gas)}
+.pill.none{background:var(--sunk);color:var(--muted)}
+.pill.hot{background:var(--elec-soft);color:var(--elec)}
+.pill.jig{background:var(--comms-soft);color:var(--comms)}
+.pill.unv{background:var(--survey-soft);color:var(--survey)}
+
+/* ---- decision rule walker ---- */
+.walker{background:var(--surface);border:1px solid var(--line-strong);border-radius:10px;
+  margin:28px 0;box-shadow:var(--shadow);overflow:hidden}
+.walker .wh{padding:14px 18px;border-bottom:1px solid var(--line);background:var(--sunk);
+  display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.walker .wh b{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+.walker .wb{padding:22px 18px 20px}
+.step{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--comms);margin:0 0 8px}
+.qz{font-family:var(--display);font-weight:700;font-size:22px;line-height:1.18;letter-spacing:-.015em;
+  margin:0 0 8px;max-width:38ch;text-wrap:balance}
+.qh{font-size:14.5px;color:var(--ink-2);margin:0 0 18px;max-width:60ch;line-height:1.5}
+.qh em{color:var(--muted);font-style:italic}
+.btns{display:flex;gap:9px;flex-wrap:wrap}
+button{font-family:var(--body);font-size:14.5px;font-weight:600;padding:9px 20px;border-radius:7px;
+  border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);cursor:pointer;
+  transition:background .12s,border-color .12s}
+button:hover{background:var(--sunk);border-color:var(--ink-2)}
+button:focus-visible{outline:2px solid var(--comms);outline-offset:2px}
+button.p{background:var(--comms);border-color:var(--comms);color:#fff}
+button.p:hover{background:var(--ink);border-color:var(--ink)}
+button.ghost{border-color:var(--line);color:var(--muted);font-weight:500;padding:6px 13px;font-size:13px}
+.verdict{border-left:3px solid var(--comms);background:var(--comms-soft);padding:16px 18px;
+  border-radius:0 7px 7px 0;margin:0 0 16px}
+.verdict .vl{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--comms);font-weight:600;margin:0 0 6px}
+.verdict h5{font-family:var(--display);font-weight:700;font-size:20px;margin:0 0 7px;letter-spacing:-.015em}
+.verdict p{font-size:14.5px;margin:0;color:var(--ink-2)}
+.trail{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:16px;line-height:1.7}
+.trail span{display:inline-block;margin-right:8px}
+
+details{border:1px solid var(--line);border-radius:8px;background:var(--surface);margin:10px 0;
+  overflow:hidden}
+summary{cursor:pointer;padding:12px 16px;font-weight:600;font-size:15px;list-style:none;
+  display:flex;gap:11px;align-items:baseline}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"+";font-family:var(--mono);color:var(--comms);font-weight:600;flex:0 0 auto}
+details[open] summary::before{content:"\2212"}
+summary:hover{background:var(--sunk)}
+details .dc{padding:2px 16px 16px 40px;font-size:14.5px;color:var(--ink-2);line-height:1.56}
+details .dc p{margin:0 0 10px;max-width:68ch}
+details .dc p:last-child{margin-bottom:0}
+.tnum{font-family:var(--mono);font-size:11px;color:var(--muted);flex:0 0 auto}
+
+ol.build{list-style:none;counter-reset:b;padding:0;margin:26px 0}
+ol.build li{counter-increment:b;position:relative;padding:0 0 22px 52px;border-left:1px solid var(--line);
+  margin-left:16px}
+ol.build li::before{content:counter(b,decimal-leading-zero);position:absolute;left:-17px;top:-2px;
+  width:33px;height:33px;border-radius:50%;background:var(--surface);border:1px solid var(--line-strong);
+  font-family:var(--mono);font-size:12px;font-weight:600;display:flex;align-items:center;
+  justify-content:center;color:var(--comms)}
+ol.build li:last-child{border-left-color:transparent;padding-bottom:0}
+ol.build h4{margin:0 0 5px;font-size:17px;font-family:var(--display);font-weight:700;letter-spacing:-.015em}
+ol.build p{font-size:14.5px;margin:0 0 7px;color:var(--ink-2)}
+ol.build .pr{font-family:var(--mono);font-size:11.5px;color:var(--muted);line-height:1.6}
+ol.build .pr b{color:var(--sewer);font-weight:600}
+
+.foot{padding-block:40px 64px;font-size:13.5px;color:var(--muted);border-bottom:0}
+.foot p{max-width:74ch;margin:0 0 10px}
+.foot code{font-size:.9em}
+
+@media (max-width:640px){
+  section{padding-block:40px}
+  .mast{padding-block:40px 32px}
+  .rail nav{width:100%;margin-left:0;overflow-x:auto}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* ================= DECK SHELL ================= */
+html,body{height:100%;overflow:hidden}
+body{overscroll-behavior:none}
+.deck{position:fixed;inset:0;overflow:hidden}
+.track{display:flex;height:100%;will-change:transform;
+  transition:transform .44s cubic-bezier(.33,.9,.28,1)}
+.slide{flex:0 0 100%;height:100%;overflow-y:auto;overflow-x:hidden;
+  padding:calc(34px + env(safe-area-inset-top,0px)) max(20px,3.4vw) 104px;
+  scrollbar-width:thin;scrollbar-color:var(--line-strong) transparent}
+.slide::-webkit-scrollbar{width:9px}
+.slide::-webkit-scrollbar-thumb{background:var(--line-strong);border-radius:9px}
+.si{max-width:1200px;margin:0 auto}
+.slide.cover{display:flex;align-items:center}
+.slide.cover .si{width:100%}
+.slide .mast{border:0;padding-block:0}
+
+.deckbar{position:fixed;left:0;right:0;bottom:0;z-index:80;height:64px;
+  padding:0 16px env(safe-area-inset-bottom,0px);display:flex;align-items:center;gap:12px;
+  background:color-mix(in srgb, var(--paper) 93%, transparent);backdrop-filter:blur(12px);
+  border-top:1px solid var(--line)}
+.nav{flex:0 0 auto;width:38px;height:38px;padding:0;border-radius:9px;font-size:17px;
+  display:flex;align-items:center;justify-content:center;line-height:1}
+.nav:disabled{opacity:.26;cursor:default}
+.dots{flex:1;display:flex;gap:3px;overflow-x:auto;scrollbar-width:none;align-items:center}
+.dots::-webkit-scrollbar{display:none}
+.dot{flex:0 0 auto;padding:6px 11px;border:0;background:transparent;border-radius:7px;
+  font-family:var(--mono);font-size:11px;letter-spacing:.03em;color:var(--muted);
+  white-space:nowrap;cursor:pointer;font-weight:500}
+.dot:hover{color:var(--ink);background:var(--sunk)}
+.dot.on{color:var(--comms);background:var(--comms-soft);font-weight:600}
+.count{flex:0 0 auto;font-family:var(--mono);font-size:11.5px;color:var(--muted);
+  font-variant-numeric:tabular-nums;padding-left:2px}
+.count b{color:var(--ink);font-weight:600}
+
+.snum{font-size:10.5px}
+h2{margin-top:0}
+.hero{background:transparent;margin-inline:0;padding-inline:0;border:0}
+.sheet{margin-top:18px}
+.sheet .body{max-height:none}
+section{padding-block:0;border-bottom:0}
+@media (max-width:760px){
+  .slide{padding:24px 17px 94px}
+  .dot span{display:none}
+  .dot{width:9px;height:9px;padding:0;border-radius:50%;background:var(--line-strong)}
+  .dot.on{background:var(--comms)}
+  .dots{gap:7px;justify-content:center}
+  .deckbar{gap:9px}
+}
+@media (prefers-reduced-motion:reduce){.track{transition:none}}
+
+/* ---------- level 1 / level 2 ---------- */
+.l1{min-height:calc(100dvh - 176px);display:flex;flex-direction:column;justify-content:center}
+.l1 > :first-child{margin-top:0}
+.l1 .sheet{margin-block:16px 0}
+.l1 .sheet .body{padding:6px}
+.l1 .sheet svg{min-width:0;width:100%;height:clamp(220px,calc(100dvh - 430px),600px)}
+.l1 .cal{margin-block:14px}
+.l1 p{margin-bottom:12px}
+.l1 .tw{margin-block:14px}
+
+.more{margin-top:46px;padding-top:28px;border-top:1px solid var(--line-strong)}
+.more .ml{font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--muted);margin:0 0 20px;display:flex;align-items:center;gap:10px}
+.more .ml::after{content:"";flex:1;height:1px;background:var(--line)}
+
+.hint{position:fixed;left:50%;transform:translateX(-50%);bottom:78px;z-index:70;
+  font-family:var(--mono);font-size:10px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--muted);background:var(--surface);border:1px solid var(--line);
+  border-radius:999px;padding:6px 14px;opacity:0;transition:opacity .22s;pointer-events:none;
+  box-shadow:var(--shadow);white-space:nowrap}
+.hint.on{opacity:1}
+
+@media (max-width:760px){
+  .l1{min-height:auto;display:block}
+  .l1 .sheet svg{min-width:820px;width:auto;height:auto}
+  .hint{bottom:72px}
+}
+
+/* picture slide: the drawing is the slide */
+@media (max-width:760px){
+}
+
+/* ---------- deck typography: level 1 is declarative ---------- */
+.big1{font-size:clamp(17px,2.05vw,21px);line-height:1.46;color:var(--ink-2);
+  max-width:52ch;margin:0 0 14px}
+.big1 strong{color:var(--ink);font-weight:600}
+.l1 .cal .quote{font-family:var(--mono);font-size:14px;line-height:1.55;color:var(--ink)}
+.mines{list-style:none;padding:0;margin:22px 0 0;display:grid;gap:11px;max-width:60ch}
+.mines li{padding-left:22px;position:relative;font-size:16px;line-height:1.45;color:var(--ink-2)}
+.mines li::before{content:"";position:absolute;left:0;top:9px;width:9px;height:9px;
+  border-radius:50%;background:var(--elec)}
+.mines b{color:var(--ink);font-weight:600;display:block}
+
+/* ---------- fix: never clip the top of a slide ---------- */
+.slide{padding-top:calc(52px + env(safe-area-inset-top,0px))}
+.slide.cover{display:block}
+.l1{justify-content:flex-start}
+.l1.centred{justify-content:center}
+.slide.cover .l1{min-height:calc(100dvh - 220px);display:flex;flex-direction:column;
+  justify-content:center}
+.mast{padding-block:0}
+h1{font-size:clamp(42px,7vw,78px)}
+.sub{max-width:22ch;margin-bottom:20px}
+.standfirst{font-size:17.5px;max-width:52ch}
+.guide{margin-top:26px;padding:18px 22px}
+.guide ol{font-size:15.5px}
+.guide li{margin-bottom:6px}
+
+.keys{flex:0 0 auto;font-family:var(--mono);font-size:10px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--muted);white-space:nowrap;display:flex;gap:5px;
+  align-items:center;padding-right:4px;border-right:1px solid var(--line);margin-right:2px}
+.keys span{color:var(--ink);font-size:12px;letter-spacing:0}
+@media (max-width:900px){.keys{display:none}}
+
+/* ---------- the fiberhood drawing ---------- */
+.cap{margin:12px auto 0;max-width:86ch;text-align:center;font-size:14.5px;line-height:1.5;
+  color:var(--ink-2);min-height:3.2em;transition:color .15s}
+.cap.live{color:var(--ink)}
+@media (hover:none){.cap{display:none}}
+
+
+.three{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin:24px 0}
+.wcard,.tcard,.acard{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px 20px}
+.wcard{border-top:3px solid var(--comms)}
+.wcard .wn{font-family:var(--mono);font-size:11px;color:var(--comms);font-weight:600;letter-spacing:.1em}
+.tcard{border-top:3px solid var(--water)}
+.tcard .tt{font-family:var(--mono);font-size:10.5px;color:var(--water);font-weight:600;letter-spacing:.12em}
+.tcard .tq{font-size:13px;color:var(--comms);font-style:italic;margin-bottom:0}
+.acard{border-top:3px solid var(--muted);opacity:.92}
+.wcard h4,.tcard h4,.acard h4{font-family:var(--display);font-weight:700;font-size:19px;margin:6px 0 8px;letter-spacing:-.015em}
+.wcard p,.tcard p,.acard p{font-size:14px;line-height:1.5;color:var(--ink-2);margin:0 0 9px}
+.starts{list-style:none;padding:0;margin:20px 0;display:grid;gap:13px;max-width:78ch}
+.starts li{padding-left:24px;position:relative;font-size:15px;line-height:1.5;color:var(--ink-2)}
+.starts li::before{content:"";position:absolute;left:0;top:9px;width:10px;height:10px;border:2px solid var(--comms);border-radius:2px}
+.starts b{color:var(--ink);font-weight:600}
+.files{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:22px 0}
+.fcard{background:var(--surface);border:1px solid var(--line-strong);border-radius:9px;padding:14px 16px;
+  display:flex;flex-direction:column;gap:8px}
+.fcard .fn{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--ink);word-break:break-all}
+.fcard .fm{font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.05em}
+.fcard.key{border-color:var(--comms);border-width:2px}
+.fcard.key .fn{color:var(--comms)}
+.fcard button{font-size:12.5px;padding:6px 12px;border-radius:6px;align-self:flex-start}
+.fcard button.done{background:var(--sewer-soft);border-color:var(--sewer);color:var(--sewer)}
+.sheet.big svg{min-width:1000px}
+.l1 .sheet svg{min-width:0;width:100%;height:clamp(240px,calc(100dvh - 400px),560px)}
+@media (max-width:760px){.l1 .sheet svg{min-width:900px;width:auto;height:auto}}
+
+td.hi{background:var(--comms-soft)}
+td.hi strong{color:var(--comms)}
+
+/* ---------- download toolbar ---------- */
+.dlbar{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));right:14px;z-index:90;
+  display:flex;gap:7px}
+.dlbar button{font-size:11px;padding:7px 12px;border-radius:7px;box-shadow:var(--shadow)}
+.dlbar button[disabled]{opacity:.4;cursor:default}
+.dlbar .msg{font-family:var(--mono);font-size:10.5px;color:var(--muted);align-self:center;
+  padding-left:2px;white-space:nowrap}
+@media (max-width:640px){.dlbar{top:auto;bottom:76px;right:10px}.dlbar .msg{display:none}}
+
+/* ---------- print / save as PDF ---------- */
+@media print{
+  html,body{height:auto!important;overflow:visible!important}
+  .deck{position:static!important;overflow:visible!important}
+  .track{display:block!important;transform:none!important;height:auto!important;
+    transition:none!important}
+  .slide{position:static!important;flex:none!important;height:auto!important;
+    overflow:visible!important;padding:22px 4px!important;page-break-after:always}
+  .slide:last-child{page-break-after:auto}
+  .l1{min-height:auto!important;display:block!important}
+  .deckbar,.hint,.dlbar{display:none!important}
+  .sheet .body{overflow-x:visible}
+  a{color:var(--ink)}
+}
+/* ---------- mockups ---------- */
+.mockrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));gap:20px;
+  align-items:start;margin:22px 0}
+.mocknote{padding-top:6px}
+.mocknote h4{font-family:var(--display);font-weight:700;font-size:16px;margin:0 0 6px}
+.mocknote h4+p{margin-top:0}
+.mocknote p{font-size:14px;line-height:1.5;color:var(--ink-2);margin:0 0 16px}
+
+.phone{background:var(--ink);border-radius:26px;padding:9px;box-shadow:var(--shadow);
+  max-width:274px;width:100%;justify-self:center;position:relative}
+.pnotch{width:76px;height:5px;border-radius:3px;background:#555;margin:2px auto 7px}
+.pscr{background:var(--surface);border-radius:19px;padding:12px 13px 14px;display:flex;
+  flex-direction:column;gap:9px}
+.pbar{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9.5px;
+  color:var(--muted);letter-spacing:.04em}
+.pbar .off{color:var(--gas);font-weight:600}
+.pbar .on2{color:var(--sewer);font-weight:600}
+.phead b{font-family:var(--display);font-size:19px;display:block;letter-spacing:-.015em}
+.phead span{font-family:var(--mono);font-size:10px;color:var(--muted)}
+.plab{font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--muted);margin-top:2px}
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.pk{font-family:var(--body);font-size:13.5px;font-weight:600;padding:11px 8px;border-radius:9px;
+  border:1.5px solid var(--line-strong);background:var(--surface);color:var(--ink);text-align:left;
+  display:flex;flex-direction:column;gap:2px;cursor:default}
+.pk em{font-style:normal;font-family:var(--mono);font-size:9px;color:var(--muted);font-weight:400}
+.pk.on{border-color:var(--comms);background:var(--comms-soft);color:var(--comms)}
+.pk.on em{color:var(--comms)}
+.pshot{display:flex;gap:9px;align-items:center;background:var(--sunk);border-radius:10px;padding:8px}
+.pshotimg{width:62px;height:48px;border-radius:7px;background:var(--ink);display:flex;
+  flex-direction:column;align-items:center;justify-content:center;flex:0 0 auto}
+.pshotimg .rdg{font-family:var(--mono);font-size:17px;font-weight:600;color:#7CFF9E;letter-spacing:.04em}
+.pshotimg em{font-style:normal;font-family:var(--mono);font-size:7px;color:#999;margin-top:1px}
+.pshotmeta b{display:block;font-family:var(--mono);font-size:16px;font-weight:600}
+.pshotmeta span{font-size:10.5px;color:var(--muted);line-height:1.3;display:block}
+.pvoice{font-size:12.5px;padding:9px;border-radius:9px;border:1.5px dashed var(--line-strong);
+  background:transparent;color:var(--muted);cursor:default}
+.pfile{font-size:15px;font-weight:600;padding:12px;border-radius:10px;border:0;
+  background:var(--comms);color:#fff;cursor:default}
+.pfoot{font-size:10.5px;color:var(--muted);text-align:center;margin:2px 0 0;font-style:italic}
+.pret{display:grid;gap:7px}
+.pr{background:var(--sunk);border-radius:9px;padding:9px 11px}
+.pr b{display:block;font-family:var(--mono);font-size:17px;font-weight:600}
+.pr span{font-size:10.5px;color:var(--muted)}
+.pr.ok{background:var(--sewer-soft)} .pr.ok b{color:var(--sewer);font-size:14px}
+.ptask{display:grid;gap:7px}
+.pt{border:1px solid var(--line);border-radius:9px;padding:9px 11px}
+.pt b{display:block;font-size:13px} .pt span{font-size:10.5px;color:var(--muted)}
+
+.mockstack{display:grid;gap:18px;margin:20px 0}
+.win{background:var(--surface);border:1px solid var(--line-strong);border-radius:11px;
+  overflow:hidden;box-shadow:var(--shadow)}
+.wbar{display:flex;align-items:center;gap:7px;padding:9px 14px;background:var(--sunk);
+  border-bottom:1px solid var(--line);flex-wrap:wrap}
+.wbar span.dotr,.wbar span.doty,.wbar span.dotg{width:9px;height:9px;border-radius:50%}
+.dotr{background:#E8666F}.doty{background:#E3B341}.dotg{background:#5BC97E}
+.wbar b{font-size:13.5px;margin-left:8px}
+.wbar em{font-style:normal;font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-left:auto}
+.wbody{padding:14px 16px}
+.wbody.adj{display:grid;grid-template-columns:minmax(190px,1fr) 2fr;gap:14px;padding:0}
+.adjq{border-right:1px solid var(--line);padding:10px}
+.ai{padding:9px 10px;border-radius:8px;display:flex;flex-direction:column;gap:1px;position:relative}
+.ai b{font-size:13px}.ai span{font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+.ai.on{background:var(--comms-soft)}
+.ai.bad b{color:var(--elec)}
+.cf{position:absolute;right:10px;top:10px;font-family:var(--mono);font-size:10.5px;font-weight:600;font-style:normal}
+.cf.hi{color:var(--sewer)}.cf.mid{color:var(--gas)}.cf.low{color:var(--elec)}
+.adjmain{display:grid;grid-template-columns:auto 1fr;gap:14px;padding:12px 14px 14px 0}
+.adjphoto{width:120px;height:150px;border-radius:9px;background:var(--ink);display:flex;
+  flex-direction:column;align-items:center;justify-content:center;flex:0 0 auto}
+.adjphoto .rdg{font-family:var(--mono);font-size:32px;font-weight:600;color:#7CFF9E}
+.adjphoto em{font-style:normal;font-family:var(--mono);font-size:9px;color:#999;margin-top:4px}
+.af{display:grid;grid-template-columns:76px 1fr;gap:8px;padding:5px 0;border-bottom:1px solid var(--line);align-items:baseline}
+.af span{font-family:var(--mono);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+.af b{font-size:13.5px}
+.af i{font-style:normal;font-family:var(--mono);font-size:10.5px;color:var(--muted);grid-column:2}
+.af.warn b{color:var(--gas)}
+.adjbtns{display:flex;gap:8px;margin-top:12px}
+.adjbtns .ok{background:var(--sewer);border-color:var(--sewer);color:#fff;font-size:13.5px;padding:8px 20px}
+.adjbtns .no{font-size:13.5px;padding:8px 16px}
+.adjwhy{font-size:11px;color:var(--muted);margin:8px 0 0;font-style:italic}
+.bars{display:grid;gap:9px}
+.brow{display:grid;grid-template-columns:120px 1fr 96px;gap:11px;align-items:center}
+.brow .bl{font-size:13px;color:var(--ink-2)}
+.btrack{height:22px;background:var(--sunk);border-radius:5px;overflow:hidden;position:relative}
+.bfill{height:100%;background:var(--comms);border-radius:5px}
+.bnum{font-family:var(--mono);font-size:11.5px;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
+.barsfoot{margin-top:12px;font-size:12.5px;color:var(--muted);font-style:italic}
+.chain{display:flex;gap:8px;align-items:stretch;flex-wrap:wrap}
+.cstep{flex:1 1 160px;background:var(--sunk);border-radius:9px;padding:11px 13px;border-left:3px solid var(--line-strong)}
+.cstep b{display:block;font-size:13px;margin-bottom:3px}
+.cstep span{font-size:11.5px;color:var(--ink-2);line-height:1.4}
+.cstep.ok{background:var(--sewer-soft);border-left-color:var(--sewer)}
+.carr{align-self:center;color:var(--line-strong);font-size:18px}
+@media (max-width:760px){.wbody.adj{grid-template-columns:1fr}.adjq{border-right:0;border-bottom:1px solid var(--line)}
+ .adjmain{grid-template-columns:1fr;padding:12px 14px}.adjphoto{width:100%;height:110px}.carr{display:none}}
+table.plan td{font-size:13px;line-height:1.45}
+table.plan td.hi{background:var(--comms-soft);color:var(--ink)}
+.mines.setup li::before{background:var(--comms)}
+</style>
+
+<div class="dlbar" id="dlbar">
+  <button type="button" id="dl-pdf" title="Opens your browser's print dialog — choose &quot;Save as PDF&quot;">Save as PDF</button>
+  <button type="button" id="dl-html" title="Download this brief as a standalone HTML file">Download HTML</button>
+  <span class="msg" id="dlmsg"></span>
+</div>
+<div class="deck"><div class="track" id="track" style="transform: translateX(0%);">
+<section class="slide cover" id="s-cover"><div class="si"><div class="l1"><div class="mast">
+<p class="eyebrow">Milbird · team build brief</p>
+<h1>The Last Mile of Data</h1>
+<p class="sub">The work happens outside. The systems are inside. Nothing connects them.</p>
+<p class="standfirst">A contractor runs crews across dozens of sites. The office has good systems. <strong>The field runs on paper.</strong></p>
+<div class="guide">
+  <p class="gl">Start here</p>
+  <ol>
+      <li><a href="#agents"><b>The agents</b></a> — five to build, four things that must not be.</li>
+      <li><a href="#buildplan"><b>The build</b></a> — three hours, hour by hour.</li>
+      <li><a href="#setup"><b>Setup</b></a> — do this before the clock starts.</li>
+    </ol>
+</div></div></div>
+<div class="more"><p class="ml">More detail</p>
+<h3>Why anyone should care</h3>
+
+<div class="three">
+  <div class="wcard"><div class="wn">01</div><h4>Nobody can be scored</h4><p>You cannot score a crew you have no records for. Every quality measure ships blank.</p></div>
+  <div class="wcard"><div class="wn">02</div><h4>Nothing can be planned</h4><p>You cannot forecast without knowing how fast crews actually work. Every date is a guess.</p></div>
+  <div class="wcard"><div class="wn">03</div><h4>Disputes are lost by default</h4><p>When the customer queries a number months later, the answer is a spreadsheet cell. That is not evidence.</p></div>
+</div>
+<p class="big1" style="margin-top:26px">One missing fact. Three dead screens. <strong>Fix capture and all three light up.</strong></p>
+<h3>The value hypothesis, stated so it can be measured</h3>
+<div class="tw"><table>
+<thead><tr><th style="width:30%">If capture works</th><th>How you would know within one season</th></tr></thead>
+<tbody>
+<tr><td class="k">Billing accuracy improves</td><td>Run capture in parallel with paper for one crew. Measure the disagreement rate between the two, and which one turns out to be right.</td></tr>
+<tr><td class="k">The office finds out sooner</td><td>Median days from work performed to work recorded. Today that is somewhere between one and twenty-one. Target: same shift.</td></tr>
+<tr><td class="k">Disputes become answerable</td><td>Proportion of billed line items that can produce a timestamped, located, attributed record on request. Today: none.</td></tr>
+<tr><td class="k">Rework becomes visible</td><td>Rework is currently invisible because nothing records the first attempt. Count of rework events per thousand units, which is a number nobody can currently produce.</td></tr>
+</tbody></table></div>
+<div class="cal position"><p class="lab">The discipline</p>
+<p>Do not promise productivity. Measured studies repeatedly find people believe tooling made them faster when it did not. <strong>Promise the fact, and measure the fact.</strong></p></div></div></div></section>
+<section class="slide" id="s-problem"><div class="si"><div class="l1"><span class="snum">01 / THE PROBLEM</span>
+<h2>Eight stages. One gets recorded.</h2>
+<div class="sheet big"><div class="body"><svg viewBox="0 0 1340 560" role="img" aria-label="Eight stages of a field build shown as icons. Only the first is recorded by any system; the other seven happen on paper. Below, the office systems are shown as good but starved of input.">
+<rect x="18" y="70" width="150" height="214" rx="12" fill="var(--surface)" stroke="var(--sewer)" stroke-width="3"></rect>
+<path d="M18,82 a12,12 0 0 1 12,-12 h126 a12,12 0 0 1 12,12 v16 h-150 z" fill="var(--sewer)"></path>
+<text class="sv-l" x="93" y="93" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">RECORDED</text>
+<g transform="translate(93,145) scale(1.05)" fill="none" stroke="var(--sewer)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M-16,20 v-40"></path><path d="M-16,-18 l26,7 l-26,7 z" fill="var(--sewer)" stroke="none"></path><path d="M2,20 v-30"></path><path d="M2,-8 l20,5 l-20,5 z" fill="var(--sewer)" stroke="none"></path></g>
+<text class="sv-t" x="93" y="205" font-size="17" fill="var(--ink)" text-anchor="middle">Locate</text>
+<text class="sv-b" x="93" y="228" font-size="12" fill="var(--ink-2)" text-anchor="middle">mark what is buried</text>
+<text class="sv-l" x="93" y="256" font-size="11" fill="var(--muted)" text-anchor="middle">each</text>
+<path d="M170,177 l10,0" stroke="var(--line-strong)" stroke-width="2"></path>
+<rect x="183" y="70" width="150" height="214" rx="12" fill="var(--surface)" stroke="var(--elec)" stroke-width="2"></rect>
+<path d="M183,82 a12,12 0 0 1 12,-12 h126 a12,12 0 0 1 12,12 v16 h-150 z" fill="var(--elec)"></path>
+<text class="sv-l" x="258" y="93" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">PAPER</text>
+<g transform="translate(258,145) scale(1.05)" fill="none" stroke="var(--elec)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><rect x="-24" y="-16" width="32" height="22" rx="4"></rect><rect x="8" y="-8" width="14" height="14" rx="3"></rect><circle cx="-14" cy="12" r="6"></circle><circle cx="2" cy="12" r="6"></circle><path d="M22,-2 q12,4 9,17"></path></g>
+<text class="sv-t" x="258" y="205" font-size="17" fill="var(--ink)" text-anchor="middle">Expose</text>
+<text class="sv-b" x="258" y="228" font-size="12" fill="var(--ink-2)" text-anchor="middle">dig without cutting</text>
+<text class="sv-l" x="258" y="256" font-size="11" fill="var(--muted)" text-anchor="middle">each</text>
+<path d="M335,177 l10,0" stroke="var(--line-strong)" stroke-width="2"></path>
+<rect x="348" y="70" width="150" height="214" rx="12" fill="var(--surface)" stroke="var(--elec)" stroke-width="2"></rect>
+<path d="M348,82 a12,12 0 0 1 12,-12 h126 a12,12 0 0 1 12,12 v16 h-150 z" fill="var(--elec)"></path>
+<text class="sv-l" x="423" y="93" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">PAPER</text>
+<g transform="translate(423,145) scale(1.05)" fill="none" stroke="var(--elec)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><rect x="-22" y="-2" width="30" height="16" rx="4"></rect><circle cx="-14" cy="18" r="6"></circle><circle cx="0" cy="18" r="6"></circle><path d="M-4,-2 l26,-22" stroke-width="5"></path><path d="M8,14 q14,10 24,12" stroke-dasharray="4 3"></path></g>
+<text class="sv-t" x="423" y="205" font-size="17" fill="var(--ink)" text-anchor="middle">Bore</text>
+<text class="sv-b" x="423" y="228" font-size="12" fill="var(--ink-2)" text-anchor="middle">push conduit under</text>
+<text class="sv-l" x="423" y="256" font-size="11" fill="var(--muted)" text-anchor="middle">metres</text>
+<path d="M500,177 l10,0" stroke="var(--line-strong)" stroke-width="2"></path>
+<rect x="513" y="70" width="150" height="214" rx="12" fill="var(--surface)" stroke="var(--elec)" stroke-width="2"></rect>
+<path d="M513,82 a12,12 0 0 1 12,-12 h126 a12,12 0 0 1 12,12 v16 h-150 z" fill="var(--elec)"></path>
+<text class="sv-l" x="588" y="93" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">PAPER</text>
+<g transform="translate(588,145) scale(1.05)" fill="none" stroke="var(--elec)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><rect x="-20" y="-6" width="16" height="26" rx="3"></rect><rect x="2" y="-18" width="18" height="38" rx="3"></rect><path d="M6,-8 h10 M6,0 h10"></path></g>
+<text class="sv-t" x="588" y="205" font-size="17" fill="var(--ink)" text-anchor="middle">Place</text>
+<text class="sv-b" x="588" y="228" font-size="12" fill="var(--ink-2)" text-anchor="middle">pedestals and boxes</text>
+<text class="sv-l" x="588" y="256" font-size="11" fill="var(--muted)" text-anchor="middle">each</text>
+<path d="M665,177 l10,0" stroke="var(--line-strong)" stroke-width="2"></path>
+<rect x="678" y="70" width="150" height="214" rx="12" fill="var(--surface)" stroke="var(--elec)" stroke-width="2"></rect>
+<path d="M678,82 a12,12 0 0 1 12,-12 h126 a12,12 0 0 1 12,12 v16 h-150 z" fill="var(--elec)"></path>
+<text class="sv-l" x="753" y="93" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">PAPER</text>
+<g transform="translate(753,145) scale(1.05)" fill="none" stroke="var(--elec)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><rect x="-20" y="-12" width="40" height="26" rx="5"></rect><path d="M-30,1 h10 M20,1 h10"></path><circle cx="0" cy="1" r="5"></circle></g>
+<text class="sv-t" x="753" y="205" font-size="17" fill="var(--ink)" text-anchor="middle">Connect</text>
+<text class="sv-b" x="753" y="228" font-size="12" fill="var(--ink-2)" text-anchor="middle">join the fibre</text>
+<text class="sv-l" x="753" y="256" font-size="11" fill="var(--muted)" text-anchor="middle">each</text>
+<path d="M830,177 l10,0" stroke="var(--line-strong)" stroke-width="2"></path>
+<rect x="843" y="70" width="150" height="214" rx="12" fill="var(--surface)" stroke="var(--elec)" stroke-width="2"></rect>
+<path d="M843,82 a12,12 0 0 1 12,-12 h126 a12,12 0 0 1 12,12 v16 h-150 z" fill="var(--elec)"></path>
+<text class="sv-l" x="918" y="93" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">PAPER</text>
+<g transform="translate(918,145) scale(1.05)" fill="none" stroke="var(--elec)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="-6" cy="0" r="18"></circle><circle cx="-6" cy="0" r="6"></circle><path d="M12,0 h18"></path><path d="M22,-7 l8,7 l-8,7"></path></g>
+<text class="sv-t" x="918" y="205" font-size="17" fill="var(--ink)" text-anchor="middle">Pull cable</text>
+<text class="sv-b" x="918" y="228" font-size="12" fill="var(--ink-2)" text-anchor="middle">blow it through</text>
+<text class="sv-l" x="918" y="256" font-size="11" fill="var(--muted)" text-anchor="middle">metres</text>
+<path d="M995,177 l10,0" stroke="var(--line-strong)" stroke-width="2"></path>
+<rect x="1008" y="70" width="150" height="214" rx="12" fill="var(--surface)" stroke="var(--elec)" stroke-width="2"></rect>
+<path d="M1008,82 a12,12 0 0 1 12,-12 h126 a12,12 0 0 1 12,12 v16 h-150 z" fill="var(--elec)"></path>
+<text class="sv-l" x="1083" y="93" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">PAPER</text>
+<g transform="translate(1083,145) scale(1.05)" fill="none" stroke="var(--elec)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><rect x="-20" y="-16" width="40" height="30" rx="4"></rect><path d="M-13,4 l7,-10 l6,7 l5,-13 l8,16"></path><path d="M-8,20 h16"></path></g>
+<text class="sv-t" x="1083" y="205" font-size="17" fill="var(--ink)" text-anchor="middle">Verify</text>
+<text class="sv-b" x="1083" y="228" font-size="12" fill="var(--ink-2)" text-anchor="middle">prove it works</text>
+<text class="sv-l" x="1083" y="256" font-size="11" fill="var(--muted)" text-anchor="middle">each</text>
+<path d="M1160,177 l10,0" stroke="var(--line-strong)" stroke-width="2"></path>
+<rect x="1173" y="70" width="150" height="214" rx="12" fill="var(--surface)" stroke="var(--elec)" stroke-width="2"></rect>
+<path d="M1173,82 a12,12 0 0 1 12,-12 h126 a12,12 0 0 1 12,12 v16 h-150 z" fill="var(--elec)"></path>
+<text class="sv-l" x="1248" y="93" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">PAPER</text>
+<g transform="translate(1248,145) scale(1.05)" fill="none" stroke="var(--elec)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M-22,14 h44" stroke-width="6"></path><path d="M-22,2 q11,-12 22,0 q11,-12 22,0"></path><rect x="-7" y="-22" width="14" height="16" rx="3"></rect></g>
+<text class="sv-t" x="1248" y="205" font-size="17" fill="var(--ink)" text-anchor="middle">Restore</text>
+<text class="sv-b" x="1248" y="228" font-size="12" fill="var(--ink-2)" text-anchor="middle">put the ground back</text>
+<text class="sv-l" x="1248" y="256" font-size="11" fill="var(--muted)" text-anchor="middle">metres</text>
+<rect x="183" y="300" width="1140" height="48" rx="9" fill="var(--elec-soft)" stroke="var(--elec)" stroke-width="2" stroke-dasharray="8 6"></rect>
+<g transform="translate(216,324) scale(0.52)" fill="none" stroke="var(--elec)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><rect x="-13" y="-22" width="26" height="44" rx="5"></rect><path d="M-5,-16 h10"></path><circle cx="0" cy="14" r="3"></circle></g>
+<text class="sv-l" x="770" y="330" font-size="13" fill="var(--elec)" text-anchor="middle" font-weight="600">SEVEN OF EIGHT REACH NO SYSTEM AT ALL</text>
+<path d="M93,284 L93,372" stroke="var(--sewer)" stroke-width="3.5" fill="none"></path><path d="M93,376 l-7,-11 h14 z" fill="var(--sewer)"></path>
+<rect x="18" y="382" width="1304" height="80" rx="10" fill="var(--sewer-soft)" stroke="var(--sewer)" stroke-width="2"></rect>
+<g transform="translate(70,422) scale(0.62)" fill="none" stroke="var(--sewer)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="0" cy="0" r="18"></circle><path d="M0,-10 v20 M-6,-5 h12 M-6,5 h12"></path></g>
+<text class="sv-b" x="70" y="452" font-size="11" fill="var(--sewer)" text-anchor="middle">ledger</text>
+<g transform="translate(198,422) scale(0.62)" fill="none" stroke="var(--sewer)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M-20,16 v-28 h12 l5,6 h23 v22 z"></path></g>
+<text class="sv-b" x="198" y="452" font-size="11" fill="var(--sewer)" text-anchor="middle">documents</text>
+<g transform="translate(326,422) scale(0.62)" fill="none" stroke="var(--sewer)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><rect x="-18" y="-20" width="36" height="40" rx="4"></rect><path d="M-9,-10 h18 M-9,-1 h18 M-9,8 h11"></path></g>
+<text class="sv-b" x="326" y="452" font-size="11" fill="var(--sewer)" text-anchor="middle">scheduling</text>
+<g transform="translate(454,422) scale(0.62)" fill="none" stroke="var(--sewer)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M-18,18 v-32"></path><path d="M-18,18 h36"></path><rect x="-12" y="0" width="8" height="18"></rect><rect x="0" y="-9" width="8" height="27"></rect><rect x="12" y="-18" width="8" height="36"></rect></g>
+<text class="sv-b" x="454" y="452" font-size="11" fill="var(--sewer)" text-anchor="middle">reporting</text>
+<text class="sv-l" x="590" y="408" font-size="11" fill="var(--sewer)" font-weight="600">THE OFFICE — GOOD SYSTEMS, NOTHING TO PUT IN THEM</text>
+<text class="sv-b" x="590" y="436" font-size="14" fill="var(--ink-2)">All of it works. All of it is waiting for a number somebody has to type in weeks later.</text>
+<rect x="18" y="482" width="1304" height="58" rx="10" fill="var(--sunk)" stroke="var(--line-strong)"></rect>
+<text class="sv-b" x="44" y="509" font-size="17" fill="var(--ink)" font-weight="600">This is a data collection problem dressed up as a software problem.</text>
+<text class="sv-b" x="44" y="530" font-size="13.5" fill="var(--ink-2)">Nobody needs another dashboard. Somebody needs the first fact.</text>
+</svg></div></div></div>
+<div class="more"><p class="ml">More detail</p>
+<p>The pattern is not specific to one trade. Substitute pest control, solar installation, road maintenance, tree work, HVAC service, agricultural contracting or disaster restoration and the shape holds: <strong>dispersed crews, physical work, a paper record, and an office that finds out weeks later.</strong></p>
+<div class="two">
+<div class="cal risk"><p class="lab">What actually happens today</p>
+<p>A crew finishes work. The foreman writes quantities on a paper ticket. The ticket travels in a truck. Somewhere between one day and three weeks later, somebody in an office types it into a spreadsheet. By then nobody can check it.</p></div>
+<div class="cal question"><p class="lab">Why it has not been solved already</p>
+<p>Because every attempt starts at the office. Dashboards, reports, integrations, a data warehouse. All of them assume the fact exists. <strong>The fact does not exist.</strong></p></div>
+</div></div></div></section>
+<section class="slide" id="s-challenge"><div class="si"><div class="l1"><span class="snum">03 / THE ARC</span>
+<h2>Capture it. Organise it. Use it.</h2>
+<div class="three">
+  <div class="tcard"><div class="tt">ONE · CAPTURE</div><h4>Get the fact</h4>
+    <p>Someone outside, in gloves, after ten hours, with no signal. Something has to leave as data.</p>
+    <p class="tq">Could a foreman file a day’s work in thirty seconds without typing a sentence?</p></div>
+  <div class="tcard"><div class="tt">TWO · ORGANISE</div><h4>Make it mean something</h4>
+    <p>A photo with no crew, site or work type is just a photo. Joining it to the plan is the job.</p>
+    <p class="tq">Can you reconstruct months later who decided, and on what evidence?</p></div>
+  <div class="tcard"><div class="tt">THREE · USE</div><h4>Change a decision</h4>
+    <p>Reports they could never run before: what got built, by whom, when, against what was sold.</p>
+    <p class="tq">Does it change what somebody does on Monday?</p></div>
+</div>
+<p class="big1" style="margin-top:24px">A small complete loop beats a big broken one. <strong>One work type, one crew, all three steps.</strong></p></div>
+<div class="more"><p class="ml">More detail</p>
+<div class="cal position"><p class="lab">Why all three, and not just the fun one</p>
+<p>Capture alone is a form. Organise alone is a schema nobody filled in. Use alone is a dashboard of invented numbers. <strong>The demo that lands is the one where a thing that happened outdoors becomes a number somebody would act on</strong>, end to end, however narrow.</p></div>
+<div class="cal question"><p class="lab">The question to settle in your first twenty minutes</p>
+<p>Is the unit of capture the <em>crew-day</em> or the <em>piece of work</em>? A crew-day is easy to file and hard to bill against. A piece of work is precise and tedious to record. Most real systems land on a crew-day carrying a list of pieces — but decide out loud and early, because everything downstream inherits it.</p></div></div></div></section>
+<section class="slide" id="s-agents"><div class="si"><div class="l1"><span class="snum">04 / WHAT TO BUILD</span>
+<h2>Five agents. And four things that must not be.</h2>
+<div class="sheet big"><div class="body"><svg viewBox="0 0 1320 470" role="img" aria-label="Five agents in a line from capture to reporting, with a band underneath showing the four things that must stay deterministic code.">
+<rect x="22" y="46" width="238" height="176" rx="12" fill="var(--surface)" stroke="var(--survey)" stroke-width="2.4"></rect>
+<path d="M22,58 a12,12 0 0 1 12,-12 h214 a12,12 0 0 1 12,12 v14 h-238 z" fill="var(--survey)"></path>
+<text class="sv-l" x="141" y="68" font-size="9.5" fill="#fff" text-anchor="middle" font-weight="600">AGENT 1</text>
+<g transform="translate(74,132) scale(0.72)" fill="none" stroke="var(--survey)" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round"><rect x="-22" y="-13" width="44" height="30" rx="5"></rect><circle cx="0" cy="2" r="9"></circle><path d="M-9,-13 l5,-7 h8 l5,7"></path></g>
+<text class="sv-t" x="114" y="118" font-size="18" fill="var(--ink)">Reader</text>
+<text class="sv-b" x="114" y="140" font-size="12" fill="var(--ink-2)">photo and voice in,</text>
+<text class="sv-b" x="114" y="157" font-size="12" fill="var(--ink-2)">a proposal out</text>
+<text class="sv-l" x="240" y="200" font-size="11" fill="var(--survey)" text-anchor="end" font-weight="600">confidence 0.94</text>
+<path d="M262,134 l14,0" stroke="var(--ink-2)" stroke-width="2"></path><path d="M276,134 l-6,-4 v8 z" fill="var(--ink-2)"></path>
+<rect x="280" y="46" width="238" height="176" rx="12" fill="var(--surface)" stroke="var(--survey)" stroke-width="2.4"></rect>
+<path d="M280,58 a12,12 0 0 1 12,-12 h214 a12,12 0 0 1 12,12 v14 h-238 z" fill="var(--survey)"></path>
+<text class="sv-l" x="399" y="68" font-size="9.5" fill="#fff" text-anchor="middle" font-weight="600">AGENT 2</text>
+<g transform="translate(332,132) scale(0.72)" fill="none" stroke="var(--survey)" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round"><circle cx="-9" cy="0" r="11"></circle><circle cx="9" cy="0" r="11"></circle></g>
+<text class="sv-t" x="372" y="118" font-size="18" fill="var(--ink)">Matcher</text>
+<text class="sv-b" x="372" y="140" font-size="12" fill="var(--ink-2)">which site, which crew,</text>
+<text class="sv-b" x="372" y="157" font-size="12" fill="var(--ink-2)">which work type</text>
+<text class="sv-l" x="498" y="200" font-size="11" fill="var(--survey)" text-anchor="end" font-weight="600">confidence 0.72</text>
+<path d="M520,134 l14,0" stroke="var(--ink-2)" stroke-width="2"></path><path d="M534,134 l-6,-4 v8 z" fill="var(--ink-2)"></path>
+<rect x="538" y="46" width="238" height="176" rx="12" fill="var(--surface)" stroke="var(--survey)" stroke-width="2.4"></rect>
+<path d="M538,58 a12,12 0 0 1 12,-12 h214 a12,12 0 0 1 12,12 v14 h-238 z" fill="var(--survey)"></path>
+<text class="sv-l" x="657" y="68" font-size="9.5" fill="#fff" text-anchor="middle" font-weight="600">AGENT 3</text>
+<g transform="translate(590,132) scale(0.72)" fill="none" stroke="var(--survey)" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round"><rect x="-20" y="-16" width="22" height="13" rx="3" transform="rotate(-35)"></rect><path d="M2,6 l16,14"></path><path d="M-4,20 h28"></path></g>
+<text class="sv-t" x="630" y="118" font-size="18" fill="var(--ink)">Router</text>
+<text class="sv-b" x="630" y="140" font-size="12" fill="var(--ink-2)">confident enough to pass,</text>
+<text class="sv-b" x="630" y="157" font-size="12" fill="var(--ink-2)">or send it to a person</text>
+<path d="M778,134 l14,0" stroke="var(--ink-2)" stroke-width="2"></path><path d="M792,134 l-6,-4 v8 z" fill="var(--ink-2)"></path>
+<rect x="796" y="46" width="238" height="176" rx="12" fill="var(--surface)" stroke="var(--survey)" stroke-width="2.4"></rect>
+<path d="M796,58 a12,12 0 0 1 12,-12 h214 a12,12 0 0 1 12,12 v14 h-238 z" fill="var(--survey)"></path>
+<text class="sv-l" x="915" y="68" font-size="9.5" fill="#fff" text-anchor="middle" font-weight="600">AGENT 4</text>
+<g transform="translate(848,132) scale(0.72)" fill="none" stroke="var(--survey)" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round"><path d="M-18,18 v-32"></path><path d="M-18,18 h36"></path><rect x="-12" y="0" width="8" height="18"></rect><rect x="0" y="-9" width="8" height="27"></rect><rect x="12" y="-18" width="8" height="36"></rect></g>
+<text class="sv-t" x="888" y="118" font-size="18" fill="var(--ink)">Checker</text>
+<text class="sv-b" x="888" y="140" font-size="12" fill="var(--ink-2)">does this quantity</text>
+<text class="sv-b" x="888" y="157" font-size="12" fill="var(--ink-2)">even make sense</text>
+<path d="M1036,134 l14,0" stroke="var(--ink-2)" stroke-width="2"></path><path d="M1050,134 l-6,-4 v8 z" fill="var(--ink-2)"></path>
+<rect x="1054" y="46" width="238" height="176" rx="12" fill="var(--surface)" stroke="var(--survey)" stroke-width="2.4"></rect>
+<path d="M1054,58 a12,12 0 0 1 12,-12 h214 a12,12 0 0 1 12,12 v14 h-238 z" fill="var(--survey)"></path>
+<text class="sv-l" x="1173" y="68" font-size="9.5" fill="#fff" text-anchor="middle" font-weight="600">AGENT 5</text>
+<g transform="translate(1106,132) scale(0.72)" fill="none" stroke="var(--survey)" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round"><circle cx="0" cy="-8" r="9"></circle><path d="M-16,18 a16,18 0 0 1 32,0"></path></g>
+<text class="sv-t" x="1146" y="118" font-size="18" fill="var(--ink)">Answerer</text>
+<text class="sv-b" x="1146" y="140" font-size="12" fill="var(--ink-2)">questions over the facts,</text>
+<text class="sv-b" x="1146" y="157" font-size="12" fill="var(--ink-2)">in plain language</text>
+<path d="M560,222 L560,268" stroke="var(--ink)" stroke-width="3" stroke-dasharray="6 5" fill="none"></path>
+<rect x="440" y="268" width="440" height="42" rx="8" fill="var(--ink)"></rect>
+<text class="sv-l" x="660" y="294" font-size="12.5" fill="var(--paper)" text-anchor="middle" font-weight="600">A NAMED PERSON CONFIRMS</text>
+<rect x="22" y="336" width="1276" height="112" rx="11" fill="var(--sunk)" stroke="var(--sewer)" stroke-width="2.4"></rect>
+<text class="sv-l" x="46" y="364" font-size="11" fill="var(--sewer)" font-weight="600">NOT AGENTS — ORDINARY CODE, AND DO NOT LET ANYONE TALK YOU OUT OF IT</text>
+<text class="sv-t" x="52" y="398" font-size="15" fill="var(--ink)">Unit maths</text>
+<text class="sv-b" x="52" y="420" font-size="12" fill="var(--ink-2)">metres, counts, totals</text>
+<text class="sv-t" x="367" y="398" font-size="15" fill="var(--ink)">Threshold checks</text>
+<text class="sv-b" x="367" y="420" font-size="12" fill="var(--ink-2)">is this above the line</text>
+<text class="sv-t" x="682" y="398" font-size="15" fill="var(--ink)">The plan lookup</text>
+<text class="sv-b" x="682" y="420" font-size="12" fill="var(--ink-2)">what was sold here</text>
+<text class="sv-t" x="997" y="398" font-size="15" fill="var(--ink)">The write</text>
+<text class="sv-b" x="997" y="420" font-size="12" fill="var(--ink-2)">one row, once, idempotent</text>
+</svg></div></div></div>
+<div class="more"><p class="ml">More detail</p>
+<div class="cal position"><p class="lab">The rule that will save you three hours</p>
+<p>A model decides <strong>what something is</strong>. Code decides <strong>whether it is allowed, whether the numbers add up, and what gets written.</strong></p>
+<p>Every team puts a model somewhere it does not belong, usually in the arithmetic. If a competent developer could write the rule down in an afternoon without listing examples, it is not an agent. It is an <span class="m">if</span>.</p></div>
+
+<h3>Each agent, and what makes it hard</h3>
+<div class="tw"><table>
+<thead><tr><th style="width:15%">Agent</th><th style="width:30%">In</th><th>The hard part</th></tr></thead>
+<tbody>
+<tr><td class="k">Reader</td><td>A photo of a counter, or thirty seconds of speech</td><td>Getting a number off a dirty LED display at an angle. Easy at 80%, painful at 98%. Decide early which you need.</td></tr>
+<tr><td class="k">Matcher</td><td>Position, time, whatever the person said</td><td><strong>This is the real project.</strong> "The north run past the bridge" has to become a site id. Get it wrong and every downstream number is attached to the wrong job.</td></tr>
+<tr><td class="k">Router</td><td>A proposal and a confidence</td><td>Not the model — the thresholds. Route by what it costs to be wrong, not by confidence alone.</td></tr>
+<tr><td class="k">Checker</td><td>The proposed quantity and the plan</td><td>Mostly arithmetic. A crew cannot bore 4,000 metres in a day. Catching that needs no model at all.</td></tr>
+<tr><td class="k">Answerer</td><td>A question and the confirmed facts</td><td>Tempting and low value. Build it last, or not at all. A chart beats a chatbot for an owner at 6am.</td></tr>
+</tbody></table></div>
+<div class="cal risk"><p class="lab">Chain length</p>
+<p>Five agents in a row at 90% each is 59% end to end. <strong>Put a deterministic check between every pair</strong>, and count the arrows in your design that have no check on them. That number is your real risk.</p></div></div></div></section>
+<section class="slide" id="s-buildplan"><div class="si"><div class="l1"><span class="snum">05 / THE BUILD</span>
+<h2>Three hours. Four people. One loop.</h2>
+<div class="tw"><table class="plan">
+<thead><tr><th style="width:12%">Clock</th><th style="width:29%">Whoever takes capture</th><th style="width:29%">Whoever takes the spine</th><th>Whoever takes the demo</th></tr></thead>
+<tbody>
+<tr><td class="k">0:00–0:30</td><td>Phone page that takes a photo and stores it locally</td><td>Load the five CSVs. One table for proposals.</td><td>Pick the one report. Write the sentence you will say.</td></tr>
+<tr><td class="k">0:30–1:15</td><td>Reader: photo in, number out</td><td>Matcher: position and time to a site id</td><td>Stub the report off the CSVs so it exists early</td></tr>
+<tr><td class="k">1:15–2:00</td><td>Offline queue. Kill the wifi and prove it.</td><td>Router plus the confirm screen</td><td>Wire the report to confirmed facts only</td></tr>
+<tr><td class="k">2:00–2:30</td><td>The return screen. Yesterday, and what it is worth.</td><td>Checker. Refuse one thing on purpose.</td><td>Rehearse. Out loud. Twice.</td></tr>
+<tr><td class="k">2:30–3:00</td><td colspan="3" class="hi"><strong>Everyone stops building.</strong> Run the whole loop end to end, on a phone, in the room, from photo to report.</td></tr>
+</tbody></table></div>
+<p class="big1" style="margin-top:18px">Six hours? Same plan. <strong>Use the extra three to make it more real, not prettier.</strong> Real footage, a second crew, a measured comparison against the paper.</p></div>
+<div class="more"><p class="ml">More detail</p>
+<div class="cal position"><p class="lab">The demo you are aiming at, in one paragraph</p>
+<p>Someone walks to the back of the room, photographs a counter, and taps once. Thirty seconds later a name appears on a queue, somebody confirms it, and a bar on a chart moves. <strong>That is the whole pitch.</strong> If you can do that with one work type, you have out-demoed anyone with six screens and no loop.</p></div>
+<div class="two">
+<div class="cal question"><p class="lab">If you are two people, not four</p>
+<p>Cut the Checker and the Answerer. Cut the return screen to a text message. Keep capture, matcher, confirm and one chart. The loop is what matters; the breadth is not.</p></div>
+<div class="cal risk"><p class="lab">The hour you will be tempted to waste</p>
+<p>Hour two, on the matcher, trying to make it clever. <strong>Make it dumb and correct instead:</strong> nearest site from a list of twelve, with a confirm step. Cleverness there wins nothing and costs everything.</p></div>
+</div></div></div></section>
+<section class="slide" id="s-setup"><div class="si"><div class="l1"><span class="snum">06 / SETUP</span>
+<h2>Do this before the clock starts.</h2>
+<ul class="mines setup">
+  <li><b>A phone that can reach your laptop.</b> Same wifi, or a tunnel. Fifteen minutes of faff that will cost you an hour if you leave it to the day.</li>
+  <li><b>The five CSVs loaded, in something you can query.</b> Copy them off the data slide now. Do not spend hackathon minutes on a schema.</li>
+  <li><b>Model access working, with a photo already sent through it.</b> One round trip, proven, before you are under pressure.</li>
+  <li><b>Something to photograph.</b> A number on any display — a kitchen scale, a meter, a printed digit on a card. You need a test subject that is not a screenshot.</li>
+  <li><b>One page where a fact can appear.</b> Even a list. It is where everything ends up and it is oddly easy to forget to build.</li>
+</ul></div>
+<div class="more"><p class="ml">More detail</p>
+<div class="cal evidence"><p class="lab">Stack advice, held lightly</p>
+<p>Use what you already know. A hackathon is not the place to learn a framework, and the judges cannot see what it is written in. The only two choices that actually matter: <strong>where the photo goes</strong>, and <strong>whether the phone works with the network off.</strong> Settle both in the first thirty minutes.</p></div>
+<div class="cal question"><p class="lab">The five-minute test that predicts your day</p>
+<p>Before anything else: take a photo on the phone, get it onto the laptop, and print its size to a console. If that takes more than fifteen minutes, your architecture is wrong and it is cheap to find out now.</p></div>
+<div class="cal risk"><p class="lab">What to have ready to say</p>
+<p>One sentence on the problem, one on what you built, one on what it would take to run it for real. <strong>Write them before you start building</strong>, because you will not have the clarity afterwards and every team discovers this at the same moment.</p></div></div></div></section>
+<section class="slide" id="s-shotlist"><div class="si"><div class="l1"><span class="snum">07 / CAPTURE</span>
+<h2>Go film it. Here is the shot list.</h2>
+<p class="big1">You cannot design this from a desk. Get footage of each stage — filmed, downloaded or staged.</p>
+<div class="cal position" style="margin-top:18px">
+  <p class="lab">The best idea in this brief, and it comes from the trade</p>
+  <p>At four of the eight stages, <strong>the number is already on a screen.</strong> Drill rigs count rods. Cable machines count metres. Test sets show readings.</p>
+  <p>So maybe nobody reports anything. Maybe you just need <strong>a photo of a counter</strong> and something that reads it.</p>
+</div></div>
+<div class="more"><p class="ml">More detail</p>
+<h3>Stage by stage: what to shoot, and what it would give you</h3>
+<div class="tw"><table>
+<thead><tr><th style="width:15%">Stage</th><th style="width:34%">The shot</th><th>What a machine could take from it</th></tr></thead>
+<tbody>
+<tr><td class="k">Locate &amp; mark</td><td>Wide shot down a street of coloured paint marks and flags; a close-up of one flag</td><td>Which utilities are present, from the colours. Area covered. The date. Whether the marks are fresh or weathered.</td></tr>
+<tr><td class="k">Expose</td><td>The vacuum truck, the hose in the hole, the exposed utility at the bottom</td><td>Hole count. Depth against the tape. What was found and whether it matched the plan.</td></tr>
+<tr><td class="k">Bore</td><td class="hi">The rig’s rod rack and the operator’s display; entry and exit pits</td><td class="hi"><strong>Metres, from rod count × rod length.</strong> This is the disputed number, and it is sitting on a screen.</td></tr>
+<tr><td class="k">Place</td><td>The pedestal or box going into the ground, with the house number in frame</td><td>Count, and the civic address it serves — which is the join to the plan.</td></tr>
+<tr><td class="k">Connect</td><td>The open enclosure, the fibres inside, the label on the door</td><td>Which box. How many connections. Whether it was left tidy, which is a quality signal nobody records.</td></tr>
+<tr><td class="k">Pull cable</td><td class="hi">The blowing machine’s metre counter; the spool before and after</td><td class="hi"><strong>Metres, read straight off the counter.</strong> Two photos bracket the run.</td></tr>
+<tr><td class="k">Verify</td><td class="hi">The test set screen showing the trace and loss figures</td><td class="hi"><strong>Pass or fail, and the actual readings.</strong> This is the acceptance evidence the customer will later ask for.</td></tr>
+<tr><td class="k">Restore</td><td>The same frame before work and after — sod, asphalt, curb</td><td>Area restored. A before-and-after pair is the entire dispute defence for surface damage.</td></tr>
+</tbody></table></div>
+
+<div class="two">
+<div class="cal risk"><p class="lab">The one shot you must not skip</p>
+<p><strong>Film the paper ticket being filled in</strong> — a foreman at the tailgate, at the end of the day, writing numbers on a page. That is the incumbent. It is fast, it never crashes, and everybody already knows it. Your demo is judged against it, so put it on screen and let the room see what you are competing with.</p></div>
+<div class="cal question"><p class="lab">If you cannot get on a site</p>
+<p>Footage of directional drilling, vacuum excavation, cable blowing and fibre splicing is abundant and public — manufacturers, trade channels and operators all post it. Pull stills from that. For the paper ticket and the tailgate moment, stage it. Ten minutes with a clipboard in a car park is enough and it will be the most useful asset you have.</p></div>
+</div>
+<div class="cal evidence"><p class="lab">What to bring back</p>
+<p>Per stage: two or three stills and one short clip. Plus one continuous walk down a street, phone held at chest height, narrating what you see. That last one is your test input for everything — voice, vision, geolocation and the awkward reality of a moving camera, all in one file.</p></div></div></div></section>
+<section class="slide" id="s-data"><div class="si"><div class="l1"><span class="snum">08 / THE DATA</span>
+<h2>Fake data. Real shape. Copy it.</h2>
+<p class="big1">Five files. Same numbers for every team. All invented, so share them freely.</p>
+<div class="files" id="files"></div>
+<p class="big1" style="margin-top:20px"><strong>daily_production.csv is the one that matters.</strong> In the real world it does not exist. That is what you are building. Treat it as the answer key, not the input.</p></div>
+<div class="more"><p class="ml">More detail</p>
+<h3>What is in each file</h3>
+<div class="tw"><table>
+<thead><tr><th style="width:22%">File</th><th style="width:10%" class="num">Rows</th><th>What it is</th></tr></thead>
+<tbody>
+<tr><td class="k">sites.csv</td><td class="num">12</td><td>Where the work happens. A site code, a town, how many homes, when it started, and its status.</td></tr>
+<tr><td class="k">crews.csv</td><td class="num">8</td><td>Eight crews across three subcontractors. A foreman, a headcount, and the work types each crew is certified for. <strong>Note that crews belong to subcontractors, not to the contractor.</strong></td></tr>
+<tr><td class="k">work_types.csv</td><td class="num">8</td><td>The eight stages, their units, and a revenue rate. Units matter: some are counts and some are metres.</td></tr>
+<tr><td class="k">planned.csv</td><td class="num">96</td><td>Planned quantity per site per work type. This is what was sold. The denominator.</td></tr>
+<tr><td class="k">daily_production.csv</td><td class="num">185</td><td>Eight weeks of crew-days. Date, crew, site, work type, quantity, how it was captured, and <span class="m">days_to_office</span> — the lag before anybody in a building knew.</td></tr>
+</tbody></table></div>
+
+<div class="cal evidence"><p class="lab">The lag column is the whole brief in one field</p>
+<p>Across 185 crew-days: 25 reached the office next day, 52 took a week, 32 took a fortnight, and 29 took three weeks. <strong>Plot that distribution first.</strong> It is the most persuasive chart in the dataset and it takes four lines of code.</p></div>
+
+<div class="cal question"><p class="lab">What the data deliberately does not give you</p>
+<p>No geolocation. No photographs. No timestamps finer than a date. No crew member names. No evidence of any kind.</p>
+<p>That is not an oversight. <strong>Those are the things your solution has to invent a way to collect</strong> — and deciding which of them are worth the friction is most of the design work.</p></div></div></div></section>
+<section class="slide" id="s-integrations"><div class="si"><div class="l1"><span class="snum">09 / INTEGRATIONS</span>
+<h2>Build three things. Fake the rest.</h2>
+<div class="sheet big"><div class="body"><svg viewBox="0 0 1320 560" role="img" aria-label="Three layers. Capture sources at the top, the spine you build in the middle, and consumers you can fake at the bottom, feeding one reporting surface.">
+<text class="sv-l" x="22" y="26" font-size="11" fill="var(--comms)" font-weight="600">CAPTURE — BUILD THIS</text>
+<rect x="22" y="40" width="300" height="78" rx="10" fill="var(--surface)" stroke="var(--comms)" stroke-width="2.4"></rect><g transform="translate(66,79.0) scale(0.62)" fill="none" stroke="var(--comms)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><rect x="-13" y="-22" width="26" height="44" rx="5"></rect><path d="M-5,-16 h10"></path><circle cx="0" cy="14" r="3"></circle></g><text class="sv-t" x="104" y="75.0" font-size="16" fill="var(--ink)">The device</text><text class="sv-b" x="104" y="95.0" font-size="11.5" fill="var(--ink-2)">a phone in a glove</text>
+<rect x="344" y="40" width="300" height="78" rx="10" fill="var(--surface)" stroke="var(--comms)" stroke-width="2.4"></rect><g transform="translate(388,79.0) scale(0.62)" fill="none" stroke="var(--comms)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><rect x="-22" y="-13" width="44" height="30" rx="5"></rect><circle cx="0" cy="2" r="9"></circle><path d="M-9,-13 l5,-7 h8 l5,7"></path></g><text class="sv-t" x="426" y="75.0" font-size="16" fill="var(--ink)">A counter photo</text><text class="sv-b" x="426" y="95.0" font-size="11.5" fill="var(--ink-2)">the number is already there</text>
+<rect x="666" y="40" width="300" height="78" rx="10" fill="var(--surface)" stroke="var(--comms)" stroke-width="2.4"></rect><g transform="translate(710,79.0) scale(0.62)" fill="none" stroke="var(--comms)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><rect x="-6" y="-22" width="12" height="24" rx="6"></rect><path d="M-13,-4 a13,13 0 0 0 26,0"></path><path d="M0,9 v11 M-8,20 h16"></path></g><text class="sv-t" x="748" y="75.0" font-size="16" fill="var(--ink)">A voice note</text><text class="sv-b" x="748" y="95.0" font-size="11.5" fill="var(--ink-2)">what he would say anyway</text>
+<rect x="988" y="40" width="300" height="78" rx="10" fill="var(--surface)" stroke="var(--comms)" stroke-width="2.4"></rect><g transform="translate(1032,79.0) scale(0.62)" fill="none" stroke="var(--comms)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="0" cy="-17" r="6"></circle><path d="M0,-11 v14"></path><path d="M0,3 l-9,17 M0,3 l9,17"></path><path d="M-11,-6 l11,3 l11,-6"></path></g><text class="sv-t" x="1070" y="75.0" font-size="16" fill="var(--ink)">The walk</text><text class="sv-b" x="1070" y="95.0" font-size="11.5" fill="var(--ink-2)">one continuous clip</text>
+<text class="sv-l" x="22" y="166" font-size="11" fill="var(--comms)" font-weight="600">THE SPINE — THIS IS THE ACTUAL PROJECT</text>
+<rect x="22" y="180" width="412" height="88" rx="10" fill="var(--surface)" stroke="var(--comms)" stroke-width="2.4"></rect><g transform="translate(66,224.0) scale(0.62)" fill="none" stroke="var(--comms)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="-9" cy="0" r="11"></circle><circle cx="9" cy="0" r="11"></circle></g><text class="sv-t" x="104" y="220.0" font-size="16" fill="var(--ink)">Identity join</text><text class="sv-b" x="104" y="240.0" font-size="11.5" fill="var(--ink-2)">which crew, which site, which work</text>
+<rect x="456" y="180" width="412" height="88" rx="10" fill="var(--surface)" stroke="var(--comms)" stroke-width="2.4"></rect><g transform="translate(500,224.0) scale(0.62)" fill="none" stroke="var(--comms)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><rect x="-20" y="-16" width="22" height="13" rx="3" transform="rotate(-35)"></rect><path d="M2,6 l16,14"></path><path d="M-4,20 h28"></path></g><text class="sv-t" x="538" y="220.0" font-size="16" fill="var(--ink)">Adjudication</text><text class="sv-b" x="538" y="240.0" font-size="11.5" fill="var(--ink-2)">machine proposes, person confirms</text>
+<rect x="890" y="180" width="412" height="88" rx="10" fill="var(--surface)" stroke="var(--comms)" stroke-width="2.4"></rect><g transform="translate(934,224.0) scale(0.62)" fill="none" stroke="var(--comms)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><rect x="-20" y="-17" width="40" height="34" rx="5"></rect><circle cx="0" cy="0" r="9"></circle><path d="M0,-13 v4 M0,9 v4 M-13,0 h4 M9,0 h4"></path></g><text class="sv-t" x="972" y="220.0" font-size="16" fill="var(--ink)">Evidence store</text><text class="sv-b" x="972" y="240.0" font-size="11.5" fill="var(--ink-2)">the photo, kept and findable</text>
+<text class="sv-b" x="22" y="292" font-size="12.5" fill="var(--muted)" font-style="italic">Nothing above this line exists today. Nearly everything below it already does.</text>
+<line x1="22" y1="304" x2="1298" y2="304" stroke="var(--line-strong)" stroke-width="1.5" stroke-dasharray="6 5"></line>
+<text class="sv-l" x="22" y="336" font-size="11" fill="var(--muted)" font-weight="600">CONSUMERS — FAKE THESE WITH A JSON FILE</text>
+<rect x="22" y="350" width="300" height="78" rx="10" fill="var(--surface)" stroke="var(--muted)" stroke-width="2.4" stroke-dasharray="7 5"></rect><g transform="translate(66,389.0) scale(0.62)" fill="none" stroke="var(--muted)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><rect x="-18" y="-20" width="36" height="40" rx="4"></rect><path d="M-9,-10 h18 M-9,-1 h18 M-9,8 h11"></path></g><text class="sv-t" x="104" y="385.0" font-size="16" fill="var(--ink)">The plan</text><text class="sv-b" x="104" y="405.0" font-size="11.5" fill="var(--ink-2)">what was sold</text>
+<rect x="344" y="350" width="300" height="78" rx="10" fill="var(--surface)" stroke="var(--muted)" stroke-width="2.4" stroke-dasharray="7 5"></rect><g transform="translate(388,389.0) scale(0.62)" fill="none" stroke="var(--muted)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="0" cy="0" r="18"></circle><path d="M0,-10 v20 M-6,-5 h12 M-6,5 h12"></path></g><text class="sv-t" x="426" y="385.0" font-size="16" fill="var(--ink)">The ledger</text><text class="sv-b" x="426" y="405.0" font-size="11.5" fill="var(--ink-2)">money and rates</text>
+<rect x="666" y="350" width="300" height="78" rx="10" fill="var(--surface)" stroke="var(--muted)" stroke-width="2.4" stroke-dasharray="7 5"></rect><g transform="translate(710,389.0) scale(0.62)" fill="none" stroke="var(--muted)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M-20,16 v-28 h12 l5,6 h23 v22 z"></path></g><text class="sv-t" x="748" y="385.0" font-size="16" fill="var(--ink)">Documents</text><text class="sv-b" x="748" y="405.0" font-size="11.5" fill="var(--ink-2)">drawings and sign-offs</text>
+<rect x="988" y="350" width="300" height="78" rx="10" fill="var(--surface)" stroke="var(--muted)" stroke-width="2.4" stroke-dasharray="7 5"></rect><g transform="translate(1032,389.0) scale(0.62)" fill="none" stroke="var(--muted)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="0" cy="-8" r="9"></circle><path d="M-16,18 a16,18 0 0 1 32,0"></path></g><text class="sv-t" x="1070" y="385.0" font-size="16" fill="var(--ink)">The customer</text><text class="sv-b" x="1070" y="405.0" font-size="11.5" fill="var(--ink-2)">who argues about it</text>
+<rect x="22" y="452" width="1276" height="80" rx="10" fill="var(--surface)" stroke="var(--sewer)" stroke-width="2.4"></rect><g transform="translate(66,492.0) scale(0.62)" fill="none" stroke="var(--sewer)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M-18,18 v-32"></path><path d="M-18,18 h36"></path><rect x="-12" y="0" width="8" height="18"></rect><rect x="0" y="-9" width="8" height="27"></rect><rect x="12" y="-18" width="8" height="36"></rect></g><text class="sv-t" x="104" y="488.0" font-size="16" fill="var(--ink)">Operational reporting</text><text class="sv-b" x="104" y="508.0" font-size="11.5" fill="var(--ink-2)">the only part anyone outside the team will look at</text>
+<path d="M172,118 L172,178" stroke="var(--comms)" stroke-width="2" fill="none"></path>
+<path d="M494,118 L494,178" stroke="var(--comms)" stroke-width="2" fill="none"></path>
+<path d="M816,118 L816,178" stroke="var(--comms)" stroke-width="2" fill="none"></path>
+<path d="M1138,118 L1138,178" stroke="var(--comms)" stroke-width="2" fill="none"></path>
+<path d="M228,268 L228,302" stroke="var(--ink-2)" stroke-width="2" fill="none" opacity=".55"></path>
+<path d="M662,268 L662,302" stroke="var(--ink-2)" stroke-width="2" fill="none" opacity=".55"></path>
+<path d="M1096,268 L1096,302" stroke="var(--ink-2)" stroke-width="2" fill="none" opacity=".55"></path>
+<path d="M660,428 L660,450" stroke="var(--sewer)" stroke-width="3" fill="none"></path>
+</svg></div></div></div>
+<div class="more"><p class="ml">More detail</p>
+<div class="cal position"><p class="lab">The scoping rule</p>
+<p>Anything below the dashed line already exists at a real company, in some form, and rebuilding it in a hackathon proves nothing. <strong>Stub it with a JSON file and spend your hours on the spine.</strong> The identity join is the hardest and least glamorous of the three, and it is the one that decides whether any of it works.</p></div>
+<h3>What each integration would really involve</h3>
+<div class="tw"><table>
+<thead><tr><th style="width:22%">Connection</th><th style="width:14%">In a hackathon</th><th>In reality</th></tr></thead>
+<tbody>
+<tr><td class="k">Device → spine</td><td><b>Build it</b></td><td>Offline queue, retry, conflicting submissions, a device that may belong to someone who does not work for you.</td></tr>
+<tr><td class="k">Media → evidence store</td><td><b>Build it</b></td><td>Object storage, content hashing, and a decision about whether a photo is evidence or just an attachment. They are different things with different retention.</td></tr>
+<tr><td class="k">Spine → the plan</td><td>Stub: <span class="m">planned.csv</span></td><td>The plan lives in whatever the contract was written in. Usually a spreadsheet. Sometimes a PDF.</td></tr>
+<tr><td class="k">Spine → the ledger</td><td>Stub: a printed line</td><td>An accounting API, usually read-only until somebody signs off on letting a machine write. That sign-off takes longer than the integration.</td></tr>
+<tr><td class="k">Spine → documents</td><td>Stub: a folder</td><td>A document store with a folder convention older than the software, which nobody will let you change.</td></tr>
+<tr><td class="k">Spine → customer</td><td>Stub: a PDF</td><td>The customer dictates the billing format and usually has no integration at all. Expect email.</td></tr>
+</tbody></table></div>
+<div class="cal risk"><p class="lab">The thing that surprises people</p>
+<p>In field-services businesses the integration difficulty is rarely technical. <strong>The counts are small and the protocols are boring.</strong> The difficulty is that most of the connections are a person reading something and typing it somewhere — and each of those people has a routine that works and a reason not to change it.</p></div></div></div></section>
+<section class="slide" id="s-mockfield"><div class="si"><div class="l1"><span class="snum">10 / MOCKUP · FIELD</span>
+<h2>Two screens nobody has built yet.</h2>
+<div class="mockrow">
+
+  <div class="phone">
+    <div class="pnotch"></div>
+    <div class="pscr">
+      <div class="pbar"><span>16:42</span><span class="off">OFFLINE · 2 QUEUED</span></div>
+      <div class="phead"><b>Ashbourne</b><span>FZ200-10 · Northgate C1</span></div>
+      <div class="plab">What did you do?</div>
+      <div class="pgrid">
+        <button class="pk on">Bore<em>metres</em></button>
+        <button class="pk">Hydrovac<em>each</em></button>
+        <button class="pk">Place<em>each</em></button>
+        <button class="pk">Jetting<em>metres</em></button>
+      </div>
+      <div class="pshot">
+        <div class="pshotimg"><span class="rdg">418</span><em>rod counter</em></div>
+        <div class="pshotmeta"><b>418 m</b><span>read from the photo · tap to correct</span></div>
+      </div>
+      <button class="pvoice">●&nbsp; Hold to add a note</button>
+      <button class="pfile">File the day</button>
+      <p class="pfoot">Nothing typed. Two taps and a photograph.</p>
+    </div>
+  </div>
+
+  <div class="phone">
+    <div class="pnotch"></div>
+    <div class="pscr">
+      <div class="pbar"><span>07:10</span><span class="on2">SYNCED</span></div>
+      <div class="phead"><b>Yesterday</b><span>Northgate C1 · 4 in crew</span></div>
+      <div class="pret">
+        <div class="pr"><b>418 m</b><span>bore, Ashbourne</span></div>
+        <div class="pr"><b>$21,736</b><span>at your rate</span></div>
+        <div class="pr ok"><b>Confirmed</b><span>by the superintendent, 06:40</span></div>
+      </div>
+      <div class="plab">Today</div>
+      <div class="ptask">
+        <div class="pt"><b>FZ207-11 · Kelmscott</b><span>bore · 640 m remaining</span></div>
+        <div class="pt"><b>Pre-filled</b><span>crew, site and work type already set</span></div>
+      </div>
+      <p class="pfoot">This screen is why they keep filling the other one in.</p>
+    </div>
+  </div>
+
+  <div class="mocknote">
+    <h4>Why these two go together</h4>
+    <p>Field software is abandoned because the person filling it in gets nothing back. <strong>Build the right-hand screen first.</strong> Then the left-hand one has a reason to exist.</p>
+    <p>Note what is absent from both: a keyboard, a form, a dropdown of forty sites, and any word longer than one syllable.</p>
+    <h4>The counter photo</h4>
+    <p>The quantity is not typed. It is read off a machine that already counted it, which is faster, harder to fudge, and carries its own evidence.</p>
+  </div>
+</div></div>
+<div class="more"><p class="ml">More detail</p>
+<h3>What exists today, and what these replace</h3>
+<div class="tw"><table>
+<thead><tr><th style="width:28%">Today</th><th>The mockup</th></tr></thead>
+<tbody>
+<tr><td class="k">A paper ticket at the tailgate</td><td>Two taps and a photograph, filed before the truck leaves. Offline by default; the queue drains whenever signal returns.</td></tr>
+<tr><td class="k">A spreadsheet typed up days later</td><td>The fact is created at the place and time it happened, with the device’s clock and position attached.</td></tr>
+<tr><td class="k">Nothing goes back to the crew</td><td>Yesterday’s metres, what they are worth, and who confirmed them — before the crew leaves the yard this morning.</td></tr>
+<tr><td class="k">No crew identity anywhere</td><td>The crew is the session. Every fact is attributed without anyone being asked who they are.</td></tr>
+</tbody></table></div>
+<div class="cal question"><p class="lab">The design argument worth having</p>
+<p>The left screen assumes the crew captures. An alternative worth prototyping: <strong>the crew captures nothing</strong>, and a supervisor walking the line at the end of the day photographs four counters and files for everyone. Fewer people to convince, one device to manage, and the same facts. It is less elegant and it might be right.</p></div></div></div></section>
+<section class="slide" id="s-mockoffice"><div class="si"><div class="l1"><span class="snum">10b / MOCKUP · OFFICE</span>
+<h2>A machine proposes. A person signs.</h2>
+<div class="mockstack">
+
+  <div class="win">
+    <div class="wbar"><span class="dotr"></span><span class="doty"></span><span class="dotg"></span><b>Adjudication queue</b><em>7 waiting · 2 refused</em></div>
+    <div class="wbody adj">
+      <div class="adjq">
+        <div class="ai on"><b>Northgate C1</b><span>bore · 418 m</span><i class="cf hi">0.94</i></div>
+        <div class="ai"><b>Halloway C2</b><span>hydrovac · 6</span><i class="cf hi">0.91</i></div>
+        <div class="ai"><b>Prentiss C1</b><span>jetting · 512 m</span><i class="cf mid">0.72</i></div>
+        <div class="ai bad"><b>Halloway C1</b><span>site unresolved</span><i class="cf low">refuse</i></div>
+      </div>
+      <div class="adjmain">
+        <div class="adjphoto"><span class="rdg">418</span><em>counter, 16:41</em></div>
+        <div class="adjfacts">
+          <div class="af"><span>Crew</span><b>Northgate C1 · Foreman A1</b></div>
+          <div class="af"><span>Site</span><b>FZ200-10 Ashbourne</b><i>matched on position + plan</i></div>
+          <div class="af"><span>Work</span><b>Directional bore</b></div>
+          <div class="af"><span>Quantity</span><b>418 m</b><i>read from counter · 0.94</i></div>
+          <div class="af warn"><span>Check</span><b>Within plan</b><i>4,118 planned, 3,240 done</i></div>
+          <div class="adjbtns"><button class="ok">Confirm</button><button class="no">Refuse…</button></div>
+          <p class="adjwhy">Refusing asks for a reason code. Refusals are kept, not deleted.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="win">
+    <div class="wbar"><span class="dotr"></span><span class="doty"></span><span class="dotg"></span><b>Ashbourne FZ200-10 — actual against sold</b><em>updated 4 minutes ago</em></div>
+    <div class="wbody">
+      <div class="bars" id="bars"><div class="brow"><div class="bl">Locates</div><div class="btrack"><div class="bfill" style="width: 84%; background: var(--sewer);"></div></div><div class="bnum">62 / 74</div></div><div class="brow"><div class="bl">Hydrovac</div><div class="btrack"><div class="bfill" style="width: 70%; background: var(--sewer);"></div></div><div class="bnum">19 / 27</div></div><div class="brow"><div class="bl">Directional bore</div><div class="btrack"><div class="bfill" style="width: 79%; background: var(--sewer);"></div></div><div class="bnum">3,240 / 4,118</div></div><div class="brow"><div class="bl">Pedestals</div><div class="btrack"><div class="bfill" style="width: 72%; background: var(--sewer);"></div></div><div class="bnum">148 / 206</div></div><div class="brow"><div class="bl">Ground boxes</div><div class="btrack"><div class="bfill" style="width: 36%; background: var(--gas);"></div></div><div class="bnum">9 / 25</div></div><div class="brow"><div class="bl">Cable jetting</div><div class="btrack"><div class="bfill" style="width: 53%; background: var(--gas);"></div></div><div class="bnum">1,980 / 3,724</div></div><div class="brow"><div class="bl">Splicing</div><div class="btrack"><div class="bfill" style="width: 24%; background: var(--elec);"></div></div><div class="bnum">44 / 186</div></div><div class="brow"><div class="bl">Restoration</div><div class="btrack"><div class="bfill" style="width: 35%; background: var(--gas);"></div></div><div class="bnum">310 / 882</div></div></div>
+      <div class="barsfoot"><span>Every bar is the sum of confirmed crew-days. Click one and you get the days. Click a day and you get the photograph.</span></div>
+    </div>
+  </div>
+
+</div></div>
+<div class="more"><p class="ml">More detail</p>
+<h3>The third screen: one number, fully traced</h3>
+<div class="win" style="margin:18px 0">
+  <div class="wbar"><span class="dotr"></span><span class="doty"></span><span class="dotg"></span><b>Evidence pack — invoice line 4471</b><em>exported 19 Sep</em></div>
+  <div class="wbody">
+    <div class="chain">
+      <div class="cstep"><b>The claim</b><span>418 m directional bore, 14 July</span></div>
+      <div class="carr">→</div>
+      <div class="cstep"><b>The capture</b><span>Photo, 16:41, device clock, position within 8 m of the site</span></div>
+      <div class="carr">→</div>
+      <div class="cstep"><b>The proposal</b><span>Machine read 418 from the counter, confidence 0.94</span></div>
+      <div class="carr">→</div>
+      <div class="cstep"><b>The verdict</b><span>Confirmed by the superintendent, 06:40 the next morning</span></div>
+      <div class="carr">→</div>
+      <div class="cstep ok"><b>The fact</b><span>Billable, and defensible eight months later</span></div>
+    </div>
+  </div>
+</div>
+<div class="two">
+<div class="cal position"><p class="lab">What makes this different from a form and a report</p>
+<p>Every number carries the thing that produced it. <strong>The refusals are kept beside the confirmations</strong>, with their reasons, so the record shows judgement being exercised rather than data being entered. That is what turns a quantity into evidence.</p></div>
+<div class="cal risk"><p class="lab">The failure mode to design against</p>
+<p>Approval fatigue. A queue of hundreds at 0.9-plus confidence trains the reviewer to tap Confirm without looking, and then the signature means nothing. <strong>Route by cost of error, not by confidence alone</strong>, audit a random sample of the auto-approved, and treat a rising approval rate as a defect in the rules rather than diligence in the reviewer.</p></div>
+</div></div></div></section>
+<section class="slide" id="s-reports"><div class="si"><div class="l1"><span class="snum">11 / USE</span>
+<h2>What you can report once you have the facts.</h2>
+<div class="three">
+  <div class="wcard"><div class="wn">DAILY</div><h4>Who did what, where</h4><p>By end of shift, not end of month. Who worked where, on what, and which sites nobody visited.</p></div>
+  <div class="wcard"><div class="wn">WEEKLY</div><h4>Actual against sold</h4><p>Done versus sold, per site, per work type. Their first honest burn-down.</p></div>
+  <div class="wcard"><div class="wn">ON DEMAND</div><h4>Defend a number</h4><p>Any invoice line traced back to a day, a crew and a photo. The one the customer asks for later.</p></div>
+</div>
+<p class="big1" style="margin-top:22px">Then the ones nobody can run today: <strong>crew productivity, rework rate, and a finish date you can calculate.</strong></p></div>
+<div class="more"><p class="ml">More detail</p>
+<h3>Six reports, and what each one needs to exist</h3>
+<div class="tw"><table>
+<thead><tr><th style="width:26%">Report</th><th style="width:26%">Needs</th><th>Why it cannot be produced today</th></tr></thead>
+<tbody>
+<tr><td class="k">Daily activity</td><td>crew × date × site</td><td>The record arrives days or weeks later, so "today" is never knowable today.</td></tr>
+<tr><td class="k">Production against plan</td><td>quantity × work type × site</td><td>Quantities exist, but typed in arrears with no way to check them, so nobody trusts the variance.</td></tr>
+<tr><td class="k">Crew productivity</td><td>quantity per crew-day</td><td>There is no crew identifier anywhere. Output cannot be attributed to the people who produced it.</td></tr>
+<tr><td class="k">Rework rate</td><td>a second visit linked to a first</td><td>Nothing records the first attempt, so a repeat looks identical to new work.</td></tr>
+<tr><td class="k">Evidence pack</td><td>a fact plus its provenance</td><td>The record is a spreadsheet cell. It has no source, no timestamp and no author.</td></tr>
+<tr><td class="k">Forecast finish</td><td>observed rate × remaining</td><td>No observed rate exists, so every forecast is the original plan restated with more confidence.</td></tr>
+</tbody></table></div>
+<div class="cal position"><p class="lab">Build one of these, not six</p>
+<p>Pick the report that would change a decision on Monday and work backwards from it to the capture. <strong>Crew productivity is the most tempting and the most dangerous</strong> — the moment a number can rank people, the people being ranked start managing the number. Production against plan is the safer first report and the one an owner will actually open.</p></div>
+<div class="cal question"><p class="lab">A fair warning about the demo</p>
+<p>Reports are the easiest thing to fake and the judges know it. A chart built from the synthetic file proves nothing. <strong>A chart built from a fact your own capture created ten minutes ago, in the room, proves everything.</strong> Even if it is one row.</p></div></div></div></section>
+<section class="slide" id="s-hard"><div class="si"><div class="l1"><span class="snum">12 / WHAT KILLS IT</span>
+<h2>Five things that kill field apps.</h2>
+<ul class="mines">
+  <li><b>The people doing the work do not work for you.</b> Subcontractors. No company email, no login, no reason to learn your app.</li>
+  <li><b>Nothing goes back to them.</b> The crew fills in the form and gets nothing. This is why field apps get abandoned.</li>
+  <li><b>There is nothing to attach a fact to.</b> No crew ids, no site ids. Most of the work is joining, not capturing.</li>
+  <li><b>Conditions are bad.</b> Rain, gloves, glare, a dead battery, no signal, and someone who wants to go home.</li>
+  <li><b>Paper works.</b> It is fast, it never crashes, everyone knows it. You are competing with a pen.</li>
+</ul></div>
+<div class="more"><p class="ml">More detail</p>
+<div class="cal risk"><p class="lab">The trap nearly every team falls into</p>
+<p>Building the office end. It is the comfortable half — dashboards, charts, a clean data model, a satisfying demo. <strong>It is also the half that already exists at most companies and is not the problem.</strong> If by the halfway point your demo only shows screens somebody in an office would look at, you have built the wrong thing.</p></div>
+<div class="cal question"><p class="lab">The question worth arguing about in your team</p>
+<p>Is the unit of capture the <em>crew-day</em> or the <em>piece of work</em>? A crew-day is easy to file and hard to bill against. A piece of work is precise and tedious to record. Most real systems end up with a crew-day carrying a list of pieces — but decide deliberately, early, and out loud, because everything downstream inherits it.</p></div>
+<h3>And four things not to build</h3>
+
+<div class="three">
+  <div class="acard"><h4>A coordination product</h4><p>Scheduling, dispatch, managing subs. Good products exist. Nobody asked for another.</p></div>
+  <div class="acard"><h4>An accounting integration</h4><p>The accounting works fine. Assume the number gets there somehow. The problem is upstream.</p></div>
+  <div class="acard"><h4>A general reporting layer</h4><p>Reports come after facts. If you are designing filters, you have drifted.</p></div>
+  <div class="acard"><h4>Anything needing a rollout</h4><p>If it needs training and managed devices, it will never get tried. Assume one willing foreman.</p></div>
+</div>
+<div class="cal question"><p class="lab">Why the anti-goals are half the brief</p>
+<p>Every one of these is more comfortable to build than the actual problem, and each has consumed a real programme somewhere. The discipline of a short build is choosing what not to touch, and the teams that do best usually say out loud, early, what they are refusing to do.</p></div></div></div></section>
+<section class="slide" id="s-good"><div class="si"><div class="l1"><span class="snum">13 / JUDGING</span>
+<h2>How far you got. Not how it looks.</h2>
+<p class="big1">The winner is whoever travels furthest — from a vague problem to something demonstrated.</p>
+<div class="tw"><table>
+<thead><tr><th style="width:20%">Artifact</th><th>What it has to do</th></tr></thead>
+<tbody>
+<tr><td class="k">The problem</td><td>Name who experiences it and what happens to them today. Specific enough that somebody could disagree with you.</td></tr>
+<tr><td class="k">The why</td><td>What becomes possible, and how it would be measured. A number you could check in one season.</td></tr>
+<tr><td class="k">The data</td><td>What sources you would need and what has to be true to trust them. Including the ones that do not exist yet.</td></tr>
+<tr><td class="k">The proof</td><td>A working thing. It can be narrow. It cannot be a mockup of a thing.</td></tr>
+<tr><td class="k">The next step</td><td>One page: owner, the experiment, the ask, what it would prove.</td></tr>
+</tbody></table></div></div>
+<div class="more"><p class="ml">More detail</p>
+<div class="two">
+<div class="cal evidence"><p class="lab">Things that earn credit</p>
+<p>Handling a case where the system should refuse. Showing a number you measured rather than asserted. Demonstrating it in conditions that resemble the real ones. Admitting what you did not build and why. Using the synthetic data honestly, including the awkward rows.</p></div>
+<div class="cal risk"><p class="lab">Things that do not</p>
+<p>A prettier interface. More screens. An integration to a product nobody named. A chart of invented numbers. Claiming a percentage improvement you did not measure. Machine learning where a rule would do.</p></div>
+</div>
+<div class="cal position"><p class="lab">If you only have three hours</p>
+<p>Build the capture, on one work type, for one crew, offline, with a return path. That is a complete loop at the smallest possible scale, and a complete small loop beats an incomplete big one every time.</p></div></div></div></section>
+<section class="slide cover" id="s-about"><div class="si"><div class="l1"><p class="eyebrow">About this brief</p>
+<h2>What this is.</h2>
+<p class="big1">A problem brief for a Milbird hackathon.</p>
+<p class="big1"><strong>No client data is in here.</strong> Every number invented, every name made up. The trade terms are standard across the industry.</p>
+<p class="big1" style="color:var(--muted)">Share freely.</p></div>
+<div class="more"><p class="ml">More detail</p>
+<p>The shape of the problem — competent back office, absent field capture, a paper record travelling in a truck — is common enough across field-services industries to be worth treating as a pattern rather than a case. That is why this brief names no company, no product and no place.</p>
+<p>The eight stages use industry-standard terms that thousands of contractors use daily. The towns, crews, subcontractors, site codes, rates and quantities are all invented. The lag distribution is plausible rather than observed.</p>
+<p class="meta">If your solution turns out to be good, the interesting question is which other trade it transfers to first.</p></div></div></section>
+</div></div>
+
+<div class="hint on" id="hint">Press ↓ for detail</div>
+
+<nav class="deckbar">
+  <button class="nav" id="prev" type="button" aria-label="Previous slide" title="Previous slide" disabled="">←</button>
+  <div class="dots" id="dots"><button class="dot on" type="button" data-i="0" title="Brief"><span>Brief</span></button><button class="dot" type="button" data-i="1" title="The problem"><span>The problem</span></button><button class="dot" type="button" data-i="2" title="The arc"><span>The arc</span></button><button class="dot" type="button" data-i="3" title="The agents"><span>The agents</span></button><button class="dot" type="button" data-i="4" title="The build"><span>The build</span></button><button class="dot" type="button" data-i="5" title="Before the clock"><span>Before the clock</span></button><button class="dot" type="button" data-i="6" title="What to film"><span>What to film</span></button><button class="dot" type="button" data-i="7" title="The data"><span>The data</span></button><button class="dot" type="button" data-i="8" title="Integrations"><span>Integrations</span></button><button class="dot" type="button" data-i="9" title="In the field"><span>In the field</span></button><button class="dot" type="button" data-i="10" title="In the office"><span>In the office</span></button><button class="dot" type="button" data-i="11" title="The reporting"><span>The reporting</span></button><button class="dot" type="button" data-i="12" title="What makes it hard"><span>What makes it hard</span></button><button class="dot" type="button" data-i="13" title="What good looks like"><span>What good looks like</span></button><button class="dot" type="button" data-i="14" title="About"><span>About</span></button></div>
+  <button class="nav" id="next" type="button" aria-label="Next slide" title="Next slide">→</button>
+  <div class="keys"><span>←→</span> slides <span>↑↓</span> detail</div>
+  <div class="count"><b id="cn">1</b> / 15</div>
+</nav>
+
+<script>
+(function(){
+  "use strict";
+  var track = document.getElementById('track');
+  var dots  = document.getElementById('dots');
+  var prev  = document.getElementById('prev');
+  var next  = document.getElementById('next');
+  var cn    = document.getElementById('cn');
+  if(!track) return;
+  var slides = Array.prototype.slice.call(track.children);
+  var n = slides.length, i = 0;
+
+  function go(k, push){
+    i = Math.max(0, Math.min(n-1, k));
+    track.style.transform = 'translateX(' + (-i * 100) + '%)';
+    Array.prototype.forEach.call(dots.children, function(d, j){ d.classList.toggle('on', j === i); });
+    prev.disabled = (i === 0); next.disabled = (i === n-1);
+    cn.textContent = String(i+1);
+    slides[i].scrollTop = 0;
+    updateHint();
+    var on = dots.children[i];
+    if (on && on.scrollIntoView) on.scrollIntoView({block:'nearest', inline:'center'});
+    var id = slides[i].id.replace(/^s-/, '');
+    if (push !== false) { try { history.replaceState(null, '', '#' + id); } catch(e){} }
+  }
+
+  var hint = document.getElementById('hint');
+  function updateHint(){
+    if(!hint) return;
+    var sl = slides[i];
+    var more = sl.scrollHeight - sl.clientHeight > 40;
+    hint.classList.toggle('on', more && sl.scrollTop < 30);
+  }
+  slides.forEach(function(sl){
+    sl.addEventListener('scroll', function(){ updateHint(); }, {passive:true});
+  });
+  window.addEventListener('resize', updateHint);
+
+  prev.addEventListener('click', function(){ go(i-1); });
+  next.addEventListener('click', function(){ go(i+1); });
+  dots.addEventListener('click', function(e){
+    var b = e.target.closest('.dot'); if(b) go(parseInt(b.dataset.i, 10));
+  });
+
+  var reduce = false;
+  try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch(e){}
+
+  // the slide is the scroll container, not the document, so arrow keys need wiring
+  function nudge(dir, full){
+    var sl = slides[i];
+    var step = Math.round(sl.clientHeight * (full ? 0.86 : 0.55)) * dir;
+    try { sl.scrollBy({ top: step, left: 0, behavior: reduce ? 'auto' : 'smooth' }); }
+    catch(err){ sl.scrollTop += step; }
+    setTimeout(updateHint, 60);
+  }
+  function toEdge(where){
+    var sl = slides[i];
+    var top = where === 'top' ? 0 : sl.scrollHeight;
+    try { sl.scrollTo({ top: top, behavior: reduce ? 'auto' : 'smooth' }); }
+    catch(err){ sl.scrollTop = top; }
+    setTimeout(updateHint, 60);
+  }
+
+  document.addEventListener('keydown', function(e){
+    var t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var k = e.key;
+    if (k === 'ArrowRight'){ e.preventDefault(); go(i+1); }
+    else if (k === 'ArrowLeft'){ e.preventDefault(); go(i-1); }
+    else if (k === 'ArrowDown'){ e.preventDefault(); nudge(1, false); }
+    else if (k === 'ArrowUp'){ e.preventDefault(); nudge(-1, false); }
+    else if (k === 'PageDown'){ e.preventDefault(); nudge(1, true); }
+    else if (k === 'PageUp'){ e.preventDefault(); nudge(-1, true); }
+    else if (k === ' ' || k === 'Spacebar'){ e.preventDefault(); nudge(e.shiftKey ? -1 : 1, true); }
+    else if (k === 'Home'){ e.preventDefault(); toEdge('top'); }
+    else if (k === 'End'){ e.preventDefault(); toEdge('bottom'); }
+  });
+
+  // in-page links jump to the slide that holds the target
+  document.addEventListener('click', function(e){
+    var a = e.target.closest('a[href^="#"]'); if(!a) return;
+    var id = a.getAttribute('href').slice(1);
+    var k = slides.findIndex(function(sl){ return sl.id === 's-' + id || sl.querySelector('#' + CSS.escape(id)); });
+    if (k >= 0){ e.preventDefault(); go(k); }
+  });
+
+  // horizontal swipe, without hijacking vertical scroll inside a slide
+  var x0 = null, y0 = null;
+  track.addEventListener('touchstart', function(e){
+    x0 = e.touches[0].clientX; y0 = e.touches[0].clientY;
+  }, {passive:true});
+  track.addEventListener('touchend', function(e){
+    if (x0 === null) return;
+    var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+    if (Math.abs(dx) > 58 && Math.abs(dx) > Math.abs(dy) * 1.7) go(dx < 0 ? i+1 : i-1);
+    x0 = y0 = null;
+  }, {passive:true});
+
+  var start = (location.hash || '').replace('#','');
+  var k0 = slides.findIndex(function(sl){ return sl.id === 's-' + start; });
+  go(k0 >= 0 ? k0 : 0, false);
+})();
+</script>
+<script>
+(function(){
+  "use strict";
+  var DATA = {"sites.csv": "site_code,town,homes,started,status
+FZ200-10,Ashbourne,96,2026-04-06,complete
+FZ207-11,Kelmscott,131,2026-04-15,active
+FZ214-12,Rivenhall,157,2026-04-24,active
+FZ221-13,Thornbury,178,2026-05-03,complete
+FZ228-14,Ashbourne,204,2026-05-12,active
+FZ235-15,Kelmscott,236,2026-05-21,active
+FZ242-16,Rivenhall,271,2026-05-30,active
+FZ249-17,Thornbury,96,2026-06-08,complete
+FZ256-18,Ashbourne,131,2026-06-17,planned
+FZ263-19,Kelmscott,157,2026-06-26,planned
+FZ270-20,Rivenhall,178,2026-07-05,active
+FZ277-21,Thornbury,204,2026-07-14,complete
+", "crews.csv": "crew_id,sub_id,sub_name,foreman,headcount,certified_for
+SC-100-C1,SC-100,Northgate Civil,Foreman A1,4,BOR,PLC,SPL,BOX
+SC-100-C2,SC-100,Northgate Civil,Foreman A2,4,RST,BOX,SPL
+SC-200-C1,SC-200,Halloway Underground,Foreman B1,4,BOR,HYD,RST,BOX
+SC-200-C2,SC-200,Halloway Underground,Foreman B2,3,LOC,BOR,SPL
+SC-200-C3,SC-200,Halloway Underground,Foreman B3,3,PLC,SPL,LOC
+SC-300-C1,SC-300,Prentiss Utility,Foreman C1,5,PLC,RST,BOX
+SC-300-C2,SC-300,Prentiss Utility,Foreman C2,3,PLC,JET,BOX,RST
+SC-300-C3,SC-300,Prentiss Utility,Foreman C3,4,SPL,PLC,BOR,JET
+", "work_types.csv": "work_code,name,unit,revenue_rate
+LOC,Locates,each,14.0
+HYD,Hydrovac,each,210.0
+BOR,Directional bore,m,52.0
+PLC,Pedestal placement,each,96.0
+BOX,Ground box,each,340.0
+JET,Cable jetting,m,9.0
+SPL,Splicing,each,128.0
+RST,Restoration,m,22.0
+", "planned.csv": "site_code,work_code,planned_qty
+FZ200-10,LOC,30
+FZ200-10,HYD,12
+FZ200-10,BOR,2198
+FZ200-10,PLC,102
+FZ200-10,BOX,14
+FZ200-10,JET,1843
+FZ200-10,SPL,82
+FZ200-10,RST,451
+FZ207-11,LOC,38
+FZ207-11,HYD,16
+FZ207-11,BOR,3035
+FZ207-11,PLC,140
+FZ207-11,BOX,15
+FZ207-11,JET,2669
+FZ207-11,SPL,132
+FZ207-11,RST,504
+FZ214-12,LOC,47
+FZ214-12,HYD,17
+FZ214-12,BOR,3073
+FZ214-12,PLC,157
+FZ214-12,BOX,22
+FZ214-12,JET,2927
+FZ214-12,SPL,129
+FZ214-12,RST,764
+FZ221-13,LOC,53
+FZ221-13,HYD,20
+FZ221-13,BOR,3420
+FZ221-13,PLC,176
+FZ221-13,BOX,22
+FZ221-13,JET,3418
+FZ221-13,SPL,147
+FZ221-13,RST,888
+FZ228-14,LOC,57
+FZ228-14,HYD,23
+FZ228-14,BOR,4627
+FZ228-14,PLC,206
+FZ228-14,BOX,30
+FZ228-14,JET,4017
+FZ228-14,SPL,191
+FZ228-14,RST,932
+FZ235-15,LOC,70
+FZ235-15,HYD,26
+FZ235-15,BOR,4431
+FZ235-15,PLC,277
+FZ235-15,BOX,30
+FZ235-15,JET,4858
+FZ235-15,SPL,227
+FZ235-15,RST,1204
+FZ242-16,LOC,76
+FZ242-16,HYD,34
+FZ242-16,BOR,5426
+FZ242-16,PLC,282
+FZ242-16,BOX,35
+FZ242-16,JET,5580
+FZ242-16,SPL,284
+FZ242-16,RST,1285
+FZ249-17,LOC,30
+FZ249-17,HYD,10
+FZ249-17,BOR,2309
+FZ249-17,PLC,115
+FZ249-17,BOX,14
+FZ249-17,JET,1829
+FZ249-17,SPL,79
+FZ249-17,RST,457
+FZ256-18,LOC,41
+FZ256-18,HYD,13
+FZ256-18,BOR,2499
+FZ256-18,PLC,153
+FZ256-18,BOX,16
+FZ256-18,JET,2380
+FZ256-18,SPL,110
+FZ256-18,RST,525
+FZ263-19,LOC,53
+FZ263-19,HYD,18
+FZ263-19,BOR,2971
+FZ263-19,PLC,156
+FZ263-19,BOX,22
+FZ263-19,JET,3289
+FZ263-19,SPL,131
+FZ263-19,RST,693
+FZ270-20,LOC,56
+FZ270-20,HYD,22
+FZ270-20,BOR,4029
+FZ270-20,PLC,190
+FZ270-20,BOX,26
+FZ270-20,JET,3231
+FZ270-20,SPL,167
+FZ270-20,RST,793
+FZ277-21,LOC,60
+FZ277-21,HYD,23
+FZ277-21,BOR,3723
+FZ277-21,PLC,230
+FZ277-21,BOX,29
+FZ277-21,JET,3608
+FZ277-21,SPL,207
+FZ277-21,RST,1038
+", "daily_production.csv": "work_date,crew_id,site_code,work_code,qty,unit,captured_by,days_to_office
+2026-07-06,SC-300-C2,FZ270-20,RST,264,m,paper,5
+2026-07-06,SC-100-C2,FZ242-16,BOX,14,each,spreadsheet,3
+2026-07-06,SC-200-C1,FZ228-14,BOX,14,each,paper,21
+2026-07-06,SC-200-C3,FZ214-12,SPL,5,each,spreadsheet,14
+2026-07-06,SC-200-C2,FZ200-10,LOC,11,each,paper,3
+2026-07-07,SC-100-C2,FZ228-14,BOX,4,each,paper,14
+2026-07-07,SC-100-C1,FZ249-17,BOR,457,m,paper,14
+2026-07-07,SC-300-C2,FZ221-13,PLC,3,each,paper,14
+2026-07-08,SC-200-C2,FZ277-21,BOR,435,m,paper,1
+2026-07-08,SC-200-C3,FZ235-15,PLC,3,each,spreadsheet,7
+2026-07-08,SC-300-C2,FZ249-17,BOX,3,each,paper,1
+2026-07-09,SC-200-C3,FZ207-11,LOC,11,each,paper,1
+2026-07-09,SC-200-C1,FZ235-15,BOX,8,each,paper,5
+2026-07-09,SC-200-C2,FZ200-10,BOR,388,m,paper,7
+2026-07-09,SC-300-C2,FZ214-12,BOX,14,each,paper,1
+2026-07-09,SC-100-C2,FZ207-11,SPL,6,each,paper,21
+2026-07-10,SC-300-C3,FZ249-17,JET,243,m,spreadsheet,7
+2026-07-10,SC-100-C2,FZ214-12,BOX,14,each,paper,7
+2026-07-10,SC-200-C2,FZ235-15,SPL,5,each,paper,14
+2026-07-10,SC-300-C2,FZ200-10,PLC,14,each,paper,7
+2026-07-13,SC-100-C1,FZ242-16,BOX,2,each,paper,3
+2026-07-13,SC-200-C3,FZ270-20,SPL,5,each,paper,7
+2026-07-13,SC-300-C1,FZ235-15,RST,188,m,spreadsheet,7
+2026-07-14,SC-100-C1,FZ242-16,BOX,3,each,paper,14
+2026-07-14,SC-200-C3,FZ228-14,SPL,2,each,paper,14
+2026-07-14,SC-200-C2,FZ214-12,BOR,378,m,paper,5
+2026-07-15,SC-300-C3,FZ242-16,SPL,5,each,spreadsheet,7
+2026-07-15,SC-300-C2,FZ228-14,PLC,4,each,paper,1
+2026-07-15,SC-100-C1,FZ207-11,BOX,6,each,spreadsheet,5
+2026-07-16,SC-200-C1,FZ221-13,BOX,11,each,paper,1
+2026-07-16,SC-100-C2,FZ277-21,SPL,11,each,paper,1
+2026-07-16,SC-200-C2,FZ249-17,BOR,416,m,paper,7
+2026-07-16,SC-200-C3,FZ221-13,SPL,4,each,paper,7
+2026-07-17,SC-200-C2,FZ214-12,SPL,6,each,paper,7
+2026-07-17,SC-300-C3,FZ200-10,JET,418,m,paper,7
+2026-07-17,SC-200-C1,FZ200-10,HYD,14,each,paper,21
+2026-07-17,SC-100-C2,FZ207-11,SPL,6,each,paper,3
+2026-07-17,SC-200-C3,FZ242-16,LOC,2,each,paper,7
+2026-07-19,SC-300-C2,FZ277-21,JET,456,m,paper,7
+2026-07-19,SC-200-C1,FZ249-17,BOX,11,each,paper,7
+2026-07-19,SC-200-C3,FZ214-12,LOC,14,each,paper,14
+2026-07-20,SC-300-C2,FZ235-15,PLC,6,each,paper,5
+2026-07-20,SC-300-C1,FZ277-21,BOX,8,each,spreadsheet,5
+2026-07-20,SC-300-C3,FZ242-16,SPL,11,each,spreadsheet,7
+2026-07-21,SC-300-C2,FZ242-16,BOX,14,each,paper,14
+2026-07-21,SC-200-C3,FZ235-15,PLC,5,each,paper,5
+2026-07-21,SC-100-C2,FZ221-13,SPL,14,each,paper,1
+2026-07-21,SC-100-C1,FZ235-15,BOX,4,each,paper,5
+2026-07-21,SC-200-C1,FZ207-11,BOX,14,each,paper,21
+2026-07-22,SC-100-C1,FZ214-12,BOX,5,each,paper,21
+2026-07-22,SC-200-C3,FZ200-10,SPL,11,each,paper,1
+2026-07-22,SC-200-C1,FZ221-13,BOX,4,each,spreadsheet,21
+2026-07-22,SC-300-C2,FZ235-15,RST,216,m,paper,21
+2026-07-22,SC-200-C2,FZ221-13,LOC,11,each,paper,21
+2026-07-23,SC-300-C2,FZ214-12,BOX,5,each,paper,7
+2026-07-23,SC-200-C1,FZ235-15,BOR,487,m,spreadsheet,7
+2026-07-23,SC-200-C3,FZ249-17,PLC,2,each,paper,7
+2026-07-23,SC-100-C2,FZ200-10,BOX,2,each,paper,3
+2026-07-23,SC-300-C3,FZ214-12,SPL,3,each,spreadsheet,14
+2026-07-24,SC-100-C2,FZ270-20,SPL,6,each,paper,7
+2026-07-24,SC-200-C1,FZ221-13,BOX,4,each,paper,14
+2026-07-24,SC-200-C3,FZ207-11,PLC,2,each,paper,7
+2026-07-25,SC-100-C2,FZ242-16,RST,527,m,spreadsheet,3
+2026-07-25,SC-200-C3,FZ228-14,SPL,11,each,paper,21
+2026-07-25,SC-300-C1,FZ235-15,RST,526,m,paper,21
+2026-07-25,SC-300-C2,FZ221-13,RST,252,m,paper,5
+2026-07-25,SC-300-C3,FZ242-16,PLC,4,each,paper,7
+2026-07-27,SC-200-C3,FZ221-13,PLC,4,each,paper,5
+2026-07-27,SC-200-C2,FZ214-12,LOC,5,each,paper,7
+2026-07-27,SC-300-C3,FZ235-15,SPL,8,each,paper,1
+2026-07-28,SC-300-C2,FZ207-11,JET,226,m,paper,14
+2026-07-28,SC-200-C2,FZ249-17,LOC,3,each,paper,5
+2026-07-28,SC-200-C1,FZ249-17,BOR,324,m,paper,1
+2026-07-28,SC-100-C2,FZ249-17,RST,367,m,paper,5
+2026-07-28,SC-200-C3,FZ277-21,SPL,5,each,paper,1
+2026-07-29,SC-300-C1,FZ270-20,PLC,11,each,paper,21
+2026-07-29,SC-200-C1,FZ249-17,HYD,14,each,spreadsheet,1
+2026-07-29,SC-300-C2,FZ277-21,RST,514,m,paper,3
+2026-07-30,SC-200-C2,FZ214-12,BOR,228,m,paper,1
+2026-07-30,SC-300-C2,FZ277-21,JET,414,m,paper,1
+2026-07-30,SC-100-C2,FZ221-13,BOX,6,each,spreadsheet,14
+2026-07-30,SC-100-C1,FZ214-12,PLC,2,each,paper,14
+2026-07-30,SC-300-C1,FZ207-11,BOX,5,each,paper,5
+2026-07-31,SC-100-C1,FZ235-15,SPL,14,each,paper,21
+2026-07-31,SC-200-C1,FZ214-12,HYD,5,each,paper,7
+2026-07-31,SC-100-C2,FZ200-10,RST,541,m,paper,3
+2026-07-31,SC-200-C2,FZ235-15,SPL,14,each,paper,1
+2026-07-31,SC-300-C1,FZ200-10,PLC,2,each,spreadsheet,7
+2026-08-01,SC-100-C1,FZ242-16,PLC,11,each,spreadsheet,21
+2026-08-01,SC-200-C1,FZ277-21,HYD,4,each,spreadsheet,21
+2026-08-01,SC-300-C1,FZ207-11,RST,200,m,paper,14
+2026-08-03,SC-300-C2,FZ200-10,BOX,6,each,paper,5
+2026-08-03,SC-200-C1,FZ270-20,HYD,11,each,paper,7
+2026-08-03,SC-200-C3,FZ200-10,SPL,5,each,paper,7
+2026-08-03,SC-300-C1,FZ235-15,PLC,4,each,paper,7
+2026-08-03,SC-200-C2,FZ228-14,LOC,5,each,spreadsheet,14
+2026-08-04,SC-300-C1,FZ207-11,PLC,11,each,paper,7
+2026-08-04,SC-300-C3,FZ214-12,PLC,2,each,paper,14
+2026-08-04,SC-100-C1,FZ200-10,BOX,2,each,paper,14
+2026-08-04,SC-200-C2,FZ221-13,LOC,3,each,spreadsheet,7
+2026-08-05,SC-100-C2,FZ214-12,BOX,5,each,paper,21
+2026-08-05,SC-200-C3,FZ207-11,PLC,2,each,paper,5
+2026-08-05,SC-200-C2,FZ277-21,SPL,4,each,paper,21
+2026-08-05,SC-200-C1,FZ277-21,BOX,3,each,spreadsheet,5
+2026-08-05,SC-100-C1,FZ221-13,BOR,597,m,paper,5
+2026-08-06,SC-100-C1,FZ200-10,BOR,277,m,paper,7
+2026-08-06,SC-200-C2,FZ249-17,BOR,610,m,spreadsheet,7
+2026-08-06,SC-300-C3,FZ200-10,PLC,11,each,paper,5
+2026-08-06,SC-200-C1,FZ200-10,RST,434,m,paper,7
+2026-08-06,SC-100-C2,FZ214-12,RST,519,m,spreadsheet,21
+2026-08-07,SC-100-C2,FZ277-21,RST,512,m,paper,3
+2026-08-07,SC-200-C2,FZ277-21,LOC,2,each,paper,21
+2026-08-07,SC-300-C2,FZ200-10,PLC,14,each,spreadsheet,7
+2026-08-07,SC-200-C3,FZ249-17,SPL,3,each,paper,7
+2026-08-08,SC-300-C1,FZ207-11,RST,566,m,paper,1
+2026-08-08,SC-300-C2,FZ242-16,PLC,3,each,spreadsheet,5
+2026-08-08,SC-300-C3,FZ207-11,PLC,14,each,paper,3
+2026-08-08,SC-100-C2,FZ200-10,RST,412,m,paper,5
+2026-08-08,SC-100-C1,FZ249-17,SPL,8,each,spreadsheet,14
+2026-08-10,SC-200-C3,FZ228-14,LOC,14,each,paper,3
+2026-08-10,SC-300-C2,FZ242-16,BOX,5,each,paper,7
+2026-08-10,SC-100-C2,FZ228-14,BOX,14,each,paper,14
+2026-08-10,SC-100-C1,FZ277-21,SPL,4,each,paper,3
+2026-08-11,SC-200-C2,FZ200-10,LOC,3,each,paper,21
+2026-08-11,SC-300-C3,FZ249-17,SPL,6,each,paper,7
+2026-08-11,SC-200-C3,FZ235-15,PLC,2,each,paper,1
+2026-08-11,SC-200-C1,FZ249-17,BOX,4,each,paper,14
+2026-08-11,SC-100-C2,FZ214-12,BOX,2,each,paper,5
+2026-08-12,SC-100-C1,FZ221-13,BOR,438,m,paper,5
+2026-08-12,SC-300-C3,FZ214-12,BOR,552,m,paper,7
+2026-08-12,SC-200-C3,FZ214-12,SPL,14,each,paper,21
+2026-08-12,SC-300-C2,FZ228-14,PLC,11,each,paper,5
+2026-08-13,SC-300-C3,FZ235-15,JET,250,m,spreadsheet,3
+2026-08-13,SC-200-C1,FZ228-14,BOR,241,m,paper,7
+2026-08-13,SC-300-C1,FZ242-16,PLC,8,each,paper,21
+2026-08-13,SC-100-C2,FZ214-12,SPL,3,each,paper,14
+2026-08-13,SC-100-C1,FZ235-15,BOR,239,m,paper,1
+2026-08-14,SC-100-C2,FZ242-16,SPL,8,each,spreadsheet,7
+2026-08-14,SC-200-C3,FZ221-13,SPL,14,each,paper,21
+2026-08-14,SC-200-C1,FZ242-16,BOX,3,each,paper,3
+2026-08-14,SC-300-C3,FZ270-20,JET,496,m,paper,21
+2026-08-17,SC-300-C1,FZ270-20,PLC,14,each,paper,21
+2026-08-17,SC-200-C1,FZ242-16,BOX,11,each,paper,21
+2026-08-17,SC-200-C2,FZ242-16,LOC,11,each,paper,5
+2026-08-18,SC-100-C1,FZ228-14,BOR,424,m,paper,5
+2026-08-18,SC-300-C2,FZ214-12,PLC,8,each,spreadsheet,3
+2026-08-18,SC-200-C2,FZ228-14,LOC,11,each,spreadsheet,14
+2026-08-19,SC-300-C1,FZ200-10,BOX,6,each,paper,7
+2026-08-19,SC-100-C1,FZ249-17,SPL,14,each,paper,7
+2026-08-19,SC-300-C2,FZ270-20,RST,202,m,spreadsheet,7
+2026-08-19,SC-200-C1,FZ207-11,BOX,5,each,spreadsheet,7
+2026-08-20,SC-200-C3,FZ270-20,LOC,4,each,spreadsheet,14
+2026-08-20,SC-300-C3,FZ270-20,SPL,5,each,paper,7
+2026-08-20,SC-300-C2,FZ221-13,JET,613,m,paper,14
+2026-08-20,SC-100-C2,FZ214-12,SPL,3,each,spreadsheet,7
+2026-08-21,SC-300-C1,FZ221-13,BOX,6,each,paper,7
+2026-08-21,SC-200-C1,FZ207-11,BOR,309,m,spreadsheet,21
+2026-08-21,SC-100-C2,FZ228-14,BOX,14,each,paper,3
+2026-08-21,SC-100-C1,FZ270-20,SPL,4,each,spreadsheet,21
+2026-08-23,SC-300-C1,FZ270-20,BOX,3,each,spreadsheet,14
+2026-08-23,SC-200-C3,FZ242-16,SPL,2,each,paper,5
+2026-08-23,SC-200-C2,FZ214-12,LOC,6,each,spreadsheet,1
+2026-08-23,SC-100-C2,FZ214-12,SPL,3,each,paper,7
+2026-08-24,SC-200-C3,FZ235-15,PLC,2,each,paper,14
+2026-08-24,SC-100-C2,FZ200-10,BOX,3,each,spreadsheet,14
+2026-08-24,SC-100-C1,FZ214-12,PLC,5,each,spreadsheet,3
+2026-08-24,SC-300-C3,FZ207-11,SPL,6,each,paper,21
+2026-08-24,SC-300-C1,FZ249-17,PLC,2,each,paper,14
+2026-08-25,SC-300-C3,FZ214-12,JET,489,m,paper,14
+2026-08-25,SC-100-C2,FZ228-14,RST,268,m,paper,7
+2026-08-25,SC-200-C1,FZ270-20,BOX,4,each,paper,7
+2026-08-25,SC-300-C1,FZ228-14,BOX,11,each,paper,21
+2026-08-26,SC-300-C3,FZ214-12,SPL,14,each,paper,7
+2026-08-26,SC-200-C1,FZ235-15,RST,216,m,paper,5
+2026-08-26,SC-200-C3,FZ221-13,LOC,4,each,paper,7
+2026-08-26,SC-300-C2,FZ270-20,BOX,8,each,paper,1
+2026-08-27,SC-100-C1,FZ277-21,BOR,521,m,paper,14
+2026-08-27,SC-300-C2,FZ228-14,RST,544,m,paper,1
+2026-08-27,SC-200-C1,FZ221-13,RST,366,m,paper,14
+2026-08-28,SC-300-C2,FZ235-15,BOX,8,each,paper,3
+2026-08-28,SC-100-C1,FZ214-12,SPL,2,each,paper,1
+2026-08-28,SC-100-C2,FZ214-12,SPL,3,each,spreadsheet,1
+2026-08-29,SC-100-C1,FZ207-11,BOR,281,m,spreadsheet,1
+2026-08-29,SC-300-C3,FZ235-15,JET,201,m,paper,3
+2026-08-29,SC-100-C2,FZ221-13,RST,462,m,spreadsheet,5
+"};
+var FILES = [["sites.csv", "12 rows", false], ["crews.csv", "8 rows", false], ["work_types.csv", "8 rows", false], ["planned.csv", "96 rows", false], ["daily_production.csv", "185 rows", true]];
+  var host=document.getElementById('files'); if(!host) return;
+  var downloadsCap = null;
+  if (window.claude && window.claude.use) {
+    window.claude.use("downloads").then(function(d){ downloadsCap = d; }).catch(function(){});
+  }
+  FILES.forEach(function(f){
+    var name=f[0], meta=f[1], key=f[2];
+    var d=document.createElement('div'); d.className='fcard'+(key?' key':'');
+    var n=document.createElement('div'); n.className='fn'; n.textContent=name;
+    var m=document.createElement('div'); m.className='fm'; m.textContent=meta+(key?' \u00b7 the answer key':'');
+    var row=document.createElement('div'); row.style.display='flex'; row.style.gap='7px';
+    var b=document.createElement('button'); b.type='button'; b.textContent='Copy CSV';
+    b.addEventListener('click', function(){
+      var txt=DATA[name]||'';
+      function ok(){ b.textContent='Copied'; b.classList.add('done');
+        setTimeout(function(){ b.textContent='Copy CSV'; b.classList.remove('done'); },1600); }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok, fallback);
+      } else { fallback(); }
+      function fallback(){
+        var ta=document.createElement('textarea'); ta.value=txt;
+        ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta);
+        ta.select(); try{ document.execCommand('copy'); ok(); }catch(e){ b.textContent='Select failed'; }
+        document.body.removeChild(ta);
+      }
+    });
+    var dl=document.createElement('button'); dl.type='button'; dl.textContent='Download';
+    dl.addEventListener('click', function(){
+      var txt=DATA[name]||'';
+      function ok(){ dl.textContent='Saved'; dl.classList.add('done');
+        setTimeout(function(){ dl.textContent='Download'; dl.classList.remove('done'); },1600); }
+      function viaBlob(){
+        try{
+          var blob=new Blob([txt], {type:'text/csv'});
+          var url=URL.createObjectURL(blob);
+          var a=document.createElement('a'); a.href=url; a.download=name;
+          document.body.appendChild(a); a.click(); document.body.removeChild(a);
+          setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
+          ok();
+        }catch(e){ dl.textContent='Unavailable'; setTimeout(function(){ dl.textContent='Download'; },1600); }
+      }
+      if (downloadsCap && downloadsCap.save) {
+        downloadsCap.save({filename:name, data:txt}).then(ok, function(err){
+          if (err && err.code === 'declined') return;
+          viaBlob();
+        });
+      } else {
+        viaBlob();
+      }
+    });
+    row.appendChild(b); row.appendChild(dl);
+    d.appendChild(n); d.appendChild(m); d.appendChild(row); host.appendChild(d);
+  });
+})();
+</script>
+
+
+<script>
+(function(){
+  "use strict";
+  var host=document.getElementById('bars'); if(!host) return;
+  var rows=[["Locates",62,74],["Hydrovac",19,27],["Directional bore",3240,4118],
+            ["Pedestals",148,206],["Ground boxes",9,25],["Cable jetting",1980,3724],
+            ["Splicing",44,186],["Restoration",310,882]];
+  rows.forEach(function(r){
+    var pct=Math.round(r[1]/r[2]*100);
+    var d=document.createElement('div'); d.className='brow';
+    var l=document.createElement('div'); l.className='bl'; l.textContent=r[0];
+    var t=document.createElement('div'); t.className='btrack';
+    var f=document.createElement('div'); f.className='bfill'; f.style.width=pct+'%';
+    if(pct<25) f.style.background='var(--elec)'; else if(pct<60) f.style.background='var(--gas)';
+    else f.style.background='var(--sewer)';
+    t.appendChild(f);
+    var n=document.createElement('div'); n.className='bnum';
+    n.textContent=r[1].toLocaleString()+' / '+r[2].toLocaleString();
+    d.appendChild(l); d.appendChild(t); d.appendChild(n); host.appendChild(d);
+  });
+})();
+</script>
+
+<script>
+(function(){
+  "use strict";
+  var pdfBtn = document.getElementById('dl-pdf');
+  var htmlBtn = document.getElementById('dl-html');
+  var msg = document.getElementById('dlmsg');
+  if (!pdfBtn || !htmlBtn) return;
+
+  function flash(text, ms){
+    if(!msg) return;
+    msg.textContent = text;
+    if (ms) setTimeout(function(){ if (msg.textContent === text) msg.textContent = ''; }, ms);
+  }
+
+  pdfBtn.addEventListener('click', function(){
+    try { window.print(); } catch(e){ flash('Print unavailable here', 2400); }
+  });
+
+  var downloadsCap = null;
+  if (window.claude && window.claude.use) {
+    window.claude.use("downloads").then(function(d){ downloadsCap = d; }).catch(function(){});
+  }
+
+  htmlBtn.addEventListener('click', function(){
+    var html = '<!doctype html>\n' + document.documentElement.outerHTML;
+    var filename = 'the-last-mile-of-data.html';
+    function ok(){ flash('Saved', 2000); }
+    function viaBlob(){
+      try{
+        var blob = new Blob([html], {type:'text/html'});
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a'); a.href = url; a.download = filename;
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
+        ok();
+      }catch(e){ flash('Download unavailable here', 2400); }
+    }
+    if (downloadsCap && downloadsCap.save) {
+      downloadsCap.save({filename:filename, data:html}).then(ok, function(err){
+        if (err && err.code === 'declined') return;
+        viaBlob();
+      });
+    } else {
+      viaBlob();
+    }
+  });
+})();
+</script>
+
+</body></html>

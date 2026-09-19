@@ -1,65 +1,179 @@
-import { useGetProject, useUpdateStage, getGetProjectQueryKey } from "@workspace/api-client-react";
+import { useState, useMemo } from "react";
 import { useParams, Link } from "wouter";
-import { ArrowLeft, CheckCircle2, Clock, AlertTriangle, Circle, FileText, User } from "lucide-react";
-import { format } from "date-fns";
-import { useState, useEffect } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+import {
+  ArrowLeft, FileText, CheckCircle2, Clock, AlertTriangle,
+  ChevronRight, XCircle, Download, Eye
+} from "lucide-react";
+import { format, formatDistanceToNow } from "date-fns";
+
+import {
+  useGetControlRoom,
+  getGetControlRoomQueryKey,
+  useListConfirmedFacts,
+  getListConfirmedFactsQueryKey,
+  getEvidenceManifest
+} from "@workspace/api-client-react";
+import type { ProductionItem } from "@workspace/api-client-react";
+
 import { cn } from "@/lib/utils";
-import type { Stage, StageStatus } from "@workspace/api-client-react";
 import { toast } from "sonner";
-
-const STATUS_ICONS = {
-  complete: CheckCircle2,
-  in_progress: Clock,
-  blocked: AlertTriangle,
-  not_started: Circle,
-};
-
-const STATUS_COLORS = {
-  complete: "text-primary bg-primary/10 border-primary/20",
-  in_progress: "text-secondary bg-secondary/10 border-secondary/20",
-  blocked: "text-destructive bg-destructive/10 border-destructive/20",
-  not_started: "text-muted-foreground bg-muted border-border/50",
-};
-
-const STATUS_LABELS = {
-  complete: "Complete",
-  in_progress: "In Progress",
-  blocked: "Blocked",
-  not_started: "Not Started",
-};
+import { FactDrilldownDialog } from "@/components/FactDrilldownDialog";
 
 export function ProjectWorkspace() {
   const { id } = useParams<{ id: string }>();
   const projectId = parseInt(id || "0", 10);
-  const { data: project, isLoading, error } = useGetProject(projectId, {
-    query: { enabled: !!projectId, queryKey: getGetProjectQueryKey(projectId) }
+
+  const { data: controlRoom, isLoading, error } = useGetControlRoom(projectId, {
+    query: { enabled: !!projectId, queryKey: getGetControlRoomQueryKey(projectId) }
   });
-  const [selectedStageNumber, setSelectedStageNumber] = useState<number | null>(null);
+
+  const { data: confirmedFacts } = useListConfirmedFacts(projectId, {
+    query: { enabled: !!projectId, queryKey: getListConfirmedFactsQueryKey(projectId) }
+  });
+
+  const [selectedFactId, setSelectedFactId] = useState<number | null>(null);
+  const [workTypeFilter, setWorkTypeFilter] = useState<number | null>(null);
+  const [isExporting, setIsExporting] = useState(false);
+
+  const filteredFacts = useMemo(() => {
+    if (!confirmedFacts) return [];
+    if (workTypeFilter === null) return confirmedFacts;
+    return confirmedFacts.filter(f => f.workTypeId === workTypeFilter);
+  }, [confirmedFacts, workTypeFilter]);
 
   if (isLoading) {
-    return <div className="flex-1 p-10 flex items-center justify-center">Loading project data...</div>;
+    return (
+      <div className="flex-1 p-10 flex flex-col items-center justify-center animate-pulse gap-4">
+         <div className="h-12 w-64 bg-muted rounded-md" />
+         <div className="h-4 w-48 bg-muted/50 rounded-md" />
+      </div>
+    );
   }
 
-  if (error || !project) {
-    return <div className="flex-1 p-10 flex flex-col items-center justify-center">
-      <h2 className="text-xl text-destructive font-serif">Project not found</h2>
-      <Link href="/" className="text-primary mt-4 hover:underline">Return to Overview</Link>
-    </div>;
+  if (error || !controlRoom) {
+    return (
+      <div className="flex-1 p-10 flex flex-col items-center justify-center text-center">
+        <AlertTriangle size={48} className="text-destructive mb-4 opacity-80" />
+        <h2 className="text-2xl font-serif text-foreground mb-2">Control Room Unavailable</h2>
+        <Link href="/" className="text-primary hover:underline text-sm font-medium">Return to Portfolio</Link>
+      </div>
+    );
   }
 
-  const selectedStage = selectedStageNumber 
-    ? project.stages.find(s => s.number === selectedStageNumber)
-    : project.stages[0]; // Default to first stage
+  const { project, workTypeProgress, reviewBacklog, refusalBacklog, sites, lag, evidenceCoverage, derivedMetrics } = controlRoom;
 
-  const completedCount = project.stages.filter(s => s.status === 'complete').length;
-  const progress = (completedCount / project.stages.length) * 100;
+  const handleExportEvidence = async () => {
+    try {
+      setIsExporting(true);
+      toast.info("Generating evidence pack...", { id: "export-toast" });
+      const manifest = await getEvidenceManifest(projectId);
+
+      const escapeHtml = (unsafe: string | null | undefined) => {
+        if (!unsafe) return '';
+        return unsafe
+          .toString()
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      };
+
+      const htmlContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <title>Evidence Pack: ${escapeHtml(manifest.project.name)}</title>
+          <style>
+            body { font-family: monospace; line-height: 1.5; padding: 2rem; max-w-5xl; margin: 0 auto; color: #1a1a1a; }
+            h1, h2, h3 { font-family: serif; font-weight: normal; }
+            .claim { border: 1px solid #ccc; padding: 1rem; margin-bottom: 2rem; border-radius: 4px; }
+            .meta { font-size: 0.9em; color: #666; margin-bottom: 1rem; }
+            table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.9em; }
+            th, td { border: 1px solid #eee; padding: 0.5rem; text-align: left; }
+            th { background: #f9f9f9; }
+            .evidence { margin-top: 1rem; padding: 1rem; background: #fafafa; border-radius: 4px; }
+            .hash { font-size: 0.8em; word-break: break-all; color: #888; }
+            .status-confirmed { color: #166534; font-weight: bold; }
+            .status-refused { color: #991b1b; font-weight: bold; }
+          </style>
+        </head>
+        <body>
+          <h1>Evidence Manifest</h1>
+          <div class="meta">
+             <p>Project: ${escapeHtml(manifest.project.name)} (ID: ${manifest.project.id})</p>
+             <p>Generated: ${escapeHtml(format(new Date(manifest.asOf), 'PPpp'))}</p>
+          </div>
+
+          <h2>Adjudicated Claims</h2>
+          ${manifest.claims.map(c => `
+             <div class="claim">
+               <h3>Fact ID: ${c.productionItem.id} <span class="status-${escapeHtml(c.productionItem.status)}">[${escapeHtml(c.productionItem.status)}]</span></h3>
+               <div class="meta">
+                 Capture Date: ${escapeHtml(format(new Date(c.capture.workDate), 'PP'))}<br>
+                 Quantity: ${escapeHtml(c.productionItem.quantity)} ${escapeHtml(c.productionItem.unit)}<br>
+                 External ID: ${escapeHtml(c.productionItem.externalId)}
+               </div>
+
+               <h4>Chain of Custody</h4>
+               <table>
+                 <thead><tr><th>Time</th><th>Actor</th><th>Decision</th><th>Notes</th></tr></thead>
+                 <tbody>
+                   ${c.decisions.map(d => `
+                     <tr>
+                       <td>${escapeHtml(format(new Date(d.createdAt), 'PP p'))}</td>
+                       <td>${escapeHtml(d.actor)}</td>
+                       <td>${escapeHtml(d.decision)}</td>
+                       <td>${escapeHtml(d.reason) || '-'}</td>
+                     </tr>
+                   `).join('')}
+                 </tbody>
+               </table>
+
+               <h4>Supporting Evidence</h4>
+               ${c.evidence.map(e => `
+                 <div class="evidence">
+                   <div><strong>Type:</strong> ${escapeHtml(e.kind)} | <strong>Captured:</strong> ${escapeHtml(format(new Date(e.capturedAt), 'PP p'))}</div>
+                   <div class="hash">SHA-256: ${escapeHtml(e.sha256)}</div>
+                   <div><strong>Retention:</strong> ${e.retentionUntil ? escapeHtml(format(new Date(e.retentionUntil), 'PP')) : 'Indefinite'}</div>
+                   ${e.checks.length > 0 ? `
+                     <h5>Deterministic Checks</h5>
+                     <ul>
+                       ${e.checks.map(check => `<li>[${check.passed ? 'PASS' : 'FAIL'}] ${escapeHtml(check.message)} (${escapeHtml(check.code)})</li>`).join('')}
+                     </ul>
+                   ` : ''}
+                 </div>
+               `).join('')}
+             </div>
+          `).join('')}
+        </body>
+        </html>
+      `;
+
+      const blob = new Blob([htmlContent], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `evidence-pack-${projectId}-${format(new Date(), 'yyyyMMdd-HHmm')}.html`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      toast.success("Evidence pack downloaded", { id: "export-toast" });
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to generate evidence pack", { id: "export-toast" });
+    } finally {
+      setIsExporting(false);
+    }
+  };
 
   return (
-    <div className="flex-1 flex flex-col h-full overflow-hidden">
-      {/* Header */}
+    <div className="flex-1 flex flex-col h-full overflow-hidden bg-background">
       <header className="flex-none p-6 border-b border-border/60 bg-card/30 backdrop-blur shrink-0">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-start justify-between gap-4">
           <div className="space-y-1">
             <Link href="/" className="inline-flex items-center text-xs font-mono text-muted-foreground hover:text-foreground mb-2 transition-colors">
               <ArrowLeft size={12} className="mr-1" />
@@ -67,253 +181,322 @@ export function ProjectWorkspace() {
             </Link>
             <h1 className="text-3xl font-serif leading-tight">{project.name}</h1>
             <div className="flex items-center gap-4 text-sm text-muted-foreground font-mono">
-              <span>LOC: {project.location}</span>
-              <span>CLIENT: {project.client}</span>
-              <span>DUE: {format(new Date(project.dueDate), 'MM/dd/yyyy')}</span>
+              <span>{project.location}</span>
+              <span>•</span>
+              <span>{project.client}</span>
+              <span>•</span>
+              <span className="text-primary font-medium">As of {format(new Date(controlRoom.asOf), 'HH:mm')}</span>
             </div>
           </div>
-          
-          <div className="flex items-center gap-6">
-            <Link href={`/projects/${project.id}/evidence`} className="bg-secondary/10 text-secondary border border-secondary/20 hover:bg-secondary hover:text-secondary-foreground px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm active:scale-95 whitespace-nowrap">
-              Evidence Review
+
+          <div className="flex items-center gap-3">
+            <button
+              onClick={handleExportEvidence}
+              disabled={isExporting}
+              className="bg-background border border-border/60 text-foreground hover:bg-muted/50 px-3 py-1.5 rounded text-xs font-mono uppercase tracking-wider transition-colors shadow-sm flex items-center gap-2 disabled:opacity-50"
+            >
+              <Download size={14} />
+              {isExporting ? 'Packaging...' : 'Export Evidence'}
+            </button>
+            <Link href={`/projects/${project.id}/evidence`} className="bg-secondary/10 text-secondary border border-secondary/20 hover:bg-secondary hover:text-secondary-foreground px-4 py-1.5 rounded font-mono uppercase tracking-wider text-xs transition-colors shadow-sm whitespace-nowrap flex items-center gap-2">
+              <Eye size={14} />
+              Adjudicate
+              {reviewBacklog.length > 0 && (
+                <span className="bg-secondary text-secondary-foreground px-1.5 py-0.5 rounded text-[9px]">{reviewBacklog.length}</span>
+              )}
             </Link>
-            <Link href={`/field/${project.id}`} className="bg-primary/10 text-primary border border-primary/20 hover:bg-primary hover:text-primary-foreground px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm active:scale-95 whitespace-nowrap" data-testid="link-field-capture">
-              Field Capture
-            </Link>
-            <div className="w-48 hidden md:block">
-              <div className="flex justify-between text-xs font-mono mb-1.5">
-                <span>PROGRESS</span>
-                <span>{completedCount}/{project.stages.length}</span>
-              </div>
-              <div className="h-2 bg-muted rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-primary transition-all duration-500 ease-in-out"
-                  style={{ width: `${progress}%` }}
-                />
-              </div>
-            </div>
           </div>
         </div>
       </header>
 
-      {/* Main Workspace Area */}
-      <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
-        {/* Stages Sidebar */}
-        <div className="w-full md:w-1/3 md:min-w-[300px] md:max-w-[350px] border-b md:border-b-0 md:border-r border-border/60 bg-sidebar/30 overflow-x-auto md:overflow-y-auto shrink-0">
-          <div className="p-4 flex flex-row md:flex-col gap-2 md:gap-1 min-w-max md:min-w-0">
-            {project.stages.map((stage) => {
-              const isSelected = selectedStage?.number === stage.number;
-              const Icon = STATUS_ICONS[stage.status];
-              
-              return (
+      <div className="flex-1 overflow-y-auto p-6">
+        <div className="max-w-7xl mx-auto space-y-8">
+
+          {/* Work Type Progress */}
+          <section>
+            <h2 className="font-serif text-2xl border-b border-border/60 pb-2 mb-4">Confirmed Progress</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {workTypeProgress.map(wt => (
                 <button
-                  key={stage.number}
-                  onClick={() => setSelectedStageNumber(stage.number)}
+                  key={wt.workTypeId}
+                  onClick={() => setWorkTypeFilter(workTypeFilter === wt.workTypeId ? null : wt.workTypeId)}
                   className={cn(
-                    "w-48 md:w-full text-left p-3 rounded-md transition-all border shrink-0",
-                    isSelected 
-                      ? "bg-card border-border/80 shadow-sm" 
-                      : "border-transparent hover:bg-muted/40"
+                    "bg-card border p-4 rounded-lg shadow-sm text-left transition-all hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent",
+                    workTypeFilter === wt.workTypeId ? "border-primary ring-1 ring-primary" : "border-border/60 hover:border-primary/40"
                   )}
                 >
-                  <div className="flex items-start gap-3">
-                    <div className={cn("mt-0.5 rounded-full p-0.5 border", STATUS_COLORS[stage.status])}>
-                      <Icon size={14} />
+                  <div className="text-sm font-medium mb-3 flex items-center justify-between">
+                    <span>{wt.name}</span>
+                    {workTypeFilter === wt.workTypeId && <span className="text-[10px] font-mono bg-primary text-primary-foreground px-1.5 py-0.5 rounded">FILTERED</span>}
+                  </div>
+                  <div className="flex justify-between items-end mb-2">
+                    <div className="text-3xl font-serif text-primary leading-none">{wt.confirmed}</div>
+                    <div className="text-xs font-mono text-muted-foreground uppercase tracking-wider">/ {wt.planned} {wt.unit} Sold</div>
+                  </div>
+                  <div className="h-2 bg-muted rounded-full overflow-hidden mb-3">
+                    <div
+                      className={cn("h-full", (wt.ratio || 0) > 1 ? "bg-accent" : "bg-primary")}
+                      style={{ width: `${Math.min(100, (wt.ratio || 0) * 100)}%` }}
+                    />
+                  </div>
+                  <div className="grid grid-cols-3 gap-1 text-[10px] font-mono text-center pt-3 border-t border-border/40">
+                    <div className="bg-secondary/10 text-secondary p-1 rounded flex flex-col justify-center">
+                      <div className="font-medium text-xs">{wt.statusQuantities.waitingTotal !== '0' && wt.statusQuantities.waitingTotal !== '0.00' ? wt.statusQuantities.waitingTotal : '-'}</div>
+                      <div className="uppercase opacity-70">Waiting</div>
                     </div>
-                    <div>
-                      <div className="text-xs font-mono text-muted-foreground mb-0.5 uppercase tracking-wider">
-                        Stage {stage.number} • {stage.phase}
-                      </div>
-                      <div className={cn("font-medium", isSelected ? "text-foreground" : "text-muted-foreground")}>
-                        {stage.name}
-                      </div>
+                    <div className="bg-destructive/10 text-destructive p-1 rounded flex flex-col justify-center">
+                      <div className="font-medium text-xs">{wt.statusQuantities.refused !== '0' && wt.statusQuantities.refused !== '0.00' ? wt.statusQuantities.refused : '-'}</div>
+                      <div className="uppercase opacity-70">Refused</div>
+                    </div>
+                    <div className="bg-muted text-muted-foreground p-1 rounded flex flex-col justify-center">
+                      <div className="font-medium text-xs">{(Number(wt.statusQuantities.captured) + Number(wt.statusQuantities.queued)) > 0 ? (Number(wt.statusQuantities.captured) + Number(wt.statusQuantities.queued)) : '-'}</div>
+                      <div className="uppercase opacity-70">New</div>
                     </div>
                   </div>
                 </button>
-              );
-            })}
-          </div>
-        </div>
+              ))}
+              {workTypeProgress.length === 0 && (
+                <div className="col-span-full p-6 text-center text-muted-foreground bg-muted/10 border border-dashed rounded-lg">
+                  No production plans found.
+                </div>
+              )}
+            </div>
+          </section>
 
-        {/* Stage Editor */}
-        <div className="flex-1 overflow-y-auto bg-background p-6">
-          {selectedStage && (
-            <StageEditor 
-              key={`${projectId}-${selectedStage.number}`}
-              projectId={project.id} 
-              stage={selectedStage} 
-            />
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2 space-y-8">
+               {/* Confirmed Ledger */}
+               <section>
+                 <h2 className="font-serif text-2xl border-b border-border/60 pb-2 mb-4 flex items-center justify-between">
+                   <span>Production Ledger</span>
+                   {workTypeFilter ? (
+                     <button
+                       onClick={() => setWorkTypeFilter(null)}
+                       className="text-xs font-mono uppercase tracking-wider text-primary hover:underline"
+                     >
+                       Clear Filter
+                     </button>
+                   ) : (
+                     <span className="text-xs font-mono uppercase tracking-wider text-muted-foreground">Defensible Facts Only</span>
+                   )}
+                 </h2>
+                 <div className="bg-card border border-border/60 rounded-lg shadow-sm overflow-hidden">
+                   {(!filteredFacts || filteredFacts.length === 0) ? (
+                     <div className="p-8 text-center text-muted-foreground">
+                       <CheckCircle2 size={32} className="mx-auto mb-3 opacity-20" />
+                        <p className="font-medium text-sm">
+                          {workTypeFilter === null ? "No confirmed facts yet." : "No confirmed facts for this work type."}
+                        </p>
+                        <p className="text-xs mt-1">
+                          {workTypeFilter === null ? "Review pending items to establish facts." : "Clear the filter to see all confirmed facts."}
+                        </p>
+                     </div>
+                   ) : (
+                     <table className="w-full text-sm text-left whitespace-nowrap">
+                       <thead className="bg-muted/30 border-b border-border/60 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+                         <tr>
+                           <th className="px-4 py-3 font-medium">Fact ID</th>
+                           <th className="px-4 py-3 font-medium">Date</th>
+                           <th className="px-4 py-3 font-medium">Work Type</th>
+                           <th className="px-4 py-3 font-medium text-right">Quantity</th>
+                           <th className="px-4 py-3 font-medium"></th>
+                         </tr>
+                       </thead>
+                       <tbody className="divide-y divide-border/40">
+                         {filteredFacts.slice(0, 10).map(fact => {
+                           const wt = workTypeProgress.find(w => w.workTypeId === fact.workTypeId);
+                           return (
+                             <tr key={fact.id} className="hover:bg-muted/20 transition-colors group cursor-pointer" onClick={() => setSelectedFactId(fact.id)}>
+                               <td className="px-4 py-3 font-mono text-xs">{fact.id}</td>
+                               <td className="px-4 py-3 font-mono text-xs">{format(new Date(fact.workDate), 'MM/dd')}</td>
+                               <td className="px-4 py-3">{wt?.name || `Type ${fact.workTypeId}`}</td>
+                               <td className="px-4 py-3 text-right font-mono text-primary font-bold">{fact.quantity} {fact.unit}</td>
+                               <td className="px-4 py-3 text-right">
+                                 <ChevronRight size={14} className="text-muted-foreground/30 group-hover:text-primary inline-block" />
+                               </td>
+                             </tr>
+                           )
+                         })}
+                       </tbody>
+                     </table>
+                   )}
+                 </div>
+               </section>
 
-function StageEditor({ projectId, stage }: { projectId: number, stage: Stage }) {
-  const queryClient = useQueryClient();
-  const updateStage = useUpdateStage();
-  
-  const [status, setStatus] = useState<StageStatus>(stage.status);
-  const [note, setNote] = useState(stage.note || "");
-  const [owner, setOwner] = useState(stage.owner || "");
-  const [completedAt, setCompletedAt] = useState(
-    stage.completedAt ? stage.completedAt.slice(0, 16) : "" // "YYYY-MM-DDTHH:mm" for datetime-local
-  );
-  const [isSaving, setIsSaving] = useState(false);
-  const [evidenceName, setEvidenceName] = useState(stage.evidenceName || "");
+               {/* Backlog Items */}
+               <section>
+                 <h2 className="font-serif text-2xl border-b border-border/60 pb-2 mb-4">Adjudication Queue</h2>
+                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="bg-card border border-secondary/30 rounded-lg p-4 shadow-sm relative overflow-hidden">
+                      <div className="absolute top-0 right-0 p-4 opacity-10 text-secondary pointer-events-none">
+                        <Clock size={64} />
+                      </div>
+                      <div className="text-[10px] font-mono uppercase tracking-wider text-secondary mb-1">Needs Review</div>
+                      <div className="text-3xl font-serif text-foreground mb-4">{reviewBacklog.length}</div>
+                      {reviewBacklog.length > 0 && (
+                        <Link href={`/projects/${projectId}/evidence`} className="inline-flex items-center gap-1 text-xs font-mono uppercase text-secondary hover:underline">
+                          Process Queue <ChevronRight size={12} />
+                        </Link>
+                      )}
+                    </div>
+                    <div className="bg-card border border-destructive/30 rounded-lg p-4 shadow-sm relative overflow-hidden">
+                      <div className="absolute top-0 right-0 p-4 opacity-10 text-destructive pointer-events-none">
+                        <XCircle size={64} />
+                      </div>
+                      <div className="text-[10px] font-mono uppercase tracking-wider text-destructive mb-1">Refused / Rework</div>
+                      <div className="text-3xl font-serif text-foreground mb-4">{refusalBacklog.length}</div>
+                      <div className="text-xs text-muted-foreground">Pending field correction</div>
+                    </div>
+                 </div>
+               </section>
 
-  // Update local state when stage receives server updates we triggered
-  useEffect(() => {
-    if (!isSaving) {
-      setStatus(stage.status);
-      setNote(stage.note || "");
-      setOwner(stage.owner || "");
-      setCompletedAt(stage.completedAt ? stage.completedAt.slice(0, 16) : "");
-      setEvidenceName(stage.evidenceName || "");
-    }
-  }, [stage.status, stage.note, stage.owner, stage.completedAt, stage.evidenceName, isSaving]);
-
-  const handleSave = () => {
-    setIsSaving(true);
-    updateStage.mutate({
-      projectId,
-      stageNumber: stage.number,
-      data: {
-        status,
-        note,
-        owner,
-        evidenceName,
-        completedAt: status === 'complete' 
-          ? (completedAt ? new Date(completedAt).toISOString() : new Date().toISOString())
-          : null
-      }
-    }, {
-      onSuccess: (updatedProject) => {
-        setIsSaving(false);
-        // Patch cache locally to avoid refetch cascade overwriting user edits
-        queryClient.setQueryData(getGetProjectQueryKey(projectId), updatedProject);
-        
-        toast.success(`Stage ${stage.number} updated`, {
-          description: `Changes to ${stage.name} have been saved.`
-        });
-      },
-      onError: () => {
-        setIsSaving(false);
-        toast.error("Failed to update stage");
-      }
-    });
-  };
-
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setEvidenceName(e.target.files[0].name);
-    }
-  };
-
-  return (
-    <div className="max-w-2xl mx-auto space-y-8 animate-in fade-in zoom-in-95 duration-200">
-      <div className="border-b border-border/60 pb-6">
-        <div className="font-mono text-xs text-muted-foreground uppercase tracking-wider mb-2 flex items-center gap-2">
-          <span>Stage {stage.number}</span>
-          <span className="w-1 h-1 rounded-full bg-border"></span>
-          <span>{stage.phase}</span>
-        </div>
-        <h2 className="text-3xl font-serif text-foreground mb-3">{stage.name}</h2>
-        <p className="text-muted-foreground">{stage.description}</p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="space-y-2">
-          <label className="text-xs font-mono text-muted-foreground uppercase tracking-wider">Status</label>
-          <div className="flex flex-wrap gap-2">
-            {(Object.keys(STATUS_LABELS) as StageStatus[]).map((s) => {
-              const isActive = status === s;
-              const Icon = STATUS_ICONS[s];
-              return (
-                <button
-                  key={s}
-                  onClick={() => setStatus(s)}
-                  className={cn(
-                    "flex items-center gap-2 px-3 py-2 rounded-md border text-sm transition-all",
-                    isActive 
-                      ? STATUS_COLORS[s] 
-                      : "border-border/60 hover:bg-muted/30 text-foreground"
+              {/* Daily Activity */}
+              <section>
+                <h2 className="font-serif text-2xl border-b border-border/60 pb-2 mb-4">Daily Activity</h2>
+                <div className="space-y-4">
+                  {controlRoom.dailyActivity.length === 0 ? (
+                    <div className="text-sm text-muted-foreground italic p-4 border border-dashed rounded bg-muted/10 text-center">No recent activity.</div>
+                  ) : (
+                    controlRoom.dailyActivity.map(da => (
+                      <div key={da.crewDay.id} className="bg-card border border-border/60 rounded-lg p-4 shadow-sm">
+                        <div className="flex justify-between items-start mb-2">
+                          <div>
+                            <div className="font-medium text-sm">{da.site.name}</div>
+                            <div className="text-xs text-muted-foreground font-mono">{da.crew.name} • {format(new Date(da.crewDay.workDate), 'MM/dd')}</div>
+                          </div>
+                          <div className="text-[10px] font-mono text-muted-foreground">
+                            {format(new Date(da.capture.capturedAt), 'HH:mm')}
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2 text-xs mt-3">
+                          <div className="bg-muted/20 p-2 rounded border border-border/40">
+                            <div className="font-mono text-[10px] uppercase text-muted-foreground mb-1">Captured</div>
+                            <div>{da.quantityByUnit.metres !== '0.00' && da.quantityByUnit.metres !== '0' && `${da.quantityByUnit.metres}m `}{da.quantityByUnit.each !== '0.00' && da.quantityByUnit.each !== '0' && `${da.quantityByUnit.each}ea`}
+                              {(da.quantityByUnit.metres === '0.00' || da.quantityByUnit.metres === '0') && (da.quantityByUnit.each === '0.00' || da.quantityByUnit.each === '0') && '-'}
+                            </div>
+                          </div>
+                          <div className="bg-primary/5 p-2 rounded border border-primary/20">
+                            <div className="font-mono text-[10px] uppercase text-primary mb-1">Confirmed</div>
+                            <div className="text-primary font-medium">{da.confirmedQuantityByUnit.metres !== '0.00' && da.confirmedQuantityByUnit.metres !== '0' && `${da.confirmedQuantityByUnit.metres}m `}{da.confirmedQuantityByUnit.each !== '0.00' && da.confirmedQuantityByUnit.each !== '0' && `${da.confirmedQuantityByUnit.each}ea`}
+                              {(da.confirmedQuantityByUnit.metres === '0.00' || da.confirmedQuantityByUnit.metres === '0') && (da.confirmedQuantityByUnit.each === '0.00' || da.confirmedQuantityByUnit.each === '0') && '-'}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))
                   )}
-                >
-                  <Icon size={14} />
-                  {STATUS_LABELS[s]}
-                </button>
-              );
-            })}
-          </div>
-        </div>
+                </div>
+              </section>
+            </div>
 
-        <div className="space-y-2">
-          <label className="text-xs font-mono text-muted-foreground uppercase tracking-wider">Assigned Crew / Owner</label>
-          <div className="relative">
-            <User size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-            <input 
-              type="text"
-              value={owner}
-              onChange={(e) => setOwner(e.target.value)}
-              className="w-full bg-card border border-border/60 rounded-md pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-shadow"
-              placeholder="e.g. Charlie Team"
-            />
+            <div className="space-y-8">
+              {/* Telemetry Health */}
+              <section className="bg-card border border-border/60 rounded-lg p-5 shadow-sm">
+                <h3 className="font-serif text-xl border-b border-border/60 pb-2 mb-4">Telemetry Health</h3>
+                <div className="space-y-4">
+                  <div>
+                    <div className="flex justify-between text-[10px] font-mono uppercase tracking-wider text-muted-foreground mb-1">
+                       <span>Evidence Accounted</span>
+                      <span>{evidenceCoverage.total > 0 ? Math.round(((evidenceCoverage.ready + evidenceCoverage.manualReview) / evidenceCoverage.total) * 100) : 0}%</span>
+                    </div>
+                    <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+                      <div className="h-full bg-primary" style={{ width: `${evidenceCoverage.total > 0 ? ((evidenceCoverage.ready + evidenceCoverage.manualReview) / evidenceCoverage.total) * 100 : 0}%` }} />
+                    </div>
+                    <div className="text-xs text-muted-foreground mt-1 flex justify-between">
+                       <span>{evidenceCoverage.ready} Ready</span>
+                       {evidenceCoverage.manualReview > 0 && <span className="text-secondary">{evidenceCoverage.manualReview} Manual review</span>}
+                      {evidenceCoverage.failed > 0 && <span className="text-destructive">{evidenceCoverage.failed} Failed</span>}
+                    </div>
+                  </div>
+
+                  <div className="pt-2">
+                    <div className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground mb-1">Review Lag</div>
+                    <div className="flex items-center gap-2">
+                       <span className={cn("text-xl font-mono", lag.averageDays && lag.averageDays > 2 ? "text-destructive" : "text-foreground")}>
+                         {lag.averageDays !== null ? `${lag.averageDays.toFixed(1)} days` : 'N/A'}
+                       </span>
+                       <span className="text-xs text-muted-foreground">avg from capture</span>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              {/* Derived Metrics */}
+              <section className="bg-card border border-border/60 rounded-lg p-5 shadow-sm">
+                <h3 className="font-serif text-xl border-b border-border/60 pb-2 mb-4">Derived Models</h3>
+                {derivedMetrics.availability === 'available' ? (
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <div className="text-[10px] font-mono uppercase text-muted-foreground mb-1">Crew Prod.</div>
+                        <div className="font-mono text-foreground">{derivedMetrics.crewProductivity?.toFixed(1) || '-'} /day</div>
+                      </div>
+                      <div>
+                        <div className="text-[10px] font-mono uppercase text-muted-foreground mb-1">Est. Finish</div>
+                        <div className="font-mono text-foreground">{derivedMetrics.forecastFinish ? format(new Date(derivedMetrics.forecastFinish), 'MM/dd') : '-'}</div>
+                      </div>
+                    </div>
+                    {derivedMetrics.assumptions.length > 0 && (
+                      <div className="pt-3 border-t border-border/40">
+                        <div className="text-[10px] font-mono uppercase text-muted-foreground mb-1">Assumptions</div>
+                        <ul className="text-xs text-muted-foreground space-y-1 list-disc pl-4">
+                          {derivedMetrics.assumptions.map((a, i) => <li key={i}>{a}</li>)}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="text-sm text-muted-foreground space-y-2">
+                    <div className="flex items-center gap-2 text-accent">
+                      <AlertTriangle size={14} />
+                      <span className="font-medium">Insufficient baseline</span>
+                    </div>
+                    <ul className="text-xs space-y-1 list-disc pl-4">
+                      {derivedMetrics.missingReasons.map((m, i) => <li key={i}>{m}</li>)}
+                    </ul>
+                  </div>
+                )}
+              </section>
+
+              {/* Sites Attention */}
+              <section className="bg-card border border-border/60 rounded-lg p-5 shadow-sm">
+                <h3 className="font-serif text-xl border-b border-border/60 pb-2 mb-4 flex items-center justify-between">
+                  <span>Site Status</span>
+                </h3>
+                <div className="space-y-3">
+                  {sites.filter(s => s.attention || !s.visited).slice(0, 5).map(s => (
+                    <div key={s.id} className="flex flex-col gap-1 text-sm border-b border-border/40 pb-2 last:border-0 last:pb-0">
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium text-foreground">{s.name}</span>
+                        {s.attention ? (
+                          <span className="px-1.5 py-0.5 rounded bg-accent/10 text-accent text-[9px] font-mono uppercase">Attention</span>
+                        ) : (
+                          <span className="px-1.5 py-0.5 rounded bg-muted text-muted-foreground text-[9px] font-mono uppercase">Unvisited</span>
+                        )}
+                      </div>
+                      {s.attentionReasons && s.attentionReasons.length > 0 && (
+                        <div className="text-xs text-muted-foreground">{s.attentionReasons[0]}</div>
+                      )}
+                    </div>
+                  ))}
+                  {sites.every(s => !s.attention && s.visited) && (
+                    <div className="text-sm text-muted-foreground italic">All sites nominal and active.</div>
+                  )}
+                </div>
+              </section>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="space-y-2">
-        <label className="text-xs font-mono text-muted-foreground uppercase tracking-wider">Field Notes</label>
-        <textarea 
-          value={note}
-          onChange={(e) => setNote(e.target.value)}
-          className="w-full h-32 bg-card border border-border/60 rounded-md p-3 text-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-shadow resize-none"
-          placeholder="Record site conditions, obstacles, or handoff details..."
+      {selectedFactId && (
+        <FactDrilldownDialog
+          projectId={projectId}
+          productionItemId={selectedFactId}
+          open={!!selectedFactId}
+          onOpenChange={(o) => !o && setSelectedFactId(null)}
         />
-      </div>
-
-      <div className="space-y-2">
-        <label className="text-xs font-mono text-muted-foreground uppercase tracking-wider">Evidence / Documentation</label>
-        <div className="border border-dashed border-border/80 rounded-md p-4 bg-card/30 flex items-center gap-4">
-          <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center shrink-0">
-            <FileText size={18} className="text-muted-foreground" />
-          </div>
-          <div className="flex-1 min-w-0">
-            {evidenceName ? (
-              <p className="text-sm font-medium text-foreground truncate">{evidenceName}</p>
-            ) : (
-              <p className="text-sm text-muted-foreground">No file attached</p>
-            )}
-            <p className="text-xs text-muted-foreground mt-0.5">Upload photos, OTDR traces, or permits.</p>
-          </div>
-          <label className="shrink-0 cursor-pointer bg-secondary hover:bg-secondary/90 text-secondary-foreground px-3 py-1.5 rounded text-xs font-medium transition-colors">
-            Browse
-            <input type="file" className="hidden" onChange={handleFileSelect} />
-          </label>
-        </div>
-      </div>
-
-      <div className="pt-4 border-t border-border/60 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <label className="text-xs font-mono text-muted-foreground uppercase tracking-wider">Completion Date</label>
-          <input
-            type="datetime-local"
-            value={completedAt}
-            onChange={(e) => setCompletedAt(e.target.value)}
-            disabled={status !== 'complete'}
-            className="bg-card border border-border/60 rounded-md px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary disabled:opacity-50"
-          />
-        </div>
-        <button 
-          onClick={handleSave}
-          disabled={isSaving}
-          className="bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-2 rounded-md font-medium text-sm transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {isSaving ? "Saving..." : "Save Changes"}
-        </button>
-      </div>
+      )}
     </div>
   );
 }

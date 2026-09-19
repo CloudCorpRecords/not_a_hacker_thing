@@ -6,4 +6,8 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export type EvidenceAuditEventDetails = { [key: string]: unknown };
+export type DailyActivityCapture = {
+  externalId: string;
+  capturedAt: Date;
+  workDate: Date;
+};

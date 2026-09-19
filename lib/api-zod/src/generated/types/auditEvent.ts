@@ -6,7 +6,7 @@
  * OpenAPI spec version: 0.1.0
  */
 import type { AuditEventDecision } from './auditEventDecision';
-import type { AuditEventMetadata } from './auditEventMetadata';
+import type { ProductionAuditMetadata } from './productionAuditMetadata';
 import type { ProductionStatus } from './productionStatus';
 
 export interface AuditEvent {
@@ -17,6 +17,6 @@ export interface AuditEvent {
   reason?: string | null;
   previousStatus?: ProductionStatus | null;
   nextStatus: ProductionStatus;
-  metadata: AuditEventMetadata;
+  metadata: ProductionAuditMetadata;
   createdAt: Date;
 }

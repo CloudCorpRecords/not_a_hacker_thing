@@ -560,6 +560,26 @@ router.patch("/production-items/:productionItemId/review", async (req, res): Pro
       return { kind: "conflict" as const };
     }
 
+    const linkedEvidenceForReview = await tx
+      .select()
+      .from(evidenceItemsTable)
+      .where(eq(evidenceItemsTable.productionItemId, current.id));
+    const failedBlockingChecks = linkedEvidenceForReview.flatMap((evidence) =>
+      (evidence.checks ?? [])
+        .filter((check) => check.severity === "blocking" && !check.passed)
+        .map((check) => ({ evidenceId: evidence.id, ...check })),
+    );
+    if (
+      body.data.decision === "confirm" &&
+      failedBlockingChecks.length > 0 &&
+      (!body.data.blockingCheckOverride?.acknowledged || !body.data.blockingCheckOverride.reason.trim())
+    ) {
+      return {
+        kind: "validation" as const,
+        error: "Confirmation requires an acknowledged blockingCheckOverride with a reason",
+      };
+    }
+
     if (body.data.decision === "correct") {
       const [crewDay] = await tx
         .select()
@@ -658,6 +678,7 @@ router.patch("/production-items/:productionItemId/review", async (req, res): Pro
           : {
               reasonCode: body.data.reasonCode ?? null,
               explanation: body.data.reason?.trim() || null,
+              blockingCheckOverride: body.data.blockingCheckOverride ?? null,
             },
     });
 
@@ -678,6 +699,8 @@ router.patch("/production-items/:productionItemId/review", async (req, res): Pro
             explanation: body.data.reason?.trim() || null,
             previousQuantity: current.quantity,
             decidedQuantity: updated.quantity,
+            blockingCheckOverride: body.data.blockingCheckOverride ?? null,
+            failedBlockingChecks,
           },
         })),
       );

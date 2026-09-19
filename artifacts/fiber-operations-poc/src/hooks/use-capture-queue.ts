@@ -180,6 +180,17 @@ async function syncEvidence(item: QueuedCapture, serverCrewDayId: number | undef
           await updateEvidenceState(item.id, [...states]);
           continue;
         }
+        if (upload.status === 'processing') {
+          // The request-url endpoint may return a record left processing by a
+          // previous attempt. Completing it is safe and lets the server
+          // recover stale processing claims.
+          const completed = await completeEvidenceUpload(projectId, upload.evidenceId, { actor: 'field-sync' });
+          if (completed.status === 'ready' || completed.status === 'manual_review') {
+            state.status = 'completed';
+            await updateEvidenceState(item.id, [...states]);
+            continue;
+          }
+        }
         throw new Error(`Evidence is already ${upload.status}; retry after processing completes`);
       }
       if (!upload.uploadURL) {
@@ -201,7 +212,7 @@ async function syncEvidence(item: QueuedCapture, serverCrewDayId: number | undef
       const apiError = error as { status?: number; data?: { error?: string } };
       state.status = 'failed';
       state.errorType =
-        apiError.status === 409 ? 'conflict' :
+        apiError.status === 409 ? 'network' :
         apiError.status === 400 || apiError.status === 422 ? 'validation' :
         'network';
       state.error = apiError.data?.error ?? (error instanceof Error ? error.message : 'Evidence upload failed');

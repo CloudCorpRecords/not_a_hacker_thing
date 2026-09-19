@@ -203,7 +203,42 @@ export const AuditEventDecision = {
   refused: 'refused',
 } as const;
 
-export type AuditEventMetadata = { [key: string]: unknown };
+export interface BlockingCheckOverride {
+  acknowledged: true;
+  /**
+     * @minLength 1
+     * @maxLength 1000
+     */
+  reason: string;
+}
+
+export type EvidenceCheckFailureSeverity = typeof EvidenceCheckFailureSeverity[keyof typeof EvidenceCheckFailureSeverity];
+
+
+export const EvidenceCheckFailureSeverity = {
+  blocking: 'blocking',
+} as const;
+
+export interface EvidenceCheckFailure {
+  evidenceId: number;
+  code: string;
+  passed: false;
+  severity: EvidenceCheckFailureSeverity;
+  message: string;
+}
+
+export interface ProductionAuditMetadata {
+  captureExternalId?: string;
+  itemExternalId?: string;
+  previousQuantity?: string;
+  correctedQuantity?: string;
+  /** @nullable */
+  reasonCode?: string | null;
+  /** @nullable */
+  explanation?: string | null;
+  blockingCheckOverride?: BlockingCheckOverride | null;
+  failedBlockingChecks?: EvidenceCheckFailure[];
+}
 
 export interface AuditEvent {
   id: number;
@@ -213,7 +248,7 @@ export interface AuditEvent {
   reason?: string | null;
   previousStatus?: ProductionStatus | null;
   nextStatus: ProductionStatus;
-  metadata: AuditEventMetadata;
+  metadata: ProductionAuditMetadata;
   createdAt: string;
 }
 
@@ -243,10 +278,37 @@ export interface ProductionItem {
   auditEvents: AuditEvent[];
 }
 
-export interface CaptureResult {
+export interface CrewDay {
+  id: number;
+  projectId: number;
+  siteId: number;
+  crewId: number;
+  workDate: string;
+  externalId: string;
+  payloadHash: string;
+  capturedAt: string;
+  /** @nullable */
+  latitude: string | null;
+  /** @nullable */
+  longitude: string | null;
+  createdAt: string;
+}
+
+export interface RawProductionItem {
+  id: number;
   crewDayId: number;
-  idempotentReplay: boolean;
-  items: ProductionItem[];
+  workTypeId: number;
+  externalId: string;
+  quantity: string;
+  unit: ProductionUnit;
+  status: ProductionStatus;
+  note: string;
+  /** @nullable */
+  refusalReason: string | null;
+  /** @nullable */
+  confirmedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export type EvidenceKind = typeof EvidenceKind[keyof typeof EvidenceKind];
@@ -282,16 +344,6 @@ export interface EvidenceCheck {
   passed: boolean;
   severity: EvidenceCheckSeverity;
   message: string;
-}
-
-export type EvidenceAuditEventDetails = { [key: string]: unknown };
-
-export interface EvidenceAuditEvent {
-  id: number;
-  eventType: string;
-  actor: string;
-  details: EvidenceAuditEventDetails;
-  createdAt: string;
 }
 
 export interface EvidenceItem {
@@ -342,6 +394,51 @@ export interface EvidenceItem {
   errorMessage?: string | null;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface EvidenceAuditDetails {
+  captureExternalId?: string;
+  byteSize?: number;
+  staleBefore?: string;
+  actualSha256?: string;
+  productionItemId?: number;
+  blockingFailure?: boolean;
+  verifiedDuplicateIds?: number[];
+  workDate?: string;
+  message?: string;
+  decision?: string;
+  reasonCode?: string;
+  /** @nullable */
+  explanation?: string | null;
+  previousQuantity?: string;
+  decidedQuantity?: string;
+  blockingCheckOverride?: BlockingCheckOverride | null;
+  failedBlockingChecks?: EvidenceCheckFailure[];
+}
+
+export interface EvidenceAuditEvent {
+  id: number;
+  eventType: string;
+  actor: string;
+  details: EvidenceAuditDetails;
+  createdAt: string;
+}
+
+export type EvidenceWithAudit = EvidenceItem & {
+  auditEvents: EvidenceAuditEvent[];
+};
+
+export interface EvidenceClaim {
+  productionItem: RawProductionItem;
+  capture: CrewDay;
+  decisions: AuditEvent[];
+  evidence: EvidenceWithAudit[];
+}
+
+export interface CaptureResult {
+  crewDayId: number;
+  idempotentReplay: boolean;
+  items: ProductionItem[];
 }
 
 export type EvidenceDetail = EvidenceItem & {
@@ -432,6 +529,7 @@ export interface ReviewInput {
   reasonCode?: ReviewInputReasonCode;
   /** @exclusiveMinimum 0 */
   quantity?: number;
+  blockingCheckOverride?: BlockingCheckOverride;
 }
 
 export interface ProgressRow {
@@ -448,5 +546,190 @@ export interface ProgressRow {
 export interface ProgressSummary {
   projectId: number;
   rows: ProgressRow[];
+}
+
+export interface StatusQuantities {
+  captured: string;
+  queued: string;
+  proposed: string;
+  needsReview: string;
+  waitingTotal: string;
+  refused: string;
+  confirmed: string;
+}
+
+export interface WorkTypeProgress {
+  workTypeId: number;
+  code: string;
+  name: string;
+  stageNumber: number;
+  unit: ProductionUnit;
+  planned: string;
+  confirmed: string;
+  remaining: string;
+  /** @nullable */
+  ratio: number | null;
+  statusQuantities: StatusQuantities;
+}
+
+export interface WorkflowStatusCounts {
+  /** @minimum 0 */
+  captured: number;
+  /** @minimum 0 */
+  queued: number;
+  /** @minimum 0 */
+  proposed: number;
+  /** @minimum 0 */
+  needs_review: number;
+  /** @minimum 0 */
+  refused: number;
+  /** @minimum 0 */
+  confirmed: number;
+}
+
+export interface LagStats {
+  /** @minimum 0 */
+  sampleSize: number;
+  /** @nullable */
+  averageDays: number | null;
+}
+
+export interface EvidenceCoverage {
+  /** @minimum 0 */
+  total: number;
+  /** @minimum 0 */
+  ready: number;
+  /** @minimum 0 */
+  manualReview: number;
+  /** @minimum 0 */
+  failed: number;
+}
+
+export type ControlRoomSite = Site & ({
+  createdAt: string;
+  visited: boolean;
+  attention: boolean;
+  attentionReasons: string[];
+  /** @nullable */
+  lastCaptureAt: string | null;
+});
+
+export type DailyActivityCapture = {
+  externalId: string;
+  capturedAt: string;
+  workDate: string;
+};
+
+export type DailyActivitySite = {
+  id: number;
+  code: string;
+  name: string;
+};
+
+export type DailyActivityCrew = {
+  id: number;
+  code: string;
+  name: string;
+};
+
+export interface UnitQuantities {
+  each: string;
+  metres: string;
+}
+
+export interface DailyActivity {
+  crewDay: CrewDay;
+  capture: DailyActivityCapture;
+  site: DailyActivitySite;
+  crew: DailyActivityCrew;
+  /** @minimum 0 */
+  itemCount: number;
+  statusCounts: WorkflowStatusCounts;
+  quantityByUnit: UnitQuantities;
+  confirmedQuantityByUnit: UnitQuantities;
+}
+
+export type DerivedMetricsAvailability = typeof DerivedMetricsAvailability[keyof typeof DerivedMetricsAvailability];
+
+
+export const DerivedMetricsAvailability = {
+  available: 'available',
+  unavailable: 'unavailable',
+} as const;
+
+export interface DerivedMetrics {
+  /** @nullable */
+  crewProductivity: number | null;
+  /** @nullable */
+  forecastFinish: string | null;
+  /** @nullable */
+  rework: number | null;
+  availability: DerivedMetricsAvailability;
+  assumptions: string[];
+  missingReasons: string[];
+}
+
+export type PortfolioProjectSummary = Project & ({
+  workTypeProgress: WorkTypeProgress[];
+  workflowStatusCounts: WorkflowStatusCounts;
+  /** @minimum 0 */
+  todayActivityCount: number;
+  /** @minimum 0 */
+  reviewBacklog: number;
+  /** @minimum 0 */
+  refusalCount: number;
+  /** @minimum 0 */
+  unvisitedSiteCount: number;
+  /** @minimum 0 */
+  attentionSiteCount: number;
+  lag: LagStats;
+  evidenceCoverage: EvidenceCoverage;
+  /** @nullable */
+  lastCaptureAt: string | null;
+  /** @nullable */
+  lastConfirmedAt: string | null;
+});
+
+export interface ControlRoom {
+  asOf: string;
+  project: Project;
+  workTypeProgress: WorkTypeProgress[];
+  dailyActivity: DailyActivity[];
+  reviewBacklog: ProductionItem[];
+  refusalBacklog: ProductionItem[];
+  sites: ControlRoomSite[];
+  lag: LagStats;
+  evidenceCoverage: EvidenceCoverage;
+  derivedMetrics: DerivedMetrics;
+}
+
+export interface PortfolioSummary {
+  asOf: string;
+  projects: PortfolioProjectSummary[];
+}
+
+export type FactDrilldownCapture = {
+  externalId: string;
+  capturedAt: string;
+  workDate: string;
+};
+
+export interface FactDrilldown {
+  asOf: string;
+  project: Project;
+  crewDay: CrewDay;
+  capture: FactDrilldownCapture;
+  site: Site;
+  crew: Crew;
+  workType: WorkType;
+  productionItem: RawProductionItem;
+  productionAuditEvents: AuditEvent[];
+  evidence: EvidenceWithAudit[];
+}
+
+export interface EvidencePack {
+  asOf: string;
+  project: Project;
+  claims: EvidenceClaim[];
 }
 

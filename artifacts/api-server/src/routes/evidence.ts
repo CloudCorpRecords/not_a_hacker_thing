@@ -58,6 +58,11 @@ router.post("/projects/:projectId/evidence/uploads/request-url", async (req, res
     res.status(422).json({ error: "Capture has not been synchronized yet" });
     return;
   }
+  const captureItems = await db
+    .select({ id: productionItemsTable.id })
+    .from(productionItemsTable)
+    .where(eq(productionItemsTable.crewDayId, crewDay.id));
+  const soleProductionItemId = captureItems.length === 1 ? captureItems[0].id : null;
   const [existing] = await db.select().from(evidenceItemsTable).where(eq(evidenceItemsTable.externalId, body.data.externalId));
   if (existing && existing.projectId !== params.data.projectId) {
     res.status(409).json({ error: "Evidence external identifier belongs to another project" });
@@ -95,6 +100,7 @@ router.post("/projects/:projectId/evidence/uploads/request-url", async (req, res
     .values({
       projectId: params.data.projectId,
       crewDayId: crewDay.id,
+      productionItemId: soleProductionItemId,
       siteId: crewDay.siteId,
       crewId: crewDay.crewId,
       externalId: body.data.externalId,

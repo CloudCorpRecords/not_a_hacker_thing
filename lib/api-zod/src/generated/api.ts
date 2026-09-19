@@ -278,6 +278,10 @@ export const SubmitCaptureBody = zod.object({
 })).min(1).max(submitCaptureBodyItemsMax)
 })
 
+export const submitCaptureResponseItemsItemAuditEventsItemMetadataBlockingCheckOverrideOneReasonMax = 1000;
+
+
+
 export const SubmitCaptureResponse = zod.object({
   "crewDayId": zod.number().int(),
   "idempotentReplay": zod.boolean(),
@@ -307,7 +311,25 @@ export const SubmitCaptureResponse = zod.object({
   "reason": zod.string().nullish(),
   "previousStatus": zod.union([zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),zod.null()]).optional(),
   "nextStatus": zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),
-  "metadata": zod.record(zod.string(), zod.unknown()),
+  "metadata": zod.object({
+  "captureExternalId": zod.string().optional(),
+  "itemExternalId": zod.string().optional(),
+  "previousQuantity": zod.string().optional(),
+  "correctedQuantity": zod.string().optional(),
+  "reasonCode": zod.string().nullish(),
+  "explanation": zod.string().nullish(),
+  "blockingCheckOverride": zod.union([zod.object({
+  "acknowledged": zod.literal(true),
+  "reason": zod.string().min(1).max(submitCaptureResponseItemsItemAuditEventsItemMetadataBlockingCheckOverrideOneReasonMax)
+}),zod.null()]).optional(),
+  "failedBlockingChecks": zod.array(zod.object({
+  "evidenceId": zod.number().int(),
+  "code": zod.string(),
+  "passed": zod.literal(false),
+  "severity": zod.enum(['blocking']),
+  "message": zod.string()
+})).optional()
+}),
   "createdAt": zod.coerce.date()
 }))
 }))
@@ -459,6 +481,10 @@ export const GetEvidenceParams = zod.object({
   "evidenceId": zod.coerce.number().int()
 })
 
+export const getEvidenceResponseTwoAuditEventsItemDetailsBlockingCheckOverrideOneReasonMax = 1000;
+
+
+
 export const GetEvidenceResponse = zod.object({
   "id": zod.number().int(),
   "projectId": zod.number().int(),
@@ -503,7 +529,33 @@ export const GetEvidenceResponse = zod.object({
   "id": zod.number().int(),
   "eventType": zod.string(),
   "actor": zod.string(),
-  "details": zod.record(zod.string(), zod.unknown()),
+  "details": zod.object({
+  "captureExternalId": zod.string().optional(),
+  "byteSize": zod.number().int().optional(),
+  "staleBefore": zod.coerce.date().optional(),
+  "actualSha256": zod.string().optional(),
+  "productionItemId": zod.number().int().optional(),
+  "blockingFailure": zod.boolean().optional(),
+  "verifiedDuplicateIds": zod.array(zod.number().int()).optional(),
+  "workDate": zod.coerce.date().optional(),
+  "message": zod.string().optional(),
+  "decision": zod.string().optional(),
+  "reasonCode": zod.string().optional(),
+  "explanation": zod.string().nullish(),
+  "previousQuantity": zod.string().optional(),
+  "decidedQuantity": zod.string().optional(),
+  "blockingCheckOverride": zod.union([zod.object({
+  "acknowledged": zod.literal(true),
+  "reason": zod.string().min(1).max(getEvidenceResponseTwoAuditEventsItemDetailsBlockingCheckOverrideOneReasonMax)
+}),zod.null()]).optional(),
+  "failedBlockingChecks": zod.array(zod.object({
+  "evidenceId": zod.number().int(),
+  "code": zod.string(),
+  "passed": zod.literal(false),
+  "severity": zod.enum(['blocking']),
+  "message": zod.string()
+})).optional()
+}),
   "createdAt": zod.coerce.date()
 }))
 }))
@@ -520,6 +572,10 @@ export const GetEvidenceContentResponse = zod.unknown()
 export const ListProposalsParams = zod.object({
   "projectId": zod.coerce.number().int()
 })
+
+export const listProposalsResponseAuditEventsItemMetadataBlockingCheckOverrideOneReasonMax = 1000;
+
+
 
 export const ListProposalsResponseItem = zod.object({
   "id": zod.number().int(),
@@ -547,7 +603,25 @@ export const ListProposalsResponseItem = zod.object({
   "reason": zod.string().nullish(),
   "previousStatus": zod.union([zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),zod.null()]).optional(),
   "nextStatus": zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),
-  "metadata": zod.record(zod.string(), zod.unknown()),
+  "metadata": zod.object({
+  "captureExternalId": zod.string().optional(),
+  "itemExternalId": zod.string().optional(),
+  "previousQuantity": zod.string().optional(),
+  "correctedQuantity": zod.string().optional(),
+  "reasonCode": zod.string().nullish(),
+  "explanation": zod.string().nullish(),
+  "blockingCheckOverride": zod.union([zod.object({
+  "acknowledged": zod.literal(true),
+  "reason": zod.string().min(1).max(listProposalsResponseAuditEventsItemMetadataBlockingCheckOverrideOneReasonMax)
+}),zod.null()]).optional(),
+  "failedBlockingChecks": zod.array(zod.object({
+  "evidenceId": zod.number().int(),
+  "code": zod.string(),
+  "passed": zod.literal(false),
+  "severity": zod.enum(['blocking']),
+  "message": zod.string()
+})).optional()
+}),
   "createdAt": zod.coerce.date()
 }))
 })
@@ -557,6 +631,10 @@ export const ListProposalsResponse = zod.array(ListProposalsResponseItem)
 export const ListConfirmedFactsParams = zod.object({
   "projectId": zod.coerce.number().int()
 })
+
+export const listConfirmedFactsResponseAuditEventsItemMetadataBlockingCheckOverrideOneReasonMax = 1000;
+
+
 
 export const ListConfirmedFactsResponseItem = zod.object({
   "id": zod.number().int(),
@@ -584,7 +662,25 @@ export const ListConfirmedFactsResponseItem = zod.object({
   "reason": zod.string().nullish(),
   "previousStatus": zod.union([zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),zod.null()]).optional(),
   "nextStatus": zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),
-  "metadata": zod.record(zod.string(), zod.unknown()),
+  "metadata": zod.object({
+  "captureExternalId": zod.string().optional(),
+  "itemExternalId": zod.string().optional(),
+  "previousQuantity": zod.string().optional(),
+  "correctedQuantity": zod.string().optional(),
+  "reasonCode": zod.string().nullish(),
+  "explanation": zod.string().nullish(),
+  "blockingCheckOverride": zod.union([zod.object({
+  "acknowledged": zod.literal(true),
+  "reason": zod.string().min(1).max(listConfirmedFactsResponseAuditEventsItemMetadataBlockingCheckOverrideOneReasonMax)
+}),zod.null()]).optional(),
+  "failedBlockingChecks": zod.array(zod.object({
+  "evidenceId": zod.number().int(),
+  "code": zod.string(),
+  "passed": zod.literal(false),
+  "severity": zod.enum(['blocking']),
+  "message": zod.string()
+})).optional()
+}),
   "createdAt": zod.coerce.date()
 }))
 })
@@ -594,6 +690,10 @@ export const ListConfirmedFactsResponse = zod.array(ListConfirmedFactsResponseIt
 export const ListFieldHistoryParams = zod.object({
   "projectId": zod.coerce.number().int()
 })
+
+export const listFieldHistoryResponseAuditEventsItemMetadataBlockingCheckOverrideOneReasonMax = 1000;
+
+
 
 export const ListFieldHistoryResponseItem = zod.object({
   "id": zod.number().int(),
@@ -621,7 +721,25 @@ export const ListFieldHistoryResponseItem = zod.object({
   "reason": zod.string().nullish(),
   "previousStatus": zod.union([zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),zod.null()]).optional(),
   "nextStatus": zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),
-  "metadata": zod.record(zod.string(), zod.unknown()),
+  "metadata": zod.object({
+  "captureExternalId": zod.string().optional(),
+  "itemExternalId": zod.string().optional(),
+  "previousQuantity": zod.string().optional(),
+  "correctedQuantity": zod.string().optional(),
+  "reasonCode": zod.string().nullish(),
+  "explanation": zod.string().nullish(),
+  "blockingCheckOverride": zod.union([zod.object({
+  "acknowledged": zod.literal(true),
+  "reason": zod.string().min(1).max(listFieldHistoryResponseAuditEventsItemMetadataBlockingCheckOverrideOneReasonMax)
+}),zod.null()]).optional(),
+  "failedBlockingChecks": zod.array(zod.object({
+  "evidenceId": zod.number().int(),
+  "code": zod.string(),
+  "passed": zod.literal(false),
+  "severity": zod.enum(['blocking']),
+  "message": zod.string()
+})).optional()
+}),
   "createdAt": zod.coerce.date()
 }))
 })
@@ -658,6 +776,8 @@ export const reviewProductionItemBodyReasonMax = 1000;
 export const reviewProductionItemBodyQuantityExclusiveMin = 0;
 export const reviewProductionItemBodyQuantityMultipleOf = 0.01;
 
+export const reviewProductionItemBodyBlockingCheckOverrideReasonMax = 1000;
+
 
 
 export const ReviewProductionItemBody = zod.object({
@@ -665,8 +785,16 @@ export const ReviewProductionItemBody = zod.object({
   "actor": zod.string().min(1).max(reviewProductionItemBodyActorMax),
   "reason": zod.string().max(reviewProductionItemBodyReasonMax).optional(),
   "reasonCode": zod.enum(['duplicate', 'wrong_site', 'wrong_crew', 'wrong_work_type', 'implausible_quantity', 'unreadable_evidence', 'duplicate_capture', 'other']).optional(),
-  "quantity": zod.number().gt(reviewProductionItemBodyQuantityExclusiveMin).multipleOf(reviewProductionItemBodyQuantityMultipleOf).optional()
+  "quantity": zod.number().gt(reviewProductionItemBodyQuantityExclusiveMin).multipleOf(reviewProductionItemBodyQuantityMultipleOf).optional(),
+  "blockingCheckOverride": zod.object({
+  "acknowledged": zod.literal(true),
+  "reason": zod.string().min(1).max(reviewProductionItemBodyBlockingCheckOverrideReasonMax)
+}).optional()
 })
+
+export const reviewProductionItemResponseAuditEventsItemMetadataBlockingCheckOverrideOneReasonMax = 1000;
+
+
 
 export const ReviewProductionItemResponse = zod.object({
   "id": zod.number().int(),
@@ -694,8 +822,744 @@ export const ReviewProductionItemResponse = zod.object({
   "reason": zod.string().nullish(),
   "previousStatus": zod.union([zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),zod.null()]).optional(),
   "nextStatus": zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),
-  "metadata": zod.record(zod.string(), zod.unknown()),
+  "metadata": zod.object({
+  "captureExternalId": zod.string().optional(),
+  "itemExternalId": zod.string().optional(),
+  "previousQuantity": zod.string().optional(),
+  "correctedQuantity": zod.string().optional(),
+  "reasonCode": zod.string().nullish(),
+  "explanation": zod.string().nullish(),
+  "blockingCheckOverride": zod.union([zod.object({
+  "acknowledged": zod.literal(true),
+  "reason": zod.string().min(1).max(reviewProductionItemResponseAuditEventsItemMetadataBlockingCheckOverrideOneReasonMax)
+}),zod.null()]).optional(),
+  "failedBlockingChecks": zod.array(zod.object({
+  "evidenceId": zod.number().int(),
+  "code": zod.string(),
+  "passed": zod.literal(false),
+  "severity": zod.enum(['blocking']),
+  "message": zod.string()
+})).optional()
+}),
   "createdAt": zod.coerce.date()
+}))
+})
+
+
+export const getPortfolioSummaryResponseProjectsItemTwoWorkflowStatusCountsCapturedMin = 0;
+
+export const getPortfolioSummaryResponseProjectsItemTwoWorkflowStatusCountsQueuedMin = 0;
+
+export const getPortfolioSummaryResponseProjectsItemTwoWorkflowStatusCountsProposedMin = 0;
+
+export const getPortfolioSummaryResponseProjectsItemTwoWorkflowStatusCountsNeedsReviewMin = 0;
+
+export const getPortfolioSummaryResponseProjectsItemTwoWorkflowStatusCountsRefusedMin = 0;
+
+export const getPortfolioSummaryResponseProjectsItemTwoWorkflowStatusCountsConfirmedMin = 0;
+
+export const getPortfolioSummaryResponseProjectsItemTwoTodayActivityCountMin = 0;
+
+export const getPortfolioSummaryResponseProjectsItemTwoReviewBacklogMin = 0;
+
+export const getPortfolioSummaryResponseProjectsItemTwoRefusalCountMin = 0;
+
+export const getPortfolioSummaryResponseProjectsItemTwoUnvisitedSiteCountMin = 0;
+
+export const getPortfolioSummaryResponseProjectsItemTwoAttentionSiteCountMin = 0;
+
+export const getPortfolioSummaryResponseProjectsItemTwoLagSampleSizeMin = 0;
+
+export const getPortfolioSummaryResponseProjectsItemTwoEvidenceCoverageTotalMin = 0;
+
+export const getPortfolioSummaryResponseProjectsItemTwoEvidenceCoverageReadyMin = 0;
+
+export const getPortfolioSummaryResponseProjectsItemTwoEvidenceCoverageManualReviewMin = 0;
+
+export const getPortfolioSummaryResponseProjectsItemTwoEvidenceCoverageFailedMin = 0;
+
+
+
+export const GetPortfolioSummaryResponse = zod.object({
+  "asOf": zod.coerce.date(),
+  "projects": zod.array(zod.object({
+  "id": zod.number().int(),
+  "name": zod.string(),
+  "location": zod.string(),
+  "client": zod.string(),
+  "dueDate": zod.string(),
+  "createdAt": zod.string(),
+  "stages": zod.array(zod.object({
+  "number": zod.number().int(),
+  "name": zod.string(),
+  "phase": zod.string(),
+  "description": zod.string(),
+  "status": zod.enum(['not_started', 'in_progress', 'blocked', 'complete']),
+  "owner": zod.string(),
+  "completedAt": zod.string().nullish(),
+  "note": zod.string(),
+  "evidenceName": zod.string()
+}))
+}).and(zod.object({
+  "workTypeProgress": zod.array(zod.object({
+  "workTypeId": zod.number().int(),
+  "code": zod.string(),
+  "name": zod.string(),
+  "stageNumber": zod.number().int(),
+  "unit": zod.enum(['each', 'metres']),
+  "planned": zod.string(),
+  "confirmed": zod.string(),
+  "remaining": zod.string(),
+  "ratio": zod.number().nullable(),
+  "statusQuantities": zod.object({
+  "captured": zod.string(),
+  "queued": zod.string(),
+  "proposed": zod.string(),
+  "needsReview": zod.string(),
+  "waitingTotal": zod.string(),
+  "refused": zod.string(),
+  "confirmed": zod.string()
+})
+})),
+  "workflowStatusCounts": zod.object({
+  "captured": zod.number().int().min(getPortfolioSummaryResponseProjectsItemTwoWorkflowStatusCountsCapturedMin),
+  "queued": zod.number().int().min(getPortfolioSummaryResponseProjectsItemTwoWorkflowStatusCountsQueuedMin),
+  "proposed": zod.number().int().min(getPortfolioSummaryResponseProjectsItemTwoWorkflowStatusCountsProposedMin),
+  "needs_review": zod.number().int().min(getPortfolioSummaryResponseProjectsItemTwoWorkflowStatusCountsNeedsReviewMin),
+  "refused": zod.number().int().min(getPortfolioSummaryResponseProjectsItemTwoWorkflowStatusCountsRefusedMin),
+  "confirmed": zod.number().int().min(getPortfolioSummaryResponseProjectsItemTwoWorkflowStatusCountsConfirmedMin)
+}),
+  "todayActivityCount": zod.number().int().min(getPortfolioSummaryResponseProjectsItemTwoTodayActivityCountMin),
+  "reviewBacklog": zod.number().int().min(getPortfolioSummaryResponseProjectsItemTwoReviewBacklogMin),
+  "refusalCount": zod.number().int().min(getPortfolioSummaryResponseProjectsItemTwoRefusalCountMin),
+  "unvisitedSiteCount": zod.number().int().min(getPortfolioSummaryResponseProjectsItemTwoUnvisitedSiteCountMin),
+  "attentionSiteCount": zod.number().int().min(getPortfolioSummaryResponseProjectsItemTwoAttentionSiteCountMin),
+  "lag": zod.object({
+  "sampleSize": zod.number().int().min(getPortfolioSummaryResponseProjectsItemTwoLagSampleSizeMin),
+  "averageDays": zod.number().nullable()
+}),
+  "evidenceCoverage": zod.object({
+  "total": zod.number().int().min(getPortfolioSummaryResponseProjectsItemTwoEvidenceCoverageTotalMin),
+  "ready": zod.number().int().min(getPortfolioSummaryResponseProjectsItemTwoEvidenceCoverageReadyMin),
+  "manualReview": zod.number().int().min(getPortfolioSummaryResponseProjectsItemTwoEvidenceCoverageManualReviewMin),
+  "failed": zod.number().int().min(getPortfolioSummaryResponseProjectsItemTwoEvidenceCoverageFailedMin)
+}),
+  "lastCaptureAt": zod.coerce.date().nullable(),
+  "lastConfirmedAt": zod.coerce.date().nullable()
+})))
+})
+
+
+export const GetControlRoomParams = zod.object({
+  "projectId": zod.coerce.number().int()
+})
+
+export const getControlRoomResponseDailyActivityItemItemCountMin = 0;
+
+export const getControlRoomResponseDailyActivityItemStatusCountsCapturedMin = 0;
+
+export const getControlRoomResponseDailyActivityItemStatusCountsQueuedMin = 0;
+
+export const getControlRoomResponseDailyActivityItemStatusCountsProposedMin = 0;
+
+export const getControlRoomResponseDailyActivityItemStatusCountsNeedsReviewMin = 0;
+
+export const getControlRoomResponseDailyActivityItemStatusCountsRefusedMin = 0;
+
+export const getControlRoomResponseDailyActivityItemStatusCountsConfirmedMin = 0;
+
+export const getControlRoomResponseReviewBacklogItemAuditEventsItemMetadataBlockingCheckOverrideOneReasonMax = 1000;
+
+export const getControlRoomResponseRefusalBacklogItemAuditEventsItemMetadataBlockingCheckOverrideOneReasonMax = 1000;
+
+export const getControlRoomResponseLagSampleSizeMin = 0;
+
+export const getControlRoomResponseEvidenceCoverageTotalMin = 0;
+
+export const getControlRoomResponseEvidenceCoverageReadyMin = 0;
+
+export const getControlRoomResponseEvidenceCoverageManualReviewMin = 0;
+
+export const getControlRoomResponseEvidenceCoverageFailedMin = 0;
+
+
+
+export const GetControlRoomResponse = zod.object({
+  "asOf": zod.coerce.date(),
+  "project": zod.object({
+  "id": zod.number().int(),
+  "name": zod.string(),
+  "location": zod.string(),
+  "client": zod.string(),
+  "dueDate": zod.string(),
+  "createdAt": zod.string(),
+  "stages": zod.array(zod.object({
+  "number": zod.number().int(),
+  "name": zod.string(),
+  "phase": zod.string(),
+  "description": zod.string(),
+  "status": zod.enum(['not_started', 'in_progress', 'blocked', 'complete']),
+  "owner": zod.string(),
+  "completedAt": zod.string().nullish(),
+  "note": zod.string(),
+  "evidenceName": zod.string()
+}))
+}),
+  "workTypeProgress": zod.array(zod.object({
+  "workTypeId": zod.number().int(),
+  "code": zod.string(),
+  "name": zod.string(),
+  "stageNumber": zod.number().int(),
+  "unit": zod.enum(['each', 'metres']),
+  "planned": zod.string(),
+  "confirmed": zod.string(),
+  "remaining": zod.string(),
+  "ratio": zod.number().nullable(),
+  "statusQuantities": zod.object({
+  "captured": zod.string(),
+  "queued": zod.string(),
+  "proposed": zod.string(),
+  "needsReview": zod.string(),
+  "waitingTotal": zod.string(),
+  "refused": zod.string(),
+  "confirmed": zod.string()
+})
+})),
+  "dailyActivity": zod.array(zod.object({
+  "crewDay": zod.object({
+  "id": zod.number().int(),
+  "projectId": zod.number().int(),
+  "siteId": zod.number().int(),
+  "crewId": zod.number().int(),
+  "workDate": zod.coerce.date(),
+  "externalId": zod.string(),
+  "payloadHash": zod.string(),
+  "capturedAt": zod.coerce.date(),
+  "latitude": zod.string().nullable(),
+  "longitude": zod.string().nullable(),
+  "createdAt": zod.coerce.date()
+}),
+  "capture": zod.object({
+  "externalId": zod.string(),
+  "capturedAt": zod.coerce.date(),
+  "workDate": zod.coerce.date()
+}),
+  "site": zod.object({
+  "id": zod.number().int(),
+  "code": zod.string(),
+  "name": zod.string()
+}),
+  "crew": zod.object({
+  "id": zod.number().int(),
+  "code": zod.string(),
+  "name": zod.string()
+}),
+  "itemCount": zod.number().int().min(getControlRoomResponseDailyActivityItemItemCountMin),
+  "statusCounts": zod.object({
+  "captured": zod.number().int().min(getControlRoomResponseDailyActivityItemStatusCountsCapturedMin),
+  "queued": zod.number().int().min(getControlRoomResponseDailyActivityItemStatusCountsQueuedMin),
+  "proposed": zod.number().int().min(getControlRoomResponseDailyActivityItemStatusCountsProposedMin),
+  "needs_review": zod.number().int().min(getControlRoomResponseDailyActivityItemStatusCountsNeedsReviewMin),
+  "refused": zod.number().int().min(getControlRoomResponseDailyActivityItemStatusCountsRefusedMin),
+  "confirmed": zod.number().int().min(getControlRoomResponseDailyActivityItemStatusCountsConfirmedMin)
+}),
+  "quantityByUnit": zod.object({
+  "each": zod.string(),
+  "metres": zod.string()
+}),
+  "confirmedQuantityByUnit": zod.object({
+  "each": zod.string(),
+  "metres": zod.string()
+})
+})),
+  "reviewBacklog": zod.array(zod.object({
+  "id": zod.number().int(),
+  "crewDayId": zod.number().int(),
+  "projectId": zod.number().int(),
+  "siteId": zod.number().int(),
+  "crewId": zod.number().int(),
+  "workDate": zod.coerce.date(),
+  "latitude": zod.string().nullable(),
+  "longitude": zod.string().nullable(),
+  "workTypeId": zod.number().int(),
+  "externalId": zod.string(),
+  "quantity": zod.string(),
+  "unit": zod.enum(['each', 'metres']),
+  "status": zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),
+  "note": zod.string(),
+  "refusalReason": zod.string().nullish(),
+  "confirmedAt": zod.coerce.date().nullish(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date(),
+  "auditEvents": zod.array(zod.object({
+  "id": zod.number().int(),
+  "decision": zod.enum(['submitted', 'proposed', 'routed_to_review', 'confirmed', 'corrected', 'refused']),
+  "actor": zod.string(),
+  "reason": zod.string().nullish(),
+  "previousStatus": zod.union([zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),zod.null()]).optional(),
+  "nextStatus": zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),
+  "metadata": zod.object({
+  "captureExternalId": zod.string().optional(),
+  "itemExternalId": zod.string().optional(),
+  "previousQuantity": zod.string().optional(),
+  "correctedQuantity": zod.string().optional(),
+  "reasonCode": zod.string().nullish(),
+  "explanation": zod.string().nullish(),
+  "blockingCheckOverride": zod.union([zod.object({
+  "acknowledged": zod.literal(true),
+  "reason": zod.string().min(1).max(getControlRoomResponseReviewBacklogItemAuditEventsItemMetadataBlockingCheckOverrideOneReasonMax)
+}),zod.null()]).optional(),
+  "failedBlockingChecks": zod.array(zod.object({
+  "evidenceId": zod.number().int(),
+  "code": zod.string(),
+  "passed": zod.literal(false),
+  "severity": zod.enum(['blocking']),
+  "message": zod.string()
+})).optional()
+}),
+  "createdAt": zod.coerce.date()
+}))
+})),
+  "refusalBacklog": zod.array(zod.object({
+  "id": zod.number().int(),
+  "crewDayId": zod.number().int(),
+  "projectId": zod.number().int(),
+  "siteId": zod.number().int(),
+  "crewId": zod.number().int(),
+  "workDate": zod.coerce.date(),
+  "latitude": zod.string().nullable(),
+  "longitude": zod.string().nullable(),
+  "workTypeId": zod.number().int(),
+  "externalId": zod.string(),
+  "quantity": zod.string(),
+  "unit": zod.enum(['each', 'metres']),
+  "status": zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),
+  "note": zod.string(),
+  "refusalReason": zod.string().nullish(),
+  "confirmedAt": zod.coerce.date().nullish(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date(),
+  "auditEvents": zod.array(zod.object({
+  "id": zod.number().int(),
+  "decision": zod.enum(['submitted', 'proposed', 'routed_to_review', 'confirmed', 'corrected', 'refused']),
+  "actor": zod.string(),
+  "reason": zod.string().nullish(),
+  "previousStatus": zod.union([zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),zod.null()]).optional(),
+  "nextStatus": zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),
+  "metadata": zod.object({
+  "captureExternalId": zod.string().optional(),
+  "itemExternalId": zod.string().optional(),
+  "previousQuantity": zod.string().optional(),
+  "correctedQuantity": zod.string().optional(),
+  "reasonCode": zod.string().nullish(),
+  "explanation": zod.string().nullish(),
+  "blockingCheckOverride": zod.union([zod.object({
+  "acknowledged": zod.literal(true),
+  "reason": zod.string().min(1).max(getControlRoomResponseRefusalBacklogItemAuditEventsItemMetadataBlockingCheckOverrideOneReasonMax)
+}),zod.null()]).optional(),
+  "failedBlockingChecks": zod.array(zod.object({
+  "evidenceId": zod.number().int(),
+  "code": zod.string(),
+  "passed": zod.literal(false),
+  "severity": zod.enum(['blocking']),
+  "message": zod.string()
+})).optional()
+}),
+  "createdAt": zod.coerce.date()
+}))
+})),
+  "sites": zod.array(zod.object({
+  "id": zod.number().int(),
+  "projectId": zod.number().int(),
+  "code": zod.string(),
+  "name": zod.string(),
+  "latitude": zod.string().nullish(),
+  "longitude": zod.string().nullish()
+}).and(zod.object({
+  "createdAt": zod.coerce.date(),
+  "visited": zod.boolean(),
+  "attention": zod.boolean(),
+  "attentionReasons": zod.array(zod.string()),
+  "lastCaptureAt": zod.coerce.date().nullable()
+}))),
+  "lag": zod.object({
+  "sampleSize": zod.number().int().min(getControlRoomResponseLagSampleSizeMin),
+  "averageDays": zod.number().nullable()
+}),
+  "evidenceCoverage": zod.object({
+  "total": zod.number().int().min(getControlRoomResponseEvidenceCoverageTotalMin),
+  "ready": zod.number().int().min(getControlRoomResponseEvidenceCoverageReadyMin),
+  "manualReview": zod.number().int().min(getControlRoomResponseEvidenceCoverageManualReviewMin),
+  "failed": zod.number().int().min(getControlRoomResponseEvidenceCoverageFailedMin)
+}),
+  "derivedMetrics": zod.object({
+  "crewProductivity": zod.number().nullable(),
+  "forecastFinish": zod.coerce.date().nullable(),
+  "rework": zod.number().nullable(),
+  "availability": zod.enum(['available', 'unavailable']),
+  "assumptions": zod.array(zod.string()),
+  "missingReasons": zod.array(zod.string())
+})
+})
+
+
+export const GetFactDrilldownParams = zod.object({
+  "projectId": zod.coerce.number().int(),
+  "productionItemId": zod.coerce.number().int()
+})
+
+export const getFactDrilldownResponseWorkTypeStageNumberMax = 8;
+
+export const getFactDrilldownResponseProductionAuditEventsItemMetadataBlockingCheckOverrideOneReasonMax = 1000;
+
+export const getFactDrilldownResponseEvidenceItemTwoAuditEventsItemDetailsBlockingCheckOverrideOneReasonMax = 1000;
+
+
+
+export const GetFactDrilldownResponse = zod.object({
+  "asOf": zod.coerce.date(),
+  "project": zod.object({
+  "id": zod.number().int(),
+  "name": zod.string(),
+  "location": zod.string(),
+  "client": zod.string(),
+  "dueDate": zod.string(),
+  "createdAt": zod.string(),
+  "stages": zod.array(zod.object({
+  "number": zod.number().int(),
+  "name": zod.string(),
+  "phase": zod.string(),
+  "description": zod.string(),
+  "status": zod.enum(['not_started', 'in_progress', 'blocked', 'complete']),
+  "owner": zod.string(),
+  "completedAt": zod.string().nullish(),
+  "note": zod.string(),
+  "evidenceName": zod.string()
+}))
+}),
+  "crewDay": zod.object({
+  "id": zod.number().int(),
+  "projectId": zod.number().int(),
+  "siteId": zod.number().int(),
+  "crewId": zod.number().int(),
+  "workDate": zod.coerce.date(),
+  "externalId": zod.string(),
+  "payloadHash": zod.string(),
+  "capturedAt": zod.coerce.date(),
+  "latitude": zod.string().nullable(),
+  "longitude": zod.string().nullable(),
+  "createdAt": zod.coerce.date()
+}),
+  "capture": zod.object({
+  "externalId": zod.string(),
+  "capturedAt": zod.coerce.date(),
+  "workDate": zod.coerce.date()
+}),
+  "site": zod.object({
+  "id": zod.number().int(),
+  "projectId": zod.number().int(),
+  "code": zod.string(),
+  "name": zod.string(),
+  "latitude": zod.string().nullish(),
+  "longitude": zod.string().nullish()
+}),
+  "crew": zod.object({
+  "id": zod.number().int(),
+  "subcontractorId": zod.number().int(),
+  "code": zod.string(),
+  "name": zod.string(),
+  "foremanName": zod.string(),
+  "headcount": zod.number().int(),
+  "certifiedWorkTypeIds": zod.array(zod.number().int()).optional()
+}),
+  "workType": zod.object({
+  "id": zod.number().int(),
+  "code": zod.string(),
+  "name": zod.string(),
+  "stageNumber": zod.number().int().min(1).max(getFactDrilldownResponseWorkTypeStageNumberMax),
+  "unit": zod.enum(['each', 'metres']),
+  "maxPerCrewDay": zod.string()
+}),
+  "productionItem": zod.object({
+  "id": zod.number().int(),
+  "crewDayId": zod.number().int(),
+  "workTypeId": zod.number().int(),
+  "externalId": zod.string(),
+  "quantity": zod.string(),
+  "unit": zod.enum(['each', 'metres']),
+  "status": zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),
+  "note": zod.string(),
+  "refusalReason": zod.string().nullable(),
+  "confirmedAt": zod.coerce.date().nullable(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date()
+}),
+  "productionAuditEvents": zod.array(zod.object({
+  "id": zod.number().int(),
+  "decision": zod.enum(['submitted', 'proposed', 'routed_to_review', 'confirmed', 'corrected', 'refused']),
+  "actor": zod.string(),
+  "reason": zod.string().nullish(),
+  "previousStatus": zod.union([zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),zod.null()]).optional(),
+  "nextStatus": zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),
+  "metadata": zod.object({
+  "captureExternalId": zod.string().optional(),
+  "itemExternalId": zod.string().optional(),
+  "previousQuantity": zod.string().optional(),
+  "correctedQuantity": zod.string().optional(),
+  "reasonCode": zod.string().nullish(),
+  "explanation": zod.string().nullish(),
+  "blockingCheckOverride": zod.union([zod.object({
+  "acknowledged": zod.literal(true),
+  "reason": zod.string().min(1).max(getFactDrilldownResponseProductionAuditEventsItemMetadataBlockingCheckOverrideOneReasonMax)
+}),zod.null()]).optional(),
+  "failedBlockingChecks": zod.array(zod.object({
+  "evidenceId": zod.number().int(),
+  "code": zod.string(),
+  "passed": zod.literal(false),
+  "severity": zod.enum(['blocking']),
+  "message": zod.string()
+})).optional()
+}),
+  "createdAt": zod.coerce.date()
+})),
+  "evidence": zod.array(zod.object({
+  "id": zod.number().int(),
+  "projectId": zod.number().int(),
+  "crewDayId": zod.number().int(),
+  "productionItemId": zod.number().int().nullish(),
+  "siteId": zod.number().int(),
+  "crewId": zod.number().int(),
+  "externalId": zod.string(),
+  "kind": zod.enum(['photo', 'audio']),
+  "objectPath": zod.string(),
+  "contentType": zod.string(),
+  "byteSize": zod.number().int(),
+  "sha256": zod.string(),
+  "verifiedAt": zod.coerce.date().nullable(),
+  "source": zod.string(),
+  "originalName": zod.string().nullish(),
+  "capturedAt": zod.coerce.date(),
+  "latitude": zod.string().nullish(),
+  "longitude": zod.string().nullish(),
+  "uploaderContext": zod.string(),
+  "retentionPolicy": zod.string(),
+  "retentionUntil": zod.string().nullish(),
+  "status": zod.enum(['uploaded', 'processing', 'ready', 'manual_review', 'failed']),
+  "candidateQuantity": zod.string().nullish(),
+  "candidateWorkTypeId": zod.number().int().nullish(),
+  "candidateUnit": zod.string().nullish(),
+  "confidence": zod.string().nullish(),
+  "identityConfidence": zod.string().nullish(),
+  "explanation": zod.string().nullish(),
+  "transcript": zod.string().nullish(),
+  "checks": zod.array(zod.object({
+  "code": zod.string(),
+  "passed": zod.boolean(),
+  "severity": zod.enum(['info', 'warning', 'blocking']),
+  "message": zod.string()
+})),
+  "errorMessage": zod.string().nullish(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date()
+}).and(zod.object({
+  "auditEvents": zod.array(zod.object({
+  "id": zod.number().int(),
+  "eventType": zod.string(),
+  "actor": zod.string(),
+  "details": zod.object({
+  "captureExternalId": zod.string().optional(),
+  "byteSize": zod.number().int().optional(),
+  "staleBefore": zod.coerce.date().optional(),
+  "actualSha256": zod.string().optional(),
+  "productionItemId": zod.number().int().optional(),
+  "blockingFailure": zod.boolean().optional(),
+  "verifiedDuplicateIds": zod.array(zod.number().int()).optional(),
+  "workDate": zod.coerce.date().optional(),
+  "message": zod.string().optional(),
+  "decision": zod.string().optional(),
+  "reasonCode": zod.string().optional(),
+  "explanation": zod.string().nullish(),
+  "previousQuantity": zod.string().optional(),
+  "decidedQuantity": zod.string().optional(),
+  "blockingCheckOverride": zod.union([zod.object({
+  "acknowledged": zod.literal(true),
+  "reason": zod.string().min(1).max(getFactDrilldownResponseEvidenceItemTwoAuditEventsItemDetailsBlockingCheckOverrideOneReasonMax)
+}),zod.null()]).optional(),
+  "failedBlockingChecks": zod.array(zod.object({
+  "evidenceId": zod.number().int(),
+  "code": zod.string(),
+  "passed": zod.literal(false),
+  "severity": zod.enum(['blocking']),
+  "message": zod.string()
+})).optional()
+}),
+  "createdAt": zod.coerce.date()
+}))
+})))
+})
+
+
+export const GetEvidenceManifestParams = zod.object({
+  "projectId": zod.coerce.number().int()
+})
+
+export const getEvidenceManifestResponseClaimsItemDecisionsItemMetadataBlockingCheckOverrideOneReasonMax = 1000;
+
+export const getEvidenceManifestResponseClaimsItemEvidenceItemTwoAuditEventsItemDetailsBlockingCheckOverrideOneReasonMax = 1000;
+
+
+
+export const GetEvidenceManifestResponse = zod.object({
+  "asOf": zod.coerce.date(),
+  "project": zod.object({
+  "id": zod.number().int(),
+  "name": zod.string(),
+  "location": zod.string(),
+  "client": zod.string(),
+  "dueDate": zod.string(),
+  "createdAt": zod.string(),
+  "stages": zod.array(zod.object({
+  "number": zod.number().int(),
+  "name": zod.string(),
+  "phase": zod.string(),
+  "description": zod.string(),
+  "status": zod.enum(['not_started', 'in_progress', 'blocked', 'complete']),
+  "owner": zod.string(),
+  "completedAt": zod.string().nullish(),
+  "note": zod.string(),
+  "evidenceName": zod.string()
+}))
+}),
+  "claims": zod.array(zod.object({
+  "productionItem": zod.object({
+  "id": zod.number().int(),
+  "crewDayId": zod.number().int(),
+  "workTypeId": zod.number().int(),
+  "externalId": zod.string(),
+  "quantity": zod.string(),
+  "unit": zod.enum(['each', 'metres']),
+  "status": zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),
+  "note": zod.string(),
+  "refusalReason": zod.string().nullable(),
+  "confirmedAt": zod.coerce.date().nullable(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date()
+}),
+  "capture": zod.object({
+  "id": zod.number().int(),
+  "projectId": zod.number().int(),
+  "siteId": zod.number().int(),
+  "crewId": zod.number().int(),
+  "workDate": zod.coerce.date(),
+  "externalId": zod.string(),
+  "payloadHash": zod.string(),
+  "capturedAt": zod.coerce.date(),
+  "latitude": zod.string().nullable(),
+  "longitude": zod.string().nullable(),
+  "createdAt": zod.coerce.date()
+}),
+  "decisions": zod.array(zod.object({
+  "id": zod.number().int(),
+  "decision": zod.enum(['submitted', 'proposed', 'routed_to_review', 'confirmed', 'corrected', 'refused']),
+  "actor": zod.string(),
+  "reason": zod.string().nullish(),
+  "previousStatus": zod.union([zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),zod.null()]).optional(),
+  "nextStatus": zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),
+  "metadata": zod.object({
+  "captureExternalId": zod.string().optional(),
+  "itemExternalId": zod.string().optional(),
+  "previousQuantity": zod.string().optional(),
+  "correctedQuantity": zod.string().optional(),
+  "reasonCode": zod.string().nullish(),
+  "explanation": zod.string().nullish(),
+  "blockingCheckOverride": zod.union([zod.object({
+  "acknowledged": zod.literal(true),
+  "reason": zod.string().min(1).max(getEvidenceManifestResponseClaimsItemDecisionsItemMetadataBlockingCheckOverrideOneReasonMax)
+}),zod.null()]).optional(),
+  "failedBlockingChecks": zod.array(zod.object({
+  "evidenceId": zod.number().int(),
+  "code": zod.string(),
+  "passed": zod.literal(false),
+  "severity": zod.enum(['blocking']),
+  "message": zod.string()
+})).optional()
+}),
+  "createdAt": zod.coerce.date()
+})),
+  "evidence": zod.array(zod.object({
+  "id": zod.number().int(),
+  "projectId": zod.number().int(),
+  "crewDayId": zod.number().int(),
+  "productionItemId": zod.number().int().nullish(),
+  "siteId": zod.number().int(),
+  "crewId": zod.number().int(),
+  "externalId": zod.string(),
+  "kind": zod.enum(['photo', 'audio']),
+  "objectPath": zod.string(),
+  "contentType": zod.string(),
+  "byteSize": zod.number().int(),
+  "sha256": zod.string(),
+  "verifiedAt": zod.coerce.date().nullable(),
+  "source": zod.string(),
+  "originalName": zod.string().nullish(),
+  "capturedAt": zod.coerce.date(),
+  "latitude": zod.string().nullish(),
+  "longitude": zod.string().nullish(),
+  "uploaderContext": zod.string(),
+  "retentionPolicy": zod.string(),
+  "retentionUntil": zod.string().nullish(),
+  "status": zod.enum(['uploaded', 'processing', 'ready', 'manual_review', 'failed']),
+  "candidateQuantity": zod.string().nullish(),
+  "candidateWorkTypeId": zod.number().int().nullish(),
+  "candidateUnit": zod.string().nullish(),
+  "confidence": zod.string().nullish(),
+  "identityConfidence": zod.string().nullish(),
+  "explanation": zod.string().nullish(),
+  "transcript": zod.string().nullish(),
+  "checks": zod.array(zod.object({
+  "code": zod.string(),
+  "passed": zod.boolean(),
+  "severity": zod.enum(['info', 'warning', 'blocking']),
+  "message": zod.string()
+})),
+  "errorMessage": zod.string().nullish(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date()
+}).and(zod.object({
+  "auditEvents": zod.array(zod.object({
+  "id": zod.number().int(),
+  "eventType": zod.string(),
+  "actor": zod.string(),
+  "details": zod.object({
+  "captureExternalId": zod.string().optional(),
+  "byteSize": zod.number().int().optional(),
+  "staleBefore": zod.coerce.date().optional(),
+  "actualSha256": zod.string().optional(),
+  "productionItemId": zod.number().int().optional(),
+  "blockingFailure": zod.boolean().optional(),
+  "verifiedDuplicateIds": zod.array(zod.number().int()).optional(),
+  "workDate": zod.coerce.date().optional(),
+  "message": zod.string().optional(),
+  "decision": zod.string().optional(),
+  "reasonCode": zod.string().optional(),
+  "explanation": zod.string().nullish(),
+  "previousQuantity": zod.string().optional(),
+  "decidedQuantity": zod.string().optional(),
+  "blockingCheckOverride": zod.union([zod.object({
+  "acknowledged": zod.literal(true),
+  "reason": zod.string().min(1).max(getEvidenceManifestResponseClaimsItemEvidenceItemTwoAuditEventsItemDetailsBlockingCheckOverrideOneReasonMax)
+}),zod.null()]).optional(),
+  "failedBlockingChecks": zod.array(zod.object({
+  "evidenceId": zod.number().int(),
+  "code": zod.string(),
+  "passed": zod.literal(false),
+  "severity": zod.enum(['blocking']),
+  "message": zod.string()
+})).optional()
+}),
+  "createdAt": zod.coerce.date()
+}))
+})))
 }))
 })
 

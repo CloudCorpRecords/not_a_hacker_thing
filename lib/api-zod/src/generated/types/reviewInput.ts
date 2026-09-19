@@ -5,6 +5,7 @@
  * Fiber operations project tracking API
  * OpenAPI spec version: 0.1.0
  */
+import type { BlockingCheckOverride } from './blockingCheckOverride';
 import type { ReviewInputDecision } from './reviewInputDecision';
 import type { ReviewInputReasonCode } from './reviewInputReasonCode';
 
@@ -20,4 +21,5 @@ export interface ReviewInput {
   reasonCode?: ReviewInputReasonCode;
   /** @exclusiveMinimum 0 */
   quantity?: number;
+  blockingCheckOverride?: BlockingCheckOverride;
 }

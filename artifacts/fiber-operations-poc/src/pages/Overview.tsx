@@ -1,133 +1,171 @@
-import { useState } from "react";
-import { useListProjects } from "@workspace/api-client-react";
-import { Link, useLocation } from "wouter";
-import { Plus, Activity, Clock, AlertTriangle } from "lucide-react";
-import { format } from "date-fns";
-import { CreateProjectDialog } from "@/components/CreateProjectDialog";
+import { useGetPortfolioSummary } from "@workspace/api-client-react";
+import { useLocation } from "wouter";
+import { Activity, Clock, AlertTriangle, FileText, ChevronRight, XCircle } from "lucide-react";
+import { format, formatDistanceToNow } from "date-fns";
+import { cn } from "@/lib/utils";
 
 export function Overview() {
-  const { data: projects, isLoading } = useListProjects();
-  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const { data: summary, isLoading, error, refetch } = useGetPortfolioSummary();
   const [, setLocation] = useLocation();
 
-  const total = projects?.length || 0;
-  // Compute some derived metrics
-  const activeStages = projects?.flatMap(p => p.stages).filter(s => s.status === 'in_progress').length || 0;
-  const blockedStages = projects?.flatMap(p => p.stages).filter(s => s.status === 'blocked').length || 0;
-
-  return (
-    <div className="flex-1 p-6 md:p-10 space-y-8 overflow-y-auto">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-        <div>
-          <h1 className="font-serif text-4xl tracking-tight text-foreground">Portfolio Overview</h1>
-          <p className="text-muted-foreground mt-1">Real-time status of all fiber installations.</p>
+  if (isLoading) {
+    return (
+      <div className="flex-1 p-6 md:p-10 flex flex-col gap-6 animate-in fade-in duration-300">
+        <div className="space-y-2">
+          <div className="h-10 w-64 bg-muted rounded-md animate-pulse"></div>
+          <div className="h-4 w-96 bg-muted/50 rounded-md animate-pulse"></div>
         </div>
-        <button 
-          onClick={() => setIsCreateOpen(true)}
-          className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm"
-        >
-          <Plus size={16} />
-          New Project
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
+          {[1, 2, 3, 4].map(i => <div key={i} className="h-24 bg-card border border-border/50 rounded-lg animate-pulse" />)}
+        </div>
+        <div className="h-64 bg-card border border-border/50 rounded-lg mt-4 animate-pulse"></div>
+      </div>
+    );
+  }
+
+  if (error || !summary) {
+    return (
+      <div className="flex-1 p-10 flex flex-col items-center justify-center text-center">
+        <AlertTriangle size={48} className="text-destructive mb-4 opacity-80" />
+        <h2 className="text-2xl font-serif text-foreground mb-2">Portfolio Data Unavailable</h2>
+        <p className="text-muted-foreground text-sm max-w-md mb-6">We could not load the latest portfolio telemetry. The API may be unavailable or there was a connection error.</p>
+        <button onClick={() => refetch()} className="bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium hover:bg-primary/90 transition-colors">
+          Retry Connection
         </button>
       </div>
+    );
+  }
 
-      <CreateProjectDialog open={isCreateOpen} onOpenChange={setIsCreateOpen} />
+  const projects = summary.projects;
+  const totalReviewBacklog = projects.reduce((acc, p) => acc + p.reviewBacklog, 0);
+  const totalRefusals = projects.reduce((acc, p) => acc + p.refusalCount, 0);
+  const totalTodayActivity = projects.reduce((acc, p) => acc + p.todayActivityCount, 0);
+  const totalAttentionSites = projects.reduce((acc, p) => acc + p.attentionSiteCount, 0);
 
-      {/* Metrics Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="p-5 bg-card border border-border/50 rounded-lg shadow-xs">
-          <div className="flex items-center gap-2 text-muted-foreground mb-3 font-mono text-[11px] uppercase tracking-wider">
-            <Activity size={14} /> Total Projects
-          </div>
-          <div className="text-3xl font-serif">{isLoading ? "-" : total}</div>
-        </div>
-        <div className="p-5 bg-card border border-border/50 rounded-lg shadow-xs">
-          <div className="flex items-center gap-2 text-muted-foreground mb-3 font-mono text-[11px] uppercase tracking-wider">
-            <Clock size={14} /> Active Stages
-          </div>
-          <div className="text-3xl font-serif">{isLoading ? "-" : activeStages}</div>
-        </div>
-        <div className="p-5 bg-card border border-destructive/20 rounded-lg shadow-xs bg-destructive/5 text-destructive-foreground">
-          <div className="flex items-center gap-2 text-destructive mb-3 font-mono text-[11px] uppercase tracking-wider">
-            <AlertTriangle size={14} /> Blocked Stages
-          </div>
-          <div className="text-3xl font-serif text-destructive">{isLoading ? "-" : blockedStages}</div>
-        </div>
-      </div>
-
-      {/* Projects List */}
-      <div>
-        <div className="mb-4">
-          <h2 className="text-xl font-serif">Active Deployments</h2>
-        </div>
-        
-        {isLoading ? (
-          <div className="h-64 flex items-center justify-center border border-dashed border-border/60 rounded-lg text-muted-foreground">
-            Loading telemetry...
-          </div>
-        ) : projects?.length === 0 ? (
-          <div className="h-64 flex flex-col items-center justify-center border border-dashed border-border/60 rounded-lg bg-card/50">
-            <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center mb-3">
-              <Activity className="text-muted-foreground" />
+  return (
+    <div className="flex-1 flex flex-col h-full overflow-hidden bg-background">
+      <header className="flex-none p-6 md:p-10 pb-4 border-b border-border/60 bg-card/30 backdrop-blur shrink-0">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-3 mb-1">
+              <h1 className="font-serif text-4xl tracking-tight text-foreground leading-none">Portfolio</h1>
+              <span className="px-2 py-0.5 rounded-full bg-secondary/10 text-secondary border border-secondary/20 text-[10px] font-mono uppercase tracking-wider">Confirmed</span>
             </div>
-            <p className="text-foreground font-medium">No projects found</p>
-            <p className="text-muted-foreground text-sm max-w-sm text-center mt-1">
-              Start by creating a new project to track fiber deployment progress.
+            <p className="text-muted-foreground mt-2 text-sm flex items-center gap-2">
+              <Clock size={14} /> Data as of {format(new Date(summary.asOf), "PPpp")}
             </p>
           </div>
+        </div>
+      </header>
+
+      <div className="flex-1 overflow-y-auto p-6 md:p-10 max-w-7xl mx-auto w-full">
+        {/* Top level metrics */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div className="p-5 bg-card border border-border/50 rounded-lg shadow-sm">
+            <div className="flex items-center gap-2 text-muted-foreground mb-2 font-mono text-[10px] uppercase tracking-wider">
+               <Activity size={14} /> Today's Activity
+            </div>
+            <div className="text-3xl font-serif text-foreground">{totalTodayActivity}</div>
+          </div>
+          <div className="p-5 bg-card border border-secondary/30 rounded-lg shadow-sm bg-secondary/5">
+            <div className="flex items-center gap-2 text-secondary mb-2 font-mono text-[10px] uppercase tracking-wider">
+              <FileText size={14} /> Pending Review
+            </div>
+            <div className="text-3xl font-serif text-secondary">{totalReviewBacklog}</div>
+          </div>
+          <div className="p-5 bg-card border border-destructive/20 rounded-lg shadow-sm bg-destructive/5">
+            <div className="flex items-center gap-2 text-destructive mb-2 font-mono text-[10px] uppercase tracking-wider">
+              <XCircle size={14} /> Refused Items
+            </div>
+            <div className="text-3xl font-serif text-destructive">{totalRefusals}</div>
+          </div>
+          <div className="p-5 bg-card border border-accent/20 rounded-lg shadow-sm bg-accent/5">
+            <div className="flex items-center gap-2 text-accent mb-2 font-mono text-[10px] uppercase tracking-wider">
+              <AlertTriangle size={14} /> Attention Sites
+            </div>
+            <div className="text-3xl font-serif text-accent">{totalAttentionSites}</div>
+          </div>
+        </div>
+
+        {projects.length === 0 ? (
+          <div className="p-12 text-center border border-dashed border-border/60 rounded-lg bg-card/30">
+            <h3 className="text-lg font-serif mb-2">No Active Projects</h3>
+            <p className="text-sm text-muted-foreground">There are currently no projects in the portfolio.</p>
+          </div>
         ) : (
-          <div className="border border-border/60 rounded-lg bg-card shadow-xs overflow-x-auto">
-            <table className="w-full text-sm text-left whitespace-nowrap min-w-[600px]">
-              <thead className="bg-muted/30 border-b border-border/60 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-                <tr>
-                  <th className="px-4 py-3 font-medium">Project</th>
-                  <th className="px-4 py-3 font-medium">Location</th>
-                  <th className="px-4 py-3 font-medium">Client</th>
-                  <th className="px-4 py-3 font-medium">Progress</th>
-                  <th className="px-4 py-3 font-medium">Due Date</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border/40">
-                {projects?.map((project) => {
-                  const completed = project.stages.filter(s => s.status === 'complete').length;
-                  const total = project.stages.length;
-                  const progress = total > 0 ? (completed / total) * 100 : 0;
-                  
-                  return (
-                    <tr 
-                      key={project.id} 
-                      onClick={() => setLocation(`/projects/${project.id}`)}
-                      className="hover:bg-muted/20 transition-colors group cursor-pointer relative"
-                    >
-                      <td className="px-4 py-3">
-                        <div className="font-medium text-foreground">{project.name}</div>
-                        <div className="text-xs text-muted-foreground font-mono mt-0.5">ID-{project.id.toString().padStart(4, '0')}</div>
-                      </td>
-                      <td className="px-4 py-3">{project.location}</td>
-                      <td className="px-4 py-3">
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-secondary/15 text-secondary-foreground border border-secondary/20">
-                          {project.client}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3">
-                        <div className="flex items-center gap-3">
-                          <div className="w-24 h-1.5 bg-muted rounded-full overflow-hidden">
-                            <div 
-                              className="h-full bg-primary" 
-                              style={{ width: `${progress}%` }}
-                            />
-                          </div>
-                          <span className="text-xs font-mono text-muted-foreground">{completed}/{total}</span>
+          <div className="space-y-4">
+            <h2 className="font-serif text-2xl border-b border-border/60 pb-2 mb-4">Operations Control</h2>
+            <div className="grid grid-cols-1 gap-4">
+              {projects.map((p) => {
+                const hasAttention = p.attentionSiteCount > 0 || p.reviewBacklog > 0 || p.refusalCount > 0;
+
+                return (
+                  <div
+                    key={p.id}
+                    onClick={() => setLocation(`/projects/${p.id}`)}
+                    className={cn(
+                      "group bg-card border rounded-lg p-5 cursor-pointer transition-all hover:shadow-md",
+                      hasAttention ? "border-secondary/40 hover:border-secondary" : "border-border/60 hover:border-primary/40"
+                    )}
+                  >
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+                      <div>
+                        <div className="flex items-center gap-2 mb-1">
+                          <h3 className="text-xl font-serif leading-none group-hover:text-primary transition-colors">{p.name}</h3>
+                          {p.reviewBacklog > 0 && (
+                            <span className="px-1.5 py-0.5 rounded bg-secondary/15 text-secondary text-[10px] font-mono uppercase border border-secondary/20">
+                              {p.reviewBacklog} Review
+                            </span>
+                          )}
+                          {p.refusalCount > 0 && (
+                            <span className="px-1.5 py-0.5 rounded bg-destructive/10 text-destructive text-[10px] font-mono uppercase border border-destructive/20">
+                              {p.refusalCount} Refused
+                            </span>
+                          )}
                         </div>
-                      </td>
-                      <td className="px-4 py-3">
-                        {format(new Date(project.dueDate), 'MMM d, yyyy')}
-                      </td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
+                        <div className="text-xs font-mono text-muted-foreground uppercase tracking-wider flex gap-3">
+                          <span>{p.location}</span>
+                          <span>•</span>
+                          <span>{p.client}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-4 text-xs font-mono">
+                         <div className="text-right">
+                           <div className="text-muted-foreground uppercase tracking-wider">Freshness</div>
+                           <div className="text-foreground">{p.lastConfirmedAt ? formatDistanceToNow(new Date(p.lastConfirmedAt), { addSuffix: true }) : 'No confirmed data'}</div>
+                         </div>
+                         <div className="text-right">
+                           <div className="text-muted-foreground uppercase tracking-wider">Lag</div>
+                           <div className={cn("text-foreground", p.lag.averageDays && p.lag.averageDays > 2 && "text-destructive")}>
+                             {p.lag.averageDays ? `${p.lag.averageDays.toFixed(1)}d` : '-'}
+                           </div>
+                         </div>
+                         <ChevronRight size={20} className="text-muted-foreground/30 group-hover:text-primary transition-colors" />
+                      </div>
+                    </div>
+
+                    {p.workTypeProgress.length > 0 ? (
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 pt-3 border-t border-border/40">
+                        {p.workTypeProgress.map(wt => (
+                          <div key={wt.workTypeId} className="flex justify-between items-center bg-muted/20 p-2 rounded">
+                            <div className="text-xs font-medium text-foreground truncate pr-2">{wt.name}</div>
+                            <div className="text-[10px] font-mono shrink-0 flex items-center gap-1">
+                               <span className="text-primary font-bold">{wt.confirmed}</span>
+                               <span className="text-muted-foreground">/ {wt.planned} {wt.unit}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="pt-3 border-t border-border/40 text-xs font-mono text-muted-foreground italic">
+                        No production plans established
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         )}
       </div>

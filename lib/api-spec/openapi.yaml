@@ -324,6 +324,53 @@ paths:
                 $ref: "#/components/schemas/ProductionItem"
         "409":
           description: Item was already finalized
+  /portfolio-summary:
+    get:
+      operationId: getPortfolioSummary
+      tags: [operations]
+      responses:
+        "200":
+          description: Confirmed-fact portfolio summary
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/PortfolioSummary" }
+  /projects/{projectId}/control-room:
+    get:
+      operationId: getControlRoom
+      tags: [operations]
+      parameters:
+        - $ref: "#/components/parameters/ProjectId"
+      responses:
+        "200":
+          description: Project control room
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ControlRoom" }
+  /projects/{projectId}/facts/{productionItemId}:
+    get:
+      operationId: getFactDrilldown
+      tags: [operations]
+      parameters:
+        - $ref: "#/components/parameters/ProjectId"
+        - $ref: "#/components/parameters/ProductionItemId"
+      responses:
+        "200":
+          description: Confirmed fact drilldown
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/FactDrilldown" }
+  /projects/{projectId}/evidence-pack:
+    get:
+      operationId: getEvidenceManifest
+      tags: [operations]
+      parameters:
+        - $ref: "#/components/parameters/ProjectId"
+      responses:
+        "200":
+          description: Readable evidence manifest
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/EvidencePack" }
 components:
   parameters:
     ProjectId:
@@ -519,7 +566,7 @@ components:
             - $ref: "#/components/schemas/ProductionStatus"
             - type: "null"
         nextStatus: { $ref: "#/components/schemas/ProductionStatus" }
-        metadata: { type: object, additionalProperties: true }
+        metadata: { $ref: "#/components/schemas/ProductionAuditMetadata" }
         createdAt: { type: string, format: date-time }
     ProductionItem:
       type: object
@@ -546,6 +593,67 @@ components:
         auditEvents:
           type: array
           items: { $ref: "#/components/schemas/AuditEvent" }
+    CrewDay:
+      type: object
+      required: [id, projectId, siteId, crewId, workDate, externalId, payloadHash, capturedAt, latitude, longitude, createdAt]
+      properties:
+        id: { type: integer }
+        projectId: { type: integer }
+        siteId: { type: integer }
+        crewId: { type: integer }
+        workDate: { type: string, format: date }
+        externalId: { type: string }
+        payloadHash: { type: string }
+        capturedAt: { type: string, format: date-time }
+        latitude: { type: ["string", "null"] }
+        longitude: { type: ["string", "null"] }
+        createdAt: { type: string, format: date-time }
+    RawProductionItem:
+      type: object
+      required: [id, crewDayId, workTypeId, externalId, quantity, unit, status, note, refusalReason, confirmedAt, createdAt, updatedAt]
+      properties:
+        id: { type: integer }
+        crewDayId: { type: integer }
+        workTypeId: { type: integer }
+        externalId: { type: string }
+        quantity: { type: string }
+        unit: { $ref: "#/components/schemas/ProductionUnit" }
+        status: { $ref: "#/components/schemas/ProductionStatus" }
+        note: { type: string }
+        refusalReason: { type: ["string", "null"] }
+        confirmedAt: { type: ["string", "null"], format: date-time }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+    ProductionAuditMetadata:
+      type: object
+      properties:
+        captureExternalId: { type: string }
+        itemExternalId: { type: string }
+        previousQuantity: { type: string }
+        correctedQuantity: { type: string }
+        reasonCode: { type: ["string", "null"] }
+        explanation: { type: ["string", "null"] }
+        blockingCheckOverride:
+          anyOf:
+            - $ref: "#/components/schemas/BlockingCheckOverride"
+            - type: "null"
+        failedBlockingChecks: { type: array, items: { $ref: "#/components/schemas/EvidenceCheckFailure" } }
+      additionalProperties: false
+    EvidenceWithAudit:
+      allOf:
+        - $ref: "#/components/schemas/EvidenceItem"
+        - type: object
+          required: [auditEvents]
+          properties:
+            auditEvents: { type: array, items: { $ref: "#/components/schemas/EvidenceAuditEvent" } }
+    EvidenceClaim:
+      type: object
+      required: [productionItem, capture, decisions, evidence]
+      properties:
+        productionItem: { $ref: "#/components/schemas/RawProductionItem" }
+        capture: { $ref: "#/components/schemas/CrewDay" }
+        decisions: { type: array, items: { $ref: "#/components/schemas/AuditEvent" } }
+        evidence: { type: array, items: { $ref: "#/components/schemas/EvidenceWithAudit" } }
     CaptureResult:
       type: object
       required: [crewDayId, idempotentReplay, items]
@@ -576,7 +684,7 @@ components:
         id: { type: integer }
         eventType: { type: string }
         actor: { type: string }
-        details: { type: object, additionalProperties: true }
+        details: { $ref: "#/components/schemas/EvidenceAuditDetails" }
         createdAt: { type: string, format: date-time }
     EvidenceItem:
       type: object
@@ -617,6 +725,29 @@ components:
         errorMessage: { type: ["string", "null"] }
         createdAt: { type: string, format: date-time }
         updatedAt: { type: string, format: date-time }
+    EvidenceAuditDetails:
+      type: object
+      properties:
+        captureExternalId: { type: string }
+        byteSize: { type: integer }
+        staleBefore: { type: string, format: date-time }
+        actualSha256: { type: string }
+        productionItemId: { type: integer }
+        blockingFailure: { type: boolean }
+        verifiedDuplicateIds: { type: array, items: { type: integer } }
+        workDate: { type: string, format: date }
+        message: { type: string }
+        decision: { type: string }
+        reasonCode: { type: string }
+        explanation: { type: ["string", "null"] }
+        previousQuantity: { type: string }
+        decidedQuantity: { type: string }
+        blockingCheckOverride:
+          anyOf:
+            - $ref: "#/components/schemas/BlockingCheckOverride"
+            - type: "null"
+        failedBlockingChecks: { type: array, items: { $ref: "#/components/schemas/EvidenceCheckFailure" } }
+      additionalProperties: false
     EvidenceDetail:
       allOf:
         - $ref: "#/components/schemas/EvidenceItem"
@@ -671,6 +802,8 @@ components:
           type: string
           enum: [duplicate, wrong_site, wrong_crew, wrong_work_type, implausible_quantity, unreadable_evidence, duplicate_capture, other]
         quantity: { type: number, exclusiveMinimum: 0, multipleOf: 0.01 }
+        blockingCheckOverride:
+          $ref: "#/components/schemas/BlockingCheckOverride"
     ProgressRow:
       type: object
       required: [workTypeId, code, name, stageNumber, unit, plannedQuantity, confirmedQuantity, remainingQuantity]
@@ -691,3 +824,188 @@ components:
         rows:
           type: array
           items: { $ref: "#/components/schemas/ProgressRow" }
+    BlockingCheckOverride:
+      type: object
+      required: [acknowledged, reason]
+      properties:
+        acknowledged: { type: boolean, const: true }
+        reason: { type: string, minLength: 1, maxLength: 1000 }
+    EvidenceCheckFailure:
+      type: object
+      required: [evidenceId, code, passed, severity, message]
+      properties:
+        evidenceId: { type: integer }
+        code: { type: string }
+        passed: { type: boolean, const: false }
+        severity: { type: string, enum: [blocking] }
+        message: { type: string }
+    WorkTypeProgress:
+      type: object
+      required: [workTypeId, code, name, stageNumber, unit, planned, confirmed, remaining, ratio, statusQuantities]
+      properties:
+        workTypeId: { type: integer }
+        code: { type: string }
+        name: { type: string }
+        stageNumber: { type: integer }
+        unit: { $ref: "#/components/schemas/ProductionUnit" }
+        planned: { type: string }
+        confirmed: { type: string }
+        remaining: { type: string }
+        ratio: { type: ["number", "null"] }
+        statusQuantities: { $ref: "#/components/schemas/StatusQuantities" }
+    StatusQuantities:
+      type: object
+      required: [captured, queued, proposed, needsReview, waitingTotal, refused, confirmed]
+      properties:
+        captured: { type: string }
+        queued: { type: string }
+        proposed: { type: string }
+        needsReview: { type: string }
+        waitingTotal: { type: string }
+        refused: { type: string }
+        confirmed: { type: string }
+    WorkflowStatusCounts:
+      type: object
+      required: [captured, queued, proposed, needs_review, refused, confirmed]
+      properties:
+        captured: { type: integer, minimum: 0 }
+        queued: { type: integer, minimum: 0 }
+        proposed: { type: integer, minimum: 0 }
+        needs_review: { type: integer, minimum: 0 }
+        refused: { type: integer, minimum: 0 }
+        confirmed: { type: integer, minimum: 0 }
+    LagStats:
+      type: object
+      required: [sampleSize, averageDays]
+      properties:
+        sampleSize: { type: integer, minimum: 0 }
+        averageDays: { type: ["number", "null"] }
+    EvidenceCoverage:
+      type: object
+      required: [total, ready, manualReview, failed]
+      properties:
+        total: { type: integer, minimum: 0 }
+        ready: { type: integer, minimum: 0 }
+        manualReview: { type: integer, minimum: 0 }
+        failed: { type: integer, minimum: 0 }
+    ControlRoomSite:
+      allOf:
+        - $ref: "#/components/schemas/Site"
+        - type: object
+          required: [createdAt, visited, attention, attentionReasons, lastCaptureAt]
+          properties:
+            createdAt: { type: string, format: date-time }
+            visited: { type: boolean }
+            attention: { type: boolean }
+            attentionReasons: { type: array, items: { type: string } }
+            lastCaptureAt: { type: ["string", "null"], format: date-time }
+    DailyActivity:
+      type: object
+      required: [crewDay, capture, site, crew, itemCount, statusCounts, quantityByUnit, confirmedQuantityByUnit]
+      properties:
+        crewDay: { $ref: "#/components/schemas/CrewDay" }
+        capture:
+          type: object
+          required: [externalId, capturedAt, workDate]
+          properties:
+            externalId: { type: string }
+            capturedAt: { type: string, format: date-time }
+            workDate: { type: string, format: date }
+        site:
+          type: object
+          required: [id, code, name]
+          properties:
+            id: { type: integer }
+            code: { type: string }
+            name: { type: string }
+        crew:
+          type: object
+          required: [id, code, name]
+          properties:
+            id: { type: integer }
+            code: { type: string }
+            name: { type: string }
+        itemCount: { type: integer, minimum: 0 }
+        statusCounts: { $ref: "#/components/schemas/WorkflowStatusCounts" }
+        quantityByUnit: { $ref: "#/components/schemas/UnitQuantities" }
+        confirmedQuantityByUnit: { $ref: "#/components/schemas/UnitQuantities" }
+    UnitQuantities:
+      type: object
+      required: [each, metres]
+      properties:
+        each: { type: string }
+        metres: { type: string }
+    DerivedMetrics:
+      type: object
+      required: [crewProductivity, forecastFinish, rework, availability, assumptions, missingReasons]
+      properties:
+        crewProductivity: { type: ["number", "null"] }
+        forecastFinish: { type: ["string", "null"], format: date }
+        rework: { type: ["number", "null"] }
+        availability: { type: string, enum: [available, unavailable] }
+        assumptions: { type: array, items: { type: string } }
+        missingReasons: { type: array, items: { type: string } }
+    PortfolioProjectSummary:
+      allOf:
+        - $ref: "#/components/schemas/Project"
+        - type: object
+          required: [workTypeProgress, workflowStatusCounts, todayActivityCount, reviewBacklog, refusalCount, unvisitedSiteCount, attentionSiteCount, lag, evidenceCoverage, lastCaptureAt, lastConfirmedAt]
+          properties:
+            workTypeProgress: { type: array, items: { $ref: "#/components/schemas/WorkTypeProgress" } }
+            workflowStatusCounts: { $ref: "#/components/schemas/WorkflowStatusCounts" }
+            todayActivityCount: { type: integer, minimum: 0 }
+            reviewBacklog: { type: integer, minimum: 0 }
+            refusalCount: { type: integer, minimum: 0 }
+            unvisitedSiteCount: { type: integer, minimum: 0 }
+            attentionSiteCount: { type: integer, minimum: 0 }
+            lag: { $ref: "#/components/schemas/LagStats" }
+            evidenceCoverage: { $ref: "#/components/schemas/EvidenceCoverage" }
+            lastCaptureAt: { type: ["string", "null"], format: date-time }
+            lastConfirmedAt: { type: ["string", "null"], format: date-time }
+    ControlRoom:
+      type: object
+      required: [asOf, project, workTypeProgress, dailyActivity, reviewBacklog, refusalBacklog, sites, lag, evidenceCoverage, derivedMetrics]
+      properties:
+        asOf: { type: string, format: date-time }
+        project: { $ref: "#/components/schemas/Project" }
+        workTypeProgress: { type: array, items: { $ref: "#/components/schemas/WorkTypeProgress" } }
+        dailyActivity: { type: array, items: { $ref: "#/components/schemas/DailyActivity" } }
+        reviewBacklog: { type: array, items: { $ref: "#/components/schemas/ProductionItem" } }
+        refusalBacklog: { type: array, items: { $ref: "#/components/schemas/ProductionItem" } }
+        sites: { type: array, items: { $ref: "#/components/schemas/ControlRoomSite" } }
+        lag: { $ref: "#/components/schemas/LagStats" }
+        evidenceCoverage: { $ref: "#/components/schemas/EvidenceCoverage" }
+        derivedMetrics: { $ref: "#/components/schemas/DerivedMetrics" }
+    PortfolioSummary:
+      type: object
+      required: [asOf, projects]
+      properties:
+        asOf: { type: string, format: date-time }
+        projects: { type: array, items: { $ref: "#/components/schemas/PortfolioProjectSummary" } }
+    FactDrilldown:
+      type: object
+      required: [asOf, project, crewDay, capture, site, crew, workType, productionItem, productionAuditEvents, evidence]
+      properties:
+        asOf: { type: string, format: date-time }
+        project: { $ref: "#/components/schemas/Project" }
+        crewDay: { $ref: "#/components/schemas/CrewDay" }
+        capture:
+          type: object
+          required: [externalId, capturedAt, workDate]
+          properties:
+            externalId: { type: string }
+            capturedAt: { type: string, format: date-time }
+            workDate: { type: string, format: date }
+        site: { $ref: "#/components/schemas/Site" }
+        crew: { $ref: "#/components/schemas/Crew" }
+        workType: { $ref: "#/components/schemas/WorkType" }
+        productionItem: { $ref: "#/components/schemas/RawProductionItem" }
+        productionAuditEvents: { type: array, items: { $ref: "#/components/schemas/AuditEvent" } }
+        evidence: { type: array, items: { $ref: "#/components/schemas/EvidenceWithAudit" } }
+    EvidencePack:
+      type: object
+      required: [asOf, project, claims]
+      properties:
+        asOf: { type: string, format: date-time }
+        project: { $ref: "#/components/schemas/Project" }
+        claims: { type: array, items: { $ref: "#/components/schemas/EvidenceClaim" } }

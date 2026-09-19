@@ -5,12 +5,12 @@
  * Fiber operations project tracking API
  * OpenAPI spec version: 0.1.0
  */
-import type { EvidenceAuditEventDetails } from './evidenceAuditEventDetails';
+import type { EvidenceAuditDetails } from './evidenceAuditDetails';
 
 export interface EvidenceAuditEvent {
   id: number;
   eventType: string;
   actor: string;
-  details: EvidenceAuditEventDetails;
+  details: EvidenceAuditDetails;
   createdAt: Date;
 }

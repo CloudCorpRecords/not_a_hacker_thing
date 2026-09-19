@@ -22,14 +22,18 @@ import type {
 import type {
   CaptureInput,
   CaptureResult,
+  ControlRoom,
   EvidenceCompleteRequest,
   EvidenceConflict,
   EvidenceDetail,
   EvidenceItem,
+  EvidencePack,
   EvidenceUploadRequest,
   EvidenceUploadResponse,
+  FactDrilldown,
   FieldContext,
   HealthStatus,
+  PortfolioSummary,
   ProductionItem,
   ProgressSummary,
   Project,
@@ -1441,3 +1445,285 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       return useMutation(getReviewProductionItemMutationOptions(options));
     }
 
+export const getGetPortfolioSummaryUrl = () => {
+
+
+
+
+  return `/api/portfolio-summary`
+}
+
+export const getPortfolioSummary = async ( options?: Parameters<typeof customFetch>[1]): Promise<PortfolioSummary> => {
+
+  return customFetch<PortfolioSummary>(getGetPortfolioSummaryUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetPortfolioSummaryQueryKey = () => {
+    return [
+    `/api/portfolio-summary`
+    ] as const;
+    }
+
+
+export const getGetPortfolioSummaryQueryOptions = <TData = Awaited<ReturnType<typeof getPortfolioSummary>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getPortfolioSummary>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetPortfolioSummaryQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPortfolioSummary>>> = ({ signal }) => getPortfolioSummary({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getPortfolioSummary>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetPortfolioSummaryQueryResult = NonNullable<Awaited<ReturnType<typeof getPortfolioSummary>>>
+export type GetPortfolioSummaryQueryError = ErrorType<unknown>
+
+
+
+export function useGetPortfolioSummary<TData = Awaited<ReturnType<typeof getPortfolioSummary>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getPortfolioSummary>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetPortfolioSummaryQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getGetControlRoomUrl = (projectId: number,) => {
+
+
+
+
+  return `/api/projects/${projectId}/control-room`
+}
+
+export const getControlRoom = async (projectId: number, options?: Parameters<typeof customFetch>[1]): Promise<ControlRoom> => {
+
+  return customFetch<ControlRoom>(getGetControlRoomUrl(projectId),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetControlRoomQueryKey = (projectId: number,) => {
+    return [
+    `/api/projects/${projectId}/control-room`
+    ] as const;
+    }
+
+
+export const getGetControlRoomQueryOptions = <TData = Awaited<ReturnType<typeof getControlRoom>>, TError = ErrorType<unknown>>(projectId: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getControlRoom>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetControlRoomQueryKey(projectId);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getControlRoom>>> = ({ signal }) => getControlRoom(projectId, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: projectId !== null && projectId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getControlRoom>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetControlRoomQueryResult = NonNullable<Awaited<ReturnType<typeof getControlRoom>>>
+export type GetControlRoomQueryError = ErrorType<unknown>
+
+
+
+export function useGetControlRoom<TData = Awaited<ReturnType<typeof getControlRoom>>, TError = ErrorType<unknown>>(
+ projectId: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getControlRoom>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetControlRoomQueryOptions(projectId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getGetFactDrilldownUrl = (projectId: number,
+    productionItemId: number,) => {
+
+
+
+
+  return `/api/projects/${projectId}/facts/${productionItemId}`
+}
+
+export const getFactDrilldown = async (projectId: number,
+    productionItemId: number, options?: Parameters<typeof customFetch>[1]): Promise<FactDrilldown> => {
+
+  return customFetch<FactDrilldown>(getGetFactDrilldownUrl(projectId,productionItemId),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetFactDrilldownQueryKey = (projectId: number,
+    productionItemId: number,) => {
+    return [
+    `/api/projects/${projectId}/facts/${productionItemId}`
+    ] as const;
+    }
+
+
+export const getGetFactDrilldownQueryOptions = <TData = Awaited<ReturnType<typeof getFactDrilldown>>, TError = ErrorType<unknown>>(projectId: number,
+    productionItemId: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getFactDrilldown>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetFactDrilldownQueryKey(projectId,productionItemId);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFactDrilldown>>> = ({ signal }) => getFactDrilldown(projectId,productionItemId, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: projectId !== null && projectId !== undefined && productionItemId !== null && productionItemId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getFactDrilldown>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetFactDrilldownQueryResult = NonNullable<Awaited<ReturnType<typeof getFactDrilldown>>>
+export type GetFactDrilldownQueryError = ErrorType<unknown>
+
+
+
+export function useGetFactDrilldown<TData = Awaited<ReturnType<typeof getFactDrilldown>>, TError = ErrorType<unknown>>(
+ projectId: number,
+    productionItemId: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getFactDrilldown>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetFactDrilldownQueryOptions(projectId,productionItemId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getGetEvidenceManifestUrl = (projectId: number,) => {
+
+
+
+
+  return `/api/projects/${projectId}/evidence-pack`
+}
+
+export const getEvidenceManifest = async (projectId: number, options?: Parameters<typeof customFetch>[1]): Promise<EvidencePack> => {
+
+  return customFetch<EvidencePack>(getGetEvidenceManifestUrl(projectId),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetEvidenceManifestQueryKey = (projectId: number,) => {
+    return [
+    `/api/projects/${projectId}/evidence-pack`
+    ] as const;
+    }
+
+
+export const getGetEvidenceManifestQueryOptions = <TData = Awaited<ReturnType<typeof getEvidenceManifest>>, TError = ErrorType<unknown>>(projectId: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getEvidenceManifest>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetEvidenceManifestQueryKey(projectId);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getEvidenceManifest>>> = ({ signal }) => getEvidenceManifest(projectId, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: projectId !== null && projectId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getEvidenceManifest>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetEvidenceManifestQueryResult = NonNullable<Awaited<ReturnType<typeof getEvidenceManifest>>>
+export type GetEvidenceManifestQueryError = ErrorType<unknown>
+
+
+
+export function useGetEvidenceManifest<TData = Awaited<ReturnType<typeof getEvidenceManifest>>, TError = ErrorType<unknown>>(
+ projectId: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getEvidenceManifest>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetEvidenceManifestQueryOptions(projectId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}

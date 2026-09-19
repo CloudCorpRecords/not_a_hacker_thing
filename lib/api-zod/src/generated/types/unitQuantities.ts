@@ -6,4 +6,7 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export type AuditEventMetadata = { [key: string]: unknown };
+export interface UnitQuantities {
+  each: string;
+  metres: string;
+}

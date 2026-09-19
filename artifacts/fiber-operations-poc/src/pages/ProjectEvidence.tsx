@@ -2,8 +2,8 @@ import { useState, useMemo, useEffect, useRef } from "react";
 import { useParams, Link } from "wouter";
 import { format } from "date-fns";
 import { toast } from "sonner";
-import { 
-  ArrowLeft, FileText, Camera, Mic, CheckCircle2, XCircle, AlertTriangle, 
+import {
+  ArrowLeft, FileText, Camera, Mic, CheckCircle2, XCircle, AlertTriangle,
   Inbox
 } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -25,9 +25,9 @@ import {
   getGetEvidenceQueryKey,
 } from "@workspace/api-client-react";
 
-import type { 
-  ProductionItem, 
-  EvidenceItem, 
+import type {
+  ProductionItem,
+  EvidenceItem,
   EvidenceDetail,
   ReviewInputDecision,
   ReviewInputReasonCode,
@@ -45,15 +45,15 @@ type QueueItem = {
 export function ProjectEvidence() {
   const { id } = useParams<{ id: string }>();
   const projectId = parseInt(id || "0", 10);
-  
+
   const { data: project } = useGetProject(projectId, {
     query: { enabled: !!projectId, queryKey: getGetProjectQueryKey(projectId) }
   });
-  
+
   const { data: proposalsData } = useListProposals(projectId, { query: { enabled: !!projectId, queryKey: getListProposalsQueryKey(projectId) } });
   const { data: evidenceData } = useListEvidence(projectId, { query: { enabled: !!projectId, queryKey: getListEvidenceQueryKey(projectId) } });
   const { data: context } = useGetFieldContext(projectId, { query: { enabled: !!projectId, queryKey: getGetFieldContextQueryKey(projectId) } });
-  
+
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState(false);
   const initialized = useRef(false);
@@ -67,10 +67,10 @@ export function ProjectEvidence() {
 
   const items = useMemo(() => {
     const map = new Map<string, QueueItem>();
-    
+
     (proposalsData || []).forEach(p => {
       if (p.status === 'confirmed' || p.status === 'refused') return;
-      
+
       map.set(`prod-${p.id}`, {
         id: `prod-${p.id}`,
         proposal: p,
@@ -152,10 +152,10 @@ export function ProjectEvidence() {
               </div>
             ) : (
               items.map(item => (
-                <QueueItemCard 
-                  key={item.id} 
-                  item={item} 
-                  selected={selectedId === item.id} 
+                <QueueItemCard
+                  key={item.id}
+                  item={item}
+                  selected={selectedId === item.id}
                   onClick={() => setSelectedId(item.id)}
                   context={context}
                 />
@@ -170,12 +170,12 @@ export function ProjectEvidence() {
           selectedItem ? "translate-x-0" : "translate-x-full"
         )}>
           {selectedItem ? (
-            <AdjudicationViewer 
+            <AdjudicationViewer
               key={selectedItem.id}
-              queueItem={selectedItem} 
-              projectId={projectId} 
+              queueItem={selectedItem}
+              projectId={projectId}
               context={context}
-              onAdvance={advanceToNext} 
+              onAdvance={advanceToNext}
               onBack={() => setSelectedId(null)}
             />
           ) : (
@@ -217,14 +217,14 @@ function QueueItemCard({ item, selected, onClick, context }: { item: QueueItem, 
         <div className="font-serif text-lg leading-tight truncate pr-2">{title}</div>
         <div className={cn(
           "text-[10px] font-mono uppercase px-1.5 py-0.5 rounded shrink-0",
-          statusStr === 'proposed' || statusStr === 'needs review' 
-            ? "bg-secondary/20 text-secondary" 
+          statusStr === 'proposed' || statusStr === 'needs review'
+            ? "bg-secondary/20 text-secondary"
             : "bg-muted text-muted-foreground"
         )}>
           {statusStr}
         </div>
       </div>
-      
+
       <div className="flex items-center justify-between w-full">
         <div className="text-xs text-muted-foreground font-mono truncate mr-2">{subtitle}</div>
         <div className="flex gap-1.5 text-muted-foreground shrink-0">
@@ -233,7 +233,7 @@ function QueueItemCard({ item, selected, onClick, context }: { item: QueueItem, 
           {!hasPhoto && !hasAudio && <FileText size={14} />}
         </div>
       </div>
-      
+
       <div className="text-[10px] font-mono text-muted-foreground/60">
         {format(new Date(item.date), 'MMM d, h:mm a')}
       </div>
@@ -265,8 +265,8 @@ function AdjudicationViewer({ queueItem, projectId, context, onAdvance, onBack }
          {queueItem.evidenceItems.length > 1 && (
             <div className="flex gap-2 overflow-x-auto pb-4 border-b border-border/60 mb-6 shrink-0">
               {queueItem.evidenceItems.map((ev, idx) => (
-                 <button 
-                   key={ev.id} 
+                 <button
+                   key={ev.id}
                    onClick={() => setSelectedEvId(ev.id)}
                    className={cn("px-4 py-2 text-xs font-mono rounded-md border transition-all whitespace-nowrap", selectedEvId === ev.id ? "bg-primary text-primary-foreground border-primary shadow-sm" : "bg-card text-foreground border-border/60 hover:bg-muted/50")}
                  >
@@ -374,7 +374,7 @@ function EvidenceMetadata({ evidence }: { evidence: EvidenceDetail }) {
             <div className="font-mono text-foreground text-lg">{evidence.identityConfidence || 'N/A'}</div>
           </div>
         </div>
-        
+
         {evidence.transcript && (
           <div>
             <div className="text-[10px] font-mono uppercase text-muted-foreground mb-1">Transcript</div>
@@ -383,7 +383,7 @@ function EvidenceMetadata({ evidence }: { evidence: EvidenceDetail }) {
             </div>
           </div>
         )}
-        
+
         {evidence.explanation && (
           <div>
             <div className="text-[10px] font-mono uppercase text-muted-foreground mb-1">AI Explanation</div>
@@ -490,6 +490,7 @@ function ProposalReview({ projectId, proposal, context, evidenceItems, onAdvance
   const [explanation, setExplanation] = useState("");
   const [quantity, setQuantity] = useState<number | "">("");
   const [overrideChecks, setOverrideChecks] = useState(false);
+  const [overrideReason, setOverrideReason] = useState("");
 
   const hasFailedBlockingChecks = useMemo(() => {
     return evidenceItems.some(e => e.checks?.some(c => c.severity === 'blocking' && !c.passed));
@@ -510,27 +511,37 @@ function ProposalReview({ projectId, proposal, context, evidenceItems, onAdvance
     if (!decision) return;
 
     const input: ReviewInput = { decision, actor: actor.trim() };
-    
+
     if (decision === 'correct') {
       const q = Number(quantity);
       if (!quantity || isNaN(q) || q <= 0) { toast.error("Valid positive quantity required for correction"); return; }
       if (q === Number(proposal.quantity)) { toast.error("Quantity must be changed for a correction"); return; }
       if (!reasonCode) { toast.error("Reason code required for correction"); return; }
       if (!explanation.trim()) { toast.error("Explanation required for correction"); return; }
-      
+
       input.quantity = q;
       input.reasonCode = reasonCode as ReviewInputReasonCode;
       input.reason = explanation.trim();
     } else if (decision === 'refuse') {
       if (!reasonCode) { toast.error("Reason code required for refusal"); return; }
       if (!explanation.trim()) { toast.error("Explanation required for refusal"); return; }
-      
+
       input.reasonCode = reasonCode as ReviewInputReasonCode;
       input.reason = explanation.trim();
     } else if (decision === 'confirm') {
-      if (hasFailedBlockingChecks && !overrideChecks) {
-         toast.error("Must acknowledge blocking checks to confirm");
-         return;
+      if (hasFailedBlockingChecks) {
+        if (!overrideChecks) {
+           toast.error("Must acknowledge blocking checks to confirm");
+           return;
+        }
+        if (!overrideReason.trim()) {
+           toast.error("Override reason is required when acknowledging blocking checks");
+           return;
+        }
+        input.blockingCheckOverride = {
+          acknowledged: true,
+          reason: overrideReason.trim()
+        };
       }
     }
 
@@ -539,11 +550,14 @@ function ProposalReview({ projectId, proposal, context, evidenceItems, onAdvance
         toast.success(`Proposal ${decision}ed successfully`);
         queryClient.invalidateQueries({ queryKey: getListProposalsQueryKey(projectId) });
         queryClient.invalidateQueries({ queryKey: getListEvidenceQueryKey(projectId) });
+        queryClient.invalidateQueries({ queryKey: ["/api/portfolio"] }); // Or whatever the portfolio key is, we'll use a broader match or exact. Actually, queryClient.invalidateQueries({ queryKey: ['/api/projects'] }) handles all control rooms too.
+        queryClient.invalidateQueries(); // Let's just invalidate everything to be safe since they are tightly coupled and reviews happen rarely.
         onAdvance();
         setDecision(null);
         setReasonCode("");
         setExplanation("");
         setOverrideChecks(false);
+        setOverrideReason("");
       },
       onError: () => {
         toast.error("Failed to submit review");
@@ -574,7 +588,7 @@ function ProposalReview({ projectId, proposal, context, evidenceItems, onAdvance
              <span className="text-muted-foreground">{format(new Date(proposal.workDate), 'MM/dd/yyyy')}</span>
            </div>
         </div>
-        
+
         <div className="grid grid-cols-2 gap-y-4 text-sm pt-2">
           <div>
              <div className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider mb-0.5">Site</div>
@@ -593,13 +607,13 @@ function ProposalReview({ projectId, proposal, context, evidenceItems, onAdvance
 
       <div className="bg-card border border-border/60 p-5 rounded-lg shadow-sm space-y-5 sticky top-6">
         <div className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider border-b border-border/60 pb-2">Adjudication</div>
-        
+
         <div className="space-y-4">
           <div>
             <label className="block text-[10px] font-mono text-muted-foreground uppercase tracking-wider mb-1">Reviewer Name</label>
-            <input 
-              type="text" 
-              value={actor} 
+            <input
+              type="text"
+              value={actor}
               onChange={e => setActor(e.target.value)}
               className="w-full bg-background border border-border/60 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary transition-shadow"
               placeholder="e.g. Jane Doe"
@@ -609,19 +623,19 @@ function ProposalReview({ projectId, proposal, context, evidenceItems, onAdvance
           <div>
             <label className="block text-[10px] font-mono text-muted-foreground uppercase tracking-wider mb-1">Decision</label>
             <div className="grid grid-cols-3 gap-2">
-              <button 
+              <button
                 onClick={() => setDecision('confirm')}
                 className={cn("px-2 py-2 text-xs font-medium rounded border transition-all shadow-sm", decision === 'confirm' ? "bg-primary text-primary-foreground border-primary" : "bg-background text-foreground border-border/60 hover:bg-muted/50 hover:border-border")}
               >
                 Confirm
               </button>
-              <button 
+              <button
                 onClick={() => setDecision('correct')}
                 className={cn("px-2 py-2 text-xs font-medium rounded border transition-all shadow-sm", decision === 'correct' ? "bg-secondary text-secondary-foreground border-secondary" : "bg-background text-foreground border-border/60 hover:bg-muted/50 hover:border-border")}
               >
                 Correct
               </button>
-              <button 
+              <button
                 onClick={() => setDecision('refuse')}
                 className={cn("px-2 py-2 text-xs font-medium rounded border transition-all shadow-sm", decision === 'refuse' ? "bg-destructive text-destructive-foreground border-destructive" : "bg-background text-foreground border-border/60 hover:bg-muted/50 hover:border-border")}
               >
@@ -635,10 +649,10 @@ function ProposalReview({ projectId, proposal, context, evidenceItems, onAdvance
               <div>
                 <label className="block text-[10px] font-mono text-muted-foreground uppercase tracking-wider mb-1">Corrected Quantity</label>
                 <div className="relative">
-                  <input 
-                    type="number" 
+                  <input
+                    type="number"
                     min="0.01" step="any"
-                    value={quantity} 
+                    value={quantity}
                     onChange={e => setQuantity(e.target.value ? Number(e.target.value) : "")}
                     className="w-full bg-background border border-border/60 rounded-md pl-3 pr-12 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-secondary transition-shadow"
                   />
@@ -647,8 +661,8 @@ function ProposalReview({ projectId, proposal, context, evidenceItems, onAdvance
               </div>
               <div>
                 <label className="block text-[10px] font-mono text-muted-foreground uppercase tracking-wider mb-1">Reason Code</label>
-                <select 
-                  value={reasonCode} 
+                <select
+                  value={reasonCode}
                   onChange={e => setReasonCode(e.target.value as ReviewInputReasonCode)}
                   className="w-full bg-background border border-border/60 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-secondary transition-shadow appearance-none"
                 >
@@ -660,8 +674,8 @@ function ProposalReview({ projectId, proposal, context, evidenceItems, onAdvance
               </div>
               <div>
                 <label className="block text-[10px] font-mono text-muted-foreground uppercase tracking-wider mb-1">Explanation</label>
-                <textarea 
-                  value={explanation} 
+                <textarea
+                  value={explanation}
                   onChange={e => setExplanation(e.target.value)}
                   className="w-full bg-background border border-border/60 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-secondary transition-shadow min-h-[100px] resize-none"
                   placeholder="Explain why this quantity was corrected..."
@@ -674,8 +688,8 @@ function ProposalReview({ projectId, proposal, context, evidenceItems, onAdvance
             <div className="space-y-4 pt-2 animate-in fade-in slide-in-from-top-2 duration-200">
               <div>
                 <label className="block text-[10px] font-mono text-muted-foreground uppercase tracking-wider mb-1">Reason Code</label>
-                <select 
-                  value={reasonCode} 
+                <select
+                  value={reasonCode}
                   onChange={e => setReasonCode(e.target.value as ReviewInputReasonCode)}
                   className="w-full bg-background border border-border/60 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-destructive transition-shadow appearance-none"
                 >
@@ -687,8 +701,8 @@ function ProposalReview({ projectId, proposal, context, evidenceItems, onAdvance
               </div>
               <div>
                 <label className="block text-[10px] font-mono text-muted-foreground uppercase tracking-wider mb-1">Explanation</label>
-                <textarea 
-                  value={explanation} 
+                <textarea
+                  value={explanation}
                   onChange={e => setExplanation(e.target.value)}
                   className="w-full bg-background border border-border/60 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-destructive transition-shadow min-h-[100px] resize-none"
                   placeholder="Explain why this proposal is being refused..."
@@ -698,11 +712,11 @@ function ProposalReview({ projectId, proposal, context, evidenceItems, onAdvance
           )}
 
           {decision === 'confirm' && hasFailedBlockingChecks && (
-            <div className="pt-2 animate-in fade-in zoom-in-95 duration-200">
+            <div className="pt-2 animate-in fade-in zoom-in-95 duration-200 space-y-3">
               <label className="flex items-start gap-3 p-3 bg-destructive/10 border border-destructive/30 rounded-md cursor-pointer hover:bg-destructive/15 transition-colors">
-                <input 
-                  type="checkbox" 
-                  checked={overrideChecks} 
+                <input
+                  type="checkbox"
+                  checked={overrideChecks}
                   onChange={e => setOverrideChecks(e.target.checked)}
                   className="mt-1 shrink-0 accent-destructive"
                 />
@@ -710,13 +724,25 @@ function ProposalReview({ projectId, proposal, context, evidenceItems, onAdvance
                   <strong>Blocking checks failed.</strong> I acknowledge the failing deterministic checks and wish to confirm this proposal anyway.
                 </span>
               </label>
+
+              {overrideChecks && (
+                <div className="animate-in fade-in duration-200">
+                  <label className="block text-[10px] font-mono text-muted-foreground uppercase tracking-wider mb-1">Override Reason</label>
+                  <textarea
+                    value={overrideReason}
+                    onChange={e => setOverrideReason(e.target.value)}
+                    className="w-full h-20 bg-background border border-border/60 rounded-md p-3 text-sm focus:outline-none focus:ring-1 focus:ring-destructive transition-shadow resize-none"
+                    placeholder="Why is this fact valid despite the failed checks?"
+                  />
+                </div>
+              )}
             </div>
           )}
 
           {decision && (
-            <button 
+            <button
               onClick={handleSubmit}
-              disabled={reviewMutation.isPending || (decision === 'confirm' && hasFailedBlockingChecks && !overrideChecks)}
+              disabled={reviewMutation.isPending || (decision === 'confirm' && hasFailedBlockingChecks && (!overrideChecks || !overrideReason.trim()))}
               className="w-full mt-6 bg-foreground text-background hover:bg-foreground/90 py-3 rounded-md font-medium text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm active:scale-[0.98]"
             >
               {reviewMutation.isPending ? "Submitting..." : "Submit Decision"}

@@ -1,10 +1,11 @@
-# [Project name]
+# FiberOps Confirmed-Fact Control Room
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+FiberOps turns field production captures and evidence into named-reviewer confirmed facts, then reports actual production against sold plan without presenting provisional data as final.
 
 ## Run & Operate
 
-- `pnpm --filter @workspace/api-server run dev` — run the API server (port 5000)
+- `pnpm --filter @workspace/api-server run dev` — run the API server (binds to `PORT`; current dev workflow uses 8080)
+- `pnpm --filter @workspace/fiber-operations-poc run dev` — run the web app
 - `pnpm run typecheck` — full typecheck across all packages
 - `pnpm run build` — typecheck + build all packages
 - `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
@@ -22,23 +23,43 @@ _Replace the heading above with the project's name, and this line with one sente
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `artifacts/fiber-operations-poc/` — React field capture and office control room
+- `artifacts/api-server/` — Express API, evidence processing, confirmed-fact read models
+- `lib/api-spec/openapi.yaml` — source-of-truth API contract
+- `lib/db/src/schema/` — Drizzle/PostgreSQL schema
+- `lib/db/migrations/` — append-only and other SQL protections
+- `lib/api-client-react/` and `lib/api-zod/` — generated clients and validators
+- `README.md` — setup, architecture, and product rules
+- `ROADMAP.md` — completed milestones and future work
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- Reports aggregate only `confirmed` production items; proposals and refusals remain visible but never count as actuals.
+- Evidence bytes live in Replit App Storage; PostgreSQL holds provenance, hashes, retention, extraction, checks, and audits.
+- Evidence interpretation is constrained to known work types from the same crew-day and cannot autonomously create final facts.
+- Production and evidence review history is append-only.
+- Different production units are never summed into a single portfolio quantity.
+- Broad company authentication is intentionally outside the current POC; intake is capture-bound and office decisions require a named reviewer.
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+- Offline field quantity capture with photo and voice evidence
+- Deterministic and AI-assisted evidence checks routed to human review
+- Confirm/correct/refuse adjudication with reason codes and override auditing
+- Confirmed-fact portfolio and project reporting with provenance drill-down
+- Evidence-pack export for confirmed and refused claims
 
 ## User preferences
 
-_Populate as you build — explicit user instructions worth remembering across sessions._
+- Preserve the warm mineral, utility green, clay, and brass visual identity.
+- Prefer one defensible actual-against-sold report over unsupported metric breadth.
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+- Change OpenAPI first, then run codegen; never hand-edit generated API files.
+- A successful API mutation must invalidate portfolio, control-room, fact, and evidence queries that consume the changed decision.
+- Keep blocking-check overrides server-enforced and append them to both production and linked evidence audit histories.
+- Do not report productivity, rework, or forecast metrics unless input completeness and assumptions are visible.
 
 ## Pointers
 

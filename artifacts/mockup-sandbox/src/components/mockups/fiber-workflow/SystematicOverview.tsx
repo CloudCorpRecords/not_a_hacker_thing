@@ -1,10 +1,8 @@
 import {
-  ArrowRight,
   CalendarDays,
   Check,
   ClipboardList,
   FileCheck2,
-  FileImage,
   HardHat,
   Image as ImageIcon,
   LocateFixed,
@@ -109,27 +107,27 @@ function StepCard({
   const Icon = step.icon;
   return (
     <div className="relative flex min-w-0 flex-1 flex-col">
-      <div className="mb-3 flex items-center gap-2">
+      <div className="mb-2 flex items-center gap-2">
         <span
-          className="font-mono text-[11px] font-bold tracking-[0.18em]"
+          className="font-mono text-[10px] font-bold tracking-[0.18em]"
           style={{ color: step.ink }}
         >
           {step.number}
         </span>
         {index < steps.length - 1 && (
-          <span className="h-px flex-1 bg-[#D9D5C9]" aria-hidden="true" />
+          <span className="h-px flex-1 bg-[#C9C9BD]" aria-hidden="true" />
         )}
       </div>
       <div
-        className="flex min-h-[142px] flex-col justify-between rounded-[3px] border border-[#D6D1C5] p-3.5 shadow-[0_2px_0_rgba(35,48,42,0.06)]"
-        style={{ backgroundColor: "#F9F7F0" }}
+        className="flex min-h-[154px] flex-col justify-between rounded-[5px] border border-[#D4D0C3] p-3.5 shadow-[0_3px_0_rgba(35,48,42,0.07)]"
+        style={{ backgroundColor: "#FBF9F2" }}
       >
         <div className="flex items-start justify-between gap-2">
           <div
-            className="flex h-8 w-8 items-center justify-center rounded-[2px]"
+            className="flex h-9 w-9 items-center justify-center rounded-[4px]"
             style={{ backgroundColor: step.tone, color: step.ink }}
           >
-            <Icon size={17} strokeWidth={1.8} />
+            <Icon size={18} strokeWidth={1.8} />
           </div>
           <span
             className="font-mono text-[8px] font-bold tracking-[0.16em]"
@@ -139,10 +137,10 @@ function StepCard({
           </span>
         </div>
         <div>
-          <h3 className="mt-3 text-[14px] font-bold leading-[1.05] tracking-[-0.02em] text-[#26362F]">
+          <h3 className="mt-3 text-[15px] font-bold leading-[1.05] tracking-[-0.03em] text-[#26362F]">
             {step.title}
           </h3>
-          <p className="mt-1.5 text-[10px] leading-[1.2] text-[#6D756D]">
+          <p className="mt-1.5 text-[10px] leading-[1.25] text-[#6D756D]">
             {step.detail}
           </p>
         </div>
@@ -163,7 +161,7 @@ export function SystematicOverview() {
       <div className="pointer-events-none absolute -right-24 -top-28 h-[360px] w-[360px] rounded-full border-[42px] border-[#D9DED2] opacity-60" />
       <div className="pointer-events-none absolute bottom-[-150px] left-[-80px] h-[300px] w-[300px] rounded-full border-[34px] border-[#D9DED2] opacity-40" />
 
-      <header className="relative z-10 flex items-start justify-between px-[5.5%] pb-5 pt-[4.5%]">
+      <header className="relative z-10 flex items-start justify-between px-[5.5%] pb-4 pt-[4.2%]">
         <div className="max-w-[920px]">
           <div className="mb-3 flex items-center gap-2">
             <span className="h-2 w-2 rounded-full bg-[#C47E37]" />
@@ -171,24 +169,24 @@ export function SystematicOverview() {
               Operating standard / field to office
             </span>
           </div>
-          <h1 className="text-[clamp(30px,3.8vw,58px)] font-black leading-[0.94] tracking-[-0.055em] text-[#26362F]">
-            One route. Eight steps.
+          <h1 className="text-[clamp(30px,3.55vw,56px)] font-black leading-[0.94] tracking-[-0.06em] text-[#26362F]">
+            From plan
             <br />
-            <span className="text-[#A04D36]">One shared record.</span>
+            <span className="text-[#A04D36]">to sign-off.</span>
           </h1>
-          <p className="mt-4 max-w-[700px] text-[clamp(12px,1.15vw,17px)] leading-[1.35] text-[#58655C]">
-            Every fiber project follows the same handoff rhythm — so crews know
-            what comes next and the office always knows what is true.
+          <p className="mt-3 max-w-[730px] text-[clamp(12px,1.05vw,16px)] leading-[1.35] text-[#58655C]">
+            Eight repeatable moves. One record at every handoff. The field keeps moving;
+            the office stays in the loop.
           </p>
         </div>
         <div className="mt-1 hidden w-[190px] shrink-0 border-l-2 border-[#C47E37] pl-4 sm:block">
           <div className="font-mono text-[9px] font-bold uppercase tracking-[0.19em] text-[#8B6844]">
-            Project control
+            THE OPERATING MODEL
           </div>
           <div className="mt-2 text-[13px] font-bold leading-[1.25] text-[#26362F]">
-            Repeatable work.
+            Same route.
             <br />
-            Visible progress.
+            Same proof.
           </div>
         </div>
       </header>
@@ -203,7 +201,7 @@ export function SystematicOverview() {
             START → COMPLETE
           </span>
         </div>
-        <div className="mb-5 flex gap-1">
+        <div className="mb-4 flex gap-1">
           {phases.map((phase) => (
             <div
               key={phase.name}
@@ -227,28 +225,31 @@ export function SystematicOverview() {
         </div>
       </section>
 
-      <section className="relative z-10 mx-[5.5%] mb-[4.5%] mt-6 grid grid-cols-[1.15fr_1fr] gap-5 rounded-[4px] border border-[#C9C9BD] bg-[#DCE0D5] p-4 sm:p-5">
-        <div className="flex items-center gap-4 border-r border-[#BFC7BA] pr-5">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[3px] bg-[#1B5149] text-[#F3E8C9]">
-            <ClipboardList size={20} strokeWidth={1.8} />
+      <section className="relative z-10 mx-[5.5%] mb-[4.5%] mt-5 rounded-[5px] border border-[#B8C1B8] bg-[#DCE2D9] px-4 py-3.5 sm:px-5 sm:py-4">
+        <div className="mb-3 flex items-center gap-3">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[4px] bg-[#1B5149] text-[#F3E8C9]">
+            <ClipboardList size={17} strokeWidth={1.8} />
           </div>
-          <div>
+          <div className="flex-1">
             <div className="font-mono text-[9px] font-bold tracking-[0.17em] text-[#1B5149]">
-              THE SAME PROOF AT EVERY HANDOFF
+              THE HANDOFF STANDARD
             </div>
-            <p className="mt-1 text-[11px] leading-[1.25] text-[#526057]">
-              No “done” without a record the next person can trust.
+            <p className="mt-0.5 text-[11px] leading-[1.25] text-[#526057]">
+              Nothing is “done” until the next person can trust the record.
             </p>
           </div>
+          <div className="hidden font-mono text-[8px] font-bold tracking-[0.14em] text-[#7A847A] sm:block">
+            EVERY STEP / EVERY TIME
+          </div>
         </div>
-        <div className="grid grid-cols-4 items-center gap-2">
+        <div className="grid grid-cols-4 gap-2">
           {[
             { icon: HardHat, label: "OWNER" },
             { icon: FileCheck2, label: "STATUS" },
             { icon: CalendarDays, label: "DATE" },
             { icon: ImageIcon, label: "EVIDENCE / PHOTO" },
           ].map(({ icon: Icon, label }) => (
-            <div key={label} className="flex items-center gap-1.5">
+            <div key={label} className="flex items-center gap-2 rounded-[3px] border border-[#C4CEC3] bg-[#E7EBE3] px-2.5 py-2">
               <Icon size={15} className="shrink-0 text-[#A04D36]" strokeWidth={1.8} />
               <span className="font-mono text-[8px] font-bold leading-[1.1] tracking-[0.08em] text-[#59655C]">
                 {label}

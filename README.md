@@ -1,3 +1,24 @@
+<!-- Walk the Line — The Executable World, San Francisco, 19 September 2026 -->
+
+# Walk the Line — FiberOps
+
+**The work happens outside. The systems are inside. Nothing connects them.**
+
+Built at [The Executable World](https://luma.com/exruwpkp), San Francisco, 19 September 2026 —
+**Track 2, Production-ready AI Agent.**
+
+| | |
+|---|---|
+| **Live app** | https://walkthelin3.replit.app/ |
+| **Write-up** | https://claude.ai/artifact/7zpNEbGd88rbQGuLsEFFBJ |
+| **Capture pipeline** | https://github.com/jymiller/milbird-walk-the-line |
+
+A fibre contractor runs eight build stages across hundreds of sites. Seven of the eight reach no
+system at all — they happen on paper, and the office finds out weeks later. On the day, we captured
+one of them with a phone, on Pine Street, two blocks from the venue.
+
+---
+
 # FiberOps Confirmed-Fact Control Room
 
 FiberOps is a proof of concept for turning field production captures into office-ready, defensible facts. Crews submit quantities with photo or voice evidence; office reviewers confirm, correct, or refuse proposals; the control room reports actual production against sold plan using **confirmed facts only**.
@@ -29,6 +50,63 @@ FiberOps keeps provisional and final data separate:
 | `confirmed` | Accepted by a named reviewer | **Yes** |
 
 AI interpretation never becomes a final production fact by itself.
+
+## Field capture from video — Stage 2, Utility Locates
+
+Alongside photo and voice capture, the hackathon build added a **video** capture path for the one
+stage that has to be read off the ground: utility locates, the spray-paint marks that say what is
+buried where.
+
+A 405-second walk, filmed on an iPhone, sampled one frame per second and thresholded in HSV against
+the **APWA Uniform Color Code**:
+
+```
+405s walked · 419 frames sampled · 53 locate marks found
+
+communications / fibre   25   ████████████████████
+gas, oil, steam          14   ███████████
+potable water             6   █████
+sewer, drain              4   ███
+electric                  4   ███
+```
+
+Orange dominating is what a fibre job should look like. It was not tuned for — it falls out of the
+colour code, which is why it is evidence rather than decoration.
+
+Detections enter the same write path as every other capture: they land as `proposed` against
+Stage 2, never `confirmed`, and a named reviewer decides. The per-crew-day plausibility ceiling
+applies to them exactly as it does to a typed quantity.
+
+### Provenance per field
+
+Each detection states which of its own values are evidence and which are inference.
+
+| Field | Status | How |
+|---|---|---|
+| Timestamp | **measured** | frame index ÷ frame rate |
+| Colour & utility class | **measured** | HSV threshold against the APWA colour code |
+| Region count & area | **measured** | contour detection in the ground plane |
+| Coordinates | **derived** | interpolated along the street axis from one ±7 m GPS anchor in the clip metadata — **not surveyed** |
+| Confirmation | **absent** | no human has confirmed these; the record says so |
+
+The iPhone writes a single ISO6709 point per clip, not a track — the six timed-metadata streams
+carry Cinematic-mode focus data, not GPS. Coordinates are therefore labelled derived rather than
+claiming a precision we do not have.
+
+### The second opinion that did not run
+
+The design calls for **two independent detectors**: colour detection locally, and a
+[Memories.ai](https://docs.memories.ai) Video Datalake integration finding the same marks by
+semantic description instead. Where two independent methods agree, the mark is evidence. Where they
+disagree, a human looks — that disagreement *is* the review queue.
+
+The integration is built and tested against the live API. It did not run on the day: the account
+balance was `$0` and every billed call returns `quota_exceeded`. The 53 marks above are therefore
+**uncorroborated** — one detector is an assertion, two that agree is evidence.
+
+Detection, the GeoJSON API, the agreement analysis and the bridge into this repo's capture endpoint
+live in [jymiller/milbird-walk-the-line](https://github.com/jymiller/milbird-walk-the-line).
+
 
 ## Architecture
 

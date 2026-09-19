@@ -152,6 +152,99 @@ paths:
           description: External identifier conflicts with another capture
         "422":
           description: Capture failed deterministic validation
+  /projects/{projectId}/evidence/uploads/request-url:
+    post:
+      operationId: requestEvidenceUploadUrl
+      tags: [operations]
+      parameters:
+        - $ref: "#/components/parameters/ProjectId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EvidenceUploadRequest"
+      responses:
+        "200":
+          description: Signed upload URL and durable evidence record
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EvidenceUploadResponse"
+        "409":
+          description: Evidence external identifier or content hash already conflicts
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EvidenceConflict"
+  /projects/{projectId}/evidence/{evidenceId}/complete:
+    post:
+      operationId: completeEvidenceUpload
+      tags: [operations]
+      parameters:
+        - $ref: "#/components/parameters/ProjectId"
+        - $ref: "#/components/parameters/EvidenceId"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EvidenceCompleteRequest"
+      responses:
+        "200":
+          description: Evidence verified and routed for review
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EvidenceItem"
+  /projects/{projectId}/evidence:
+    get:
+      operationId: listEvidence
+      tags: [operations]
+      parameters:
+        - $ref: "#/components/parameters/ProjectId"
+      responses:
+        "200":
+          description: Evidence and interpretation outcomes for office review
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/EvidenceItem"
+  /projects/{projectId}/evidence/{evidenceId}:
+    get:
+      operationId: getEvidence
+      tags: [operations]
+      parameters:
+        - $ref: "#/components/parameters/ProjectId"
+        - $ref: "#/components/parameters/EvidenceId"
+      responses:
+        "200":
+          description: Evidence detail with audit history
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EvidenceDetail"
+        "404":
+          description: Evidence not found
+  /projects/{projectId}/evidence/{evidenceId}/content:
+    get:
+      operationId: getEvidenceContent
+      tags: [operations]
+      parameters:
+        - $ref: "#/components/parameters/ProjectId"
+        - $ref: "#/components/parameters/EvidenceId"
+      responses:
+        "200":
+          description: Evidence media bytes
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        "404":
+          description: Evidence not found
   /projects/{projectId}/proposals:
     get:
       operationId: listProposals
@@ -241,6 +334,12 @@ components:
         type: integer
     ProductionItemId:
       name: productionItemId
+      in: path
+      required: true
+      schema:
+        type: integer
+    EvidenceId:
+      name: evidenceId
       in: path
       required: true
       schema:
@@ -456,6 +555,109 @@ components:
         items:
           type: array
           items: { $ref: "#/components/schemas/ProductionItem" }
+    EvidenceKind:
+      type: string
+      enum: [photo, audio]
+    EvidenceStatus:
+      type: string
+      enum: [uploaded, processing, ready, manual_review, failed]
+    EvidenceCheck:
+      type: object
+      required: [code, passed, severity, message]
+      properties:
+        code: { type: string }
+        passed: { type: boolean }
+        severity: { type: string, enum: [info, warning, blocking] }
+        message: { type: string }
+    EvidenceAuditEvent:
+      type: object
+      required: [id, eventType, actor, details, createdAt]
+      properties:
+        id: { type: integer }
+        eventType: { type: string }
+        actor: { type: string }
+        details: { type: object, additionalProperties: true }
+        createdAt: { type: string, format: date-time }
+    EvidenceItem:
+      type: object
+      required: [id, projectId, crewDayId, siteId, crewId, externalId, kind, objectPath, contentType, byteSize, sha256, verifiedAt, source, capturedAt, uploaderContext, retentionPolicy, status, checks, createdAt, updatedAt]
+      properties:
+        id: { type: integer }
+        projectId: { type: integer }
+        crewDayId: { type: integer }
+        productionItemId: { type: ["integer", "null"] }
+        siteId: { type: integer }
+        crewId: { type: integer }
+        externalId: { type: string }
+        kind: { $ref: "#/components/schemas/EvidenceKind" }
+        objectPath: { type: string }
+        contentType: { type: string }
+        byteSize: { type: integer }
+        sha256: { type: string }
+        verifiedAt: { type: ["string", "null"], format: date-time }
+        source: { type: string }
+        originalName: { type: ["string", "null"] }
+        capturedAt: { type: string, format: date-time }
+        latitude: { type: ["string", "null"] }
+        longitude: { type: ["string", "null"] }
+        uploaderContext: { type: string }
+        retentionPolicy: { type: string }
+        retentionUntil: { type: ["string", "null"] }
+        status: { $ref: "#/components/schemas/EvidenceStatus" }
+        candidateQuantity: { type: ["string", "null"] }
+        candidateWorkTypeId: { type: ["integer", "null"] }
+        candidateUnit: { type: ["string", "null"] }
+        confidence: { type: ["string", "null"] }
+        identityConfidence: { type: ["string", "null"] }
+        explanation: { type: ["string", "null"] }
+        transcript: { type: ["string", "null"] }
+        checks:
+          type: array
+          items: { $ref: "#/components/schemas/EvidenceCheck" }
+        errorMessage: { type: ["string", "null"] }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+    EvidenceDetail:
+      allOf:
+        - $ref: "#/components/schemas/EvidenceItem"
+        - type: object
+          required: [auditEvents]
+          properties:
+            auditEvents:
+              type: array
+              items: { $ref: "#/components/schemas/EvidenceAuditEvent" }
+    EvidenceUploadRequest:
+      type: object
+      required: [externalId, captureExternalId, kind, contentType, byteSize, sha256, capturedAt]
+      properties:
+        externalId: { type: string, minLength: 1, maxLength: 160 }
+        captureExternalId: { type: string, minLength: 1, maxLength: 120 }
+        kind: { $ref: "#/components/schemas/EvidenceKind" }
+        contentType: { type: string, minLength: 1, maxLength: 120 }
+        byteSize: { type: integer, minimum: 1, maximum: 52428800 }
+        sha256: { type: string, pattern: "^[a-fA-F0-9]{64}$" }
+        capturedAt: { type: string, format: date-time }
+        originalName: { type: string, maxLength: 255 }
+    EvidenceUploadResponse:
+      type: object
+      required: [evidenceId, externalId, uploadRequired, uploadURL, objectPath, status]
+      properties:
+        evidenceId: { type: integer }
+        externalId: { type: string }
+        uploadRequired: { type: boolean }
+        uploadURL: { type: ["string", "null"], format: uri }
+        objectPath: { type: string }
+        status: { $ref: "#/components/schemas/EvidenceStatus" }
+    EvidenceCompleteRequest:
+      type: object
+      properties:
+        actor: { type: string, maxLength: 120 }
+    EvidenceConflict:
+      type: object
+      required: [error, existingEvidenceId]
+      properties:
+        error: { type: string }
+        existingEvidenceId: { type: integer }
     ReviewInput:
       type: object
       required: [decision, actor]
@@ -465,6 +667,9 @@ components:
           enum: [confirm, correct, refuse]
         actor: { type: string, minLength: 1, maxLength: 120 }
         reason: { type: string, maxLength: 1000 }
+        reasonCode:
+          type: string
+          enum: [duplicate, wrong_site, wrong_crew, wrong_work_type, implausible_quantity, unreadable_evidence, duplicate_capture, other]
         quantity: { type: number, exclusiveMinimum: 0, multipleOf: 0.01 }
     ProgressRow:
       type: object

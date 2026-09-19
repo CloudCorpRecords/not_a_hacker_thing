@@ -74,6 +74,9 @@ export function ProjectWorkspace() {
           </div>
           
           <div className="flex items-center gap-6">
+            <Link href={`/projects/${project.id}/evidence`} className="bg-secondary/10 text-secondary border border-secondary/20 hover:bg-secondary hover:text-secondary-foreground px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm active:scale-95 whitespace-nowrap">
+              Evidence Review
+            </Link>
             <Link href={`/field/${project.id}`} className="bg-primary/10 text-primary border border-primary/20 hover:bg-primary hover:text-primary-foreground px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm active:scale-95 whitespace-nowrap" data-testid="link-field-capture">
               Field Capture
             </Link>

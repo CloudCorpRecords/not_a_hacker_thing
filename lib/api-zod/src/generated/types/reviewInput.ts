@@ -6,6 +6,7 @@
  * OpenAPI spec version: 0.1.0
  */
 import type { ReviewInputDecision } from './reviewInputDecision';
+import type { ReviewInputReasonCode } from './reviewInputReasonCode';
 
 export interface ReviewInput {
   decision: ReviewInputDecision;
@@ -16,6 +17,7 @@ export interface ReviewInput {
   actor: string;
   /** @maxLength 1000 */
   reason?: string;
+  reasonCode?: ReviewInputReasonCode;
   /** @exclusiveMinimum 0 */
   quantity?: number;
 }

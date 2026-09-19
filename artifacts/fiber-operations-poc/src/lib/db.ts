@@ -11,7 +11,19 @@ export interface QueuedCapture {
   error?: string;
   errorType?: 'network' | 'conflict' | 'validation';
   serverItemIds?: number[];
+  serverCrewDayId?: number;
+  evidence?: EvidenceUploadState[];
   createdAt: number;
+}
+
+export interface EvidenceUploadState {
+  externalId: string;
+  kind: 'photo' | 'audio';
+  index: number;
+  status: 'pending' | 'uploading' | 'completed' | 'failed';
+  evidenceId?: number;
+  error?: string;
+  errorType?: 'network' | 'conflict' | 'validation';
 }
 
 export interface CaptureDraft {
@@ -27,7 +39,7 @@ export interface CaptureDraft {
 }
 
 const DB_NAME = 'FiberOpsFieldDB';
-const DB_VERSION = 2;
+const DB_VERSION = 3;
 const STORE_NAME = 'captures';
 const DRAFT_STORE_NAME = 'drafts';
 
@@ -109,7 +121,7 @@ export async function updateCaptureStatus(
   id: number,
   status: QueuedCapture['status'],
   error?: string,
-  updates: Pick<QueuedCapture, 'errorType' | 'serverItemIds'> = {},
+  updates: Pick<QueuedCapture, 'errorType' | 'serverItemIds' | 'serverCrewDayId' | 'evidence'> = {},
 ): Promise<void> {
   const db = await openDB();
   return new Promise((resolve, reject) => {
@@ -121,14 +133,40 @@ export async function updateCaptureStatus(
       if (record) {
         record.status = status;
         record.error = error;
-        record.errorType = updates.errorType;
+        if (updates.errorType !== undefined) record.errorType = updates.errorType;
         record.serverItemIds = updates.serverItemIds ?? record.serverItemIds;
+        record.serverCrewDayId = updates.serverCrewDayId ?? record.serverCrewDayId;
+        record.evidence = updates.evidence ?? record.evidence;
         store.put(record);
       }
     };
     tx.oncomplete = () => resolve();
     tx.onabort = () => reject(tx.error ?? new Error('Queue update transaction aborted'));
     tx.onerror = () => reject(tx.error ?? new Error('Queue update transaction failed'));
+  });
+}
+
+export async function updateEvidenceState(
+  id: number,
+  evidence: EvidenceUploadState[],
+  error?: string,
+): Promise<void> {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, 'readwrite');
+    const store = tx.objectStore(STORE_NAME);
+    const getReq = store.get(id);
+    getReq.onsuccess = () => {
+      const record = getReq.result as QueuedCapture | undefined;
+      if (record) {
+        record.evidence = evidence;
+        if (error) record.error = error;
+        store.put(record);
+      }
+    };
+    tx.oncomplete = () => resolve();
+    tx.onabort = () => reject(tx.error ?? new Error('Evidence state update aborted'));
+    tx.onerror = () => reject(tx.error ?? new Error('Evidence state update failed'));
   });
 }
 

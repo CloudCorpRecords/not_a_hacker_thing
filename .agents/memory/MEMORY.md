@@ -1,0 +1,1 @@
+- [POC evidence identity scope](evidence-identity-scope.md) — Evidence intake uses capture-bound context and named reviewers; do not introduce broad auth without explicit scope change.

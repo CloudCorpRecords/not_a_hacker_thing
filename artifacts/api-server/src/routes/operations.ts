@@ -6,6 +6,8 @@ import {
   crewDaysTable,
   crewsTable,
   db,
+  evidenceAuditEventsTable,
+  evidenceItemsTable,
   productionAuditEventsTable,
   productionItemsTable,
   productionPlansTable,
@@ -521,6 +523,22 @@ router.patch("/production-items/:productionItemId/review", async (req, res): Pro
     res.status(422).json({ error: "A refusal reason is required" });
     return;
   }
+  if (
+    (body.data.decision === "correct" || body.data.decision === "refuse") &&
+    (!body.data.reasonCode || !body.data.reason?.trim())
+  ) {
+    res.status(422).json({
+      error: "Corrections and refusals require a reason code and explanation",
+    });
+    return;
+  }
+  if (
+    body.data.reasonCode &&
+    !["duplicate", "wrong_site", "wrong_crew", "wrong_work_type", "implausible_quantity", "unreadable_evidence", "duplicate_capture", "other"].includes(body.data.reasonCode)
+  ) {
+    res.status(422).json({ error: "Unknown review reason code" });
+    return;
+  }
   if (body.data.decision === "correct" && body.data.quantity === undefined) {
     res.status(422).json({ error: "A corrected quantity is required" });
     return;
@@ -631,9 +649,39 @@ router.patch("/production-items/:productionItemId/review", async (req, res): Pro
       nextStatus,
       metadata:
         body.data.decision === "correct"
-          ? { previousQuantity: current.quantity, correctedQuantity: updated.quantity }
-          : {},
+          ? {
+              previousQuantity: current.quantity,
+              correctedQuantity: updated.quantity,
+              reasonCode: body.data.reasonCode ?? null,
+              explanation: body.data.reason?.trim() || null,
+            }
+          : {
+              reasonCode: body.data.reasonCode ?? null,
+              explanation: body.data.reason?.trim() || null,
+            },
     });
+
+    const linkedEvidence = await tx
+      .select({ id: evidenceItemsTable.id })
+      .from(evidenceItemsTable)
+      .where(eq(evidenceItemsTable.productionItemId, updated.id));
+    if (linkedEvidence.length > 0) {
+      await tx.insert(evidenceAuditEventsTable).values(
+        linkedEvidence.map((evidence) => ({
+          evidenceId: evidence.id,
+          eventType: "production_review_decision",
+          actor: body.data.actor,
+          details: {
+            productionItemId: updated.id,
+            decision: body.data.decision,
+            reasonCode: body.data.reasonCode ?? null,
+            explanation: body.data.reason?.trim() || null,
+            previousQuantity: current.quantity,
+            decidedQuantity: updated.quantity,
+          },
+        })),
+      );
+    }
     return {
       kind: "ok" as const,
       item: (await loadProductionItems(tx, [updated.id]))[0],

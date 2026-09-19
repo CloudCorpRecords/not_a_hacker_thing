@@ -314,6 +314,209 @@ export const SubmitCaptureResponse = zod.object({
 })
 
 
+export const RequestEvidenceUploadUrlParams = zod.object({
+  "projectId": zod.coerce.number().int()
+})
+
+export const requestEvidenceUploadUrlBodyExternalIdMax = 160;
+
+export const requestEvidenceUploadUrlBodyCaptureExternalIdMax = 120;
+
+export const requestEvidenceUploadUrlBodyContentTypeMax = 120;
+
+export const requestEvidenceUploadUrlBodyByteSizeMax = 52428800;
+
+export const requestEvidenceUploadUrlBodySha256RegExp = new RegExp('^[a-fA-F0-9]{64}$');
+export const requestEvidenceUploadUrlBodyOriginalNameMax = 255;
+
+
+
+export const RequestEvidenceUploadUrlBody = zod.object({
+  "externalId": zod.string().min(1).max(requestEvidenceUploadUrlBodyExternalIdMax),
+  "captureExternalId": zod.string().min(1).max(requestEvidenceUploadUrlBodyCaptureExternalIdMax),
+  "kind": zod.enum(['photo', 'audio']),
+  "contentType": zod.string().min(1).max(requestEvidenceUploadUrlBodyContentTypeMax),
+  "byteSize": zod.number().int().min(1).max(requestEvidenceUploadUrlBodyByteSizeMax),
+  "sha256": zod.string().regex(requestEvidenceUploadUrlBodySha256RegExp),
+  "capturedAt": zod.coerce.date(),
+  "originalName": zod.string().max(requestEvidenceUploadUrlBodyOriginalNameMax).optional()
+})
+
+export const RequestEvidenceUploadUrlResponse = zod.object({
+  "evidenceId": zod.number().int(),
+  "externalId": zod.string(),
+  "uploadRequired": zod.boolean(),
+  "uploadURL": zod.string().url().nullable(),
+  "objectPath": zod.string(),
+  "status": zod.enum(['uploaded', 'processing', 'ready', 'manual_review', 'failed'])
+})
+
+
+export const CompleteEvidenceUploadParams = zod.object({
+  "projectId": zod.coerce.number().int(),
+  "evidenceId": zod.coerce.number().int()
+})
+
+export const completeEvidenceUploadBodyActorMax = 120;
+
+
+
+export const CompleteEvidenceUploadBody = zod.object({
+  "actor": zod.string().max(completeEvidenceUploadBodyActorMax).optional()
+})
+
+export const CompleteEvidenceUploadResponse = zod.object({
+  "id": zod.number().int(),
+  "projectId": zod.number().int(),
+  "crewDayId": zod.number().int(),
+  "productionItemId": zod.number().int().nullish(),
+  "siteId": zod.number().int(),
+  "crewId": zod.number().int(),
+  "externalId": zod.string(),
+  "kind": zod.enum(['photo', 'audio']),
+  "objectPath": zod.string(),
+  "contentType": zod.string(),
+  "byteSize": zod.number().int(),
+  "sha256": zod.string(),
+  "verifiedAt": zod.coerce.date().nullable(),
+  "source": zod.string(),
+  "originalName": zod.string().nullish(),
+  "capturedAt": zod.coerce.date(),
+  "latitude": zod.string().nullish(),
+  "longitude": zod.string().nullish(),
+  "uploaderContext": zod.string(),
+  "retentionPolicy": zod.string(),
+  "retentionUntil": zod.string().nullish(),
+  "status": zod.enum(['uploaded', 'processing', 'ready', 'manual_review', 'failed']),
+  "candidateQuantity": zod.string().nullish(),
+  "candidateWorkTypeId": zod.number().int().nullish(),
+  "candidateUnit": zod.string().nullish(),
+  "confidence": zod.string().nullish(),
+  "identityConfidence": zod.string().nullish(),
+  "explanation": zod.string().nullish(),
+  "transcript": zod.string().nullish(),
+  "checks": zod.array(zod.object({
+  "code": zod.string(),
+  "passed": zod.boolean(),
+  "severity": zod.enum(['info', 'warning', 'blocking']),
+  "message": zod.string()
+})),
+  "errorMessage": zod.string().nullish(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date()
+})
+
+
+export const ListEvidenceParams = zod.object({
+  "projectId": zod.coerce.number().int()
+})
+
+export const ListEvidenceResponseItem = zod.object({
+  "id": zod.number().int(),
+  "projectId": zod.number().int(),
+  "crewDayId": zod.number().int(),
+  "productionItemId": zod.number().int().nullish(),
+  "siteId": zod.number().int(),
+  "crewId": zod.number().int(),
+  "externalId": zod.string(),
+  "kind": zod.enum(['photo', 'audio']),
+  "objectPath": zod.string(),
+  "contentType": zod.string(),
+  "byteSize": zod.number().int(),
+  "sha256": zod.string(),
+  "verifiedAt": zod.coerce.date().nullable(),
+  "source": zod.string(),
+  "originalName": zod.string().nullish(),
+  "capturedAt": zod.coerce.date(),
+  "latitude": zod.string().nullish(),
+  "longitude": zod.string().nullish(),
+  "uploaderContext": zod.string(),
+  "retentionPolicy": zod.string(),
+  "retentionUntil": zod.string().nullish(),
+  "status": zod.enum(['uploaded', 'processing', 'ready', 'manual_review', 'failed']),
+  "candidateQuantity": zod.string().nullish(),
+  "candidateWorkTypeId": zod.number().int().nullish(),
+  "candidateUnit": zod.string().nullish(),
+  "confidence": zod.string().nullish(),
+  "identityConfidence": zod.string().nullish(),
+  "explanation": zod.string().nullish(),
+  "transcript": zod.string().nullish(),
+  "checks": zod.array(zod.object({
+  "code": zod.string(),
+  "passed": zod.boolean(),
+  "severity": zod.enum(['info', 'warning', 'blocking']),
+  "message": zod.string()
+})),
+  "errorMessage": zod.string().nullish(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date()
+})
+export const ListEvidenceResponse = zod.array(ListEvidenceResponseItem)
+
+
+export const GetEvidenceParams = zod.object({
+  "projectId": zod.coerce.number().int(),
+  "evidenceId": zod.coerce.number().int()
+})
+
+export const GetEvidenceResponse = zod.object({
+  "id": zod.number().int(),
+  "projectId": zod.number().int(),
+  "crewDayId": zod.number().int(),
+  "productionItemId": zod.number().int().nullish(),
+  "siteId": zod.number().int(),
+  "crewId": zod.number().int(),
+  "externalId": zod.string(),
+  "kind": zod.enum(['photo', 'audio']),
+  "objectPath": zod.string(),
+  "contentType": zod.string(),
+  "byteSize": zod.number().int(),
+  "sha256": zod.string(),
+  "verifiedAt": zod.coerce.date().nullable(),
+  "source": zod.string(),
+  "originalName": zod.string().nullish(),
+  "capturedAt": zod.coerce.date(),
+  "latitude": zod.string().nullish(),
+  "longitude": zod.string().nullish(),
+  "uploaderContext": zod.string(),
+  "retentionPolicy": zod.string(),
+  "retentionUntil": zod.string().nullish(),
+  "status": zod.enum(['uploaded', 'processing', 'ready', 'manual_review', 'failed']),
+  "candidateQuantity": zod.string().nullish(),
+  "candidateWorkTypeId": zod.number().int().nullish(),
+  "candidateUnit": zod.string().nullish(),
+  "confidence": zod.string().nullish(),
+  "identityConfidence": zod.string().nullish(),
+  "explanation": zod.string().nullish(),
+  "transcript": zod.string().nullish(),
+  "checks": zod.array(zod.object({
+  "code": zod.string(),
+  "passed": zod.boolean(),
+  "severity": zod.enum(['info', 'warning', 'blocking']),
+  "message": zod.string()
+})),
+  "errorMessage": zod.string().nullish(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date()
+}).and(zod.object({
+  "auditEvents": zod.array(zod.object({
+  "id": zod.number().int(),
+  "eventType": zod.string(),
+  "actor": zod.string(),
+  "details": zod.record(zod.string(), zod.unknown()),
+  "createdAt": zod.coerce.date()
+}))
+}))
+
+
+export const GetEvidenceContentParams = zod.object({
+  "projectId": zod.coerce.number().int(),
+  "evidenceId": zod.coerce.number().int()
+})
+
+export const GetEvidenceContentResponse = zod.unknown()
+
+
 export const ListProposalsParams = zod.object({
   "projectId": zod.coerce.number().int()
 })
@@ -461,6 +664,7 @@ export const ReviewProductionItemBody = zod.object({
   "decision": zod.enum(['confirm', 'correct', 'refuse']),
   "actor": zod.string().min(1).max(reviewProductionItemBodyActorMax),
   "reason": zod.string().max(reviewProductionItemBodyReasonMax).optional(),
+  "reasonCode": zod.enum(['duplicate', 'wrong_site', 'wrong_crew', 'wrong_work_type', 'implausible_quantity', 'unreadable_evidence', 'duplicate_capture', 'other']).optional(),
   "quantity": zod.number().gt(reviewProductionItemBodyQuantityExclusiveMin).multipleOf(reviewProductionItemBodyQuantityMultipleOf).optional()
 })
 

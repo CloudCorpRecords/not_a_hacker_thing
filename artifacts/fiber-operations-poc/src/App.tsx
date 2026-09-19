@@ -11,6 +11,8 @@ import { Overview } from '@/pages/Overview';
 import { ProjectWorkspace } from '@/pages/ProjectWorkspace';
 import { FieldCaptureApp } from '@/pages/field/FieldCaptureApp';
 
+import { ProjectEvidence } from '@/pages/ProjectEvidence';
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -40,6 +42,7 @@ function Router() {
       <RoutedErrorBoundary>
         <Switch>
           <Route path="/" component={Overview} />
+          <Route path="/projects/:id/evidence" component={ProjectEvidence} />
           <Route path="/projects/:id" component={ProjectWorkspace} />
           <Route component={NotFound} />
         </Switch>

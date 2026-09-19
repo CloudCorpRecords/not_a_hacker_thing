@@ -14,11 +14,17 @@ function generateId() {
 }
 
 function isRetryableCapture(capture: QueuedCapture) {
-  return (
+  const metadataRetryable = (
     capture.status === 'pending' ||
     capture.status === 'syncing' ||
     (capture.status === 'failed' && (capture.errorType === undefined || capture.errorType === 'network'))
   );
+  const evidenceRetryable = (capture.evidence ?? []).some(evidence =>
+    evidence.status === 'pending' ||
+    evidence.status === 'uploading' ||
+    (evidence.status === 'failed' && (evidence.errorType === undefined || evidence.errorType === 'network')),
+  );
+  return metadataRetryable || evidenceRetryable || (capture.status === 'synced' && !capture.evidence);
 }
 
 export function FieldCaptureApp() {
@@ -691,7 +697,7 @@ function CaptureForm({ context, onCaptureSaved, onCrewChanged }: { context: Fiel
 }
 
 function QueueView({ queue, isSyncing, onSync }: { queue: QueuedCapture[], isSyncing: boolean, onSync: () => void }) {
-  const pendingCount = queue.filter(q => q.status !== 'synced').length;
+  const pendingCount = queue.filter(q => q.status !== 'synced' || (q.evidence ?? []).some(e => e.status !== 'completed')).length;
   const retryableCount = queue.filter(isRetryableCapture).length;
 
   if (queue.length === 0) {
@@ -760,11 +766,35 @@ function QueueView({ queue, isSyncing, onSync }: { queue: QueuedCapture[], isSyn
             </div>
           )}
           
-          {item.status === 'synced' && item.serverItemIds && (
-            <div className="mt-3 p-2 bg-primary/5 border border-primary/20 rounded-md text-xs text-primary font-mono" data-testid={`success-${item.id}`}>
-               Production synced • evidence stored locally • IDs: {item.serverItemIds.join(', ')}
-            </div>
-          )}
+           {item.status === 'synced' && item.serverItemIds && (
+             <div className="mt-3 p-2 bg-primary/5 border border-primary/20 rounded-md text-xs text-primary font-mono" data-testid={`success-${item.id}`}>
+                Production metadata synced • IDs: {item.serverItemIds.join(', ')}
+             </div>
+           )}
+           {((item.photoBlobs ?? []).length > 0 || (item.audioBlobs ?? []).length > 0) && (
+             <div className="mt-3 space-y-1 border-t border-border/40 pt-3 text-xs" data-testid={`evidence-status-${item.id}`}>
+               <div className="font-mono uppercase tracking-wider text-muted-foreground">Evidence retention</div>
+               {([
+                 ...(item.photoBlobs ?? []).map((_, index) => ({ kind: 'photo' as const, index })),
+                 ...(item.audioBlobs ?? []).map((_, index) => ({ kind: 'audio' as const, index })),
+               ]).map(media => {
+                 const evidence = item.evidence?.find(e => e.kind === media.kind && e.index === media.index);
+                 const label = `${media.kind === 'photo' ? 'Photo' : 'Voice note'} ${media.index + 1}`;
+                 return (
+                   <div key={`${media.kind}-${media.index}`} className="flex items-center justify-between gap-2">
+                     <span>{label}</span>
+                     <span className={evidence?.status === 'completed' ? 'text-primary' : evidence?.status === 'failed' ? 'text-destructive' : 'text-muted-foreground'}>
+                        {evidence?.status === 'completed'
+                          ? 'Stored and processed'
+                          : evidence?.status === 'failed'
+                            ? `Retry needed: ${evidence.error ?? 'upload failed'}`
+                            : 'Waiting to upload'}
+                     </span>
+                   </div>
+                 );
+               })}
+             </div>
+           )}
         </div>
       ))}
     </div>

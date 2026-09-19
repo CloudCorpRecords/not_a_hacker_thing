@@ -22,6 +22,12 @@ import type {
 import type {
   CaptureInput,
   CaptureResult,
+  EvidenceCompleteRequest,
+  EvidenceConflict,
+  EvidenceDetail,
+  EvidenceItem,
+  EvidenceUploadRequest,
+  EvidenceUploadResponse,
   FieldContext,
   HealthStatus,
   ProductionItem,
@@ -676,6 +682,397 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       > => {
       return useMutation(getSubmitCaptureMutationOptions(options));
     }
+
+export const getRequestEvidenceUploadUrlUrl = (projectId: number,) => {
+
+
+
+
+  return `/api/projects/${projectId}/evidence/uploads/request-url`
+}
+
+export const requestEvidenceUploadUrl = async (projectId: number,
+    evidenceUploadRequest: EvidenceUploadRequest, options?: Parameters<typeof customFetch>[1]): Promise<EvidenceUploadResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<EvidenceUploadResponse>(getRequestEvidenceUploadUrlUrl(projectId),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(evidenceUploadRequest)
+  }
+);}
+
+
+
+
+
+export const getRequestEvidenceUploadUrlMutationKey = () => ['requestEvidenceUploadUrl'] as const;
+
+export const getRequestEvidenceUploadUrlMutationOptions = <TError = ErrorType<EvidenceConflict>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof requestEvidenceUploadUrl>>, TError,RequestEvidenceUploadUrlMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof requestEvidenceUploadUrl>>, TError,RequestEvidenceUploadUrlMutationVariables, TContext> => {
+
+const mutationKey = getRequestEvidenceUploadUrlMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof requestEvidenceUploadUrl>>, RequestEvidenceUploadUrlMutationVariables> = (props) => {
+          const {projectId,data} = props ?? {};
+
+          return  requestEvidenceUploadUrl(projectId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RequestEvidenceUploadUrlMutationResult = NonNullable<Awaited<ReturnType<typeof requestEvidenceUploadUrl>>>
+    export type RequestEvidenceUploadUrlMutationBody = BodyType<EvidenceUploadRequest>
+    export type RequestEvidenceUploadUrlMutationError = ErrorType<EvidenceConflict>
+    export type RequestEvidenceUploadUrlMutationVariables = {projectId: number;data: BodyType<EvidenceUploadRequest>}
+
+    export const useRequestEvidenceUploadUrl = <TError = ErrorType<EvidenceConflict>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof requestEvidenceUploadUrl>>, TError,RequestEvidenceUploadUrlMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof requestEvidenceUploadUrl>>,
+        TError,
+        RequestEvidenceUploadUrlMutationVariables,
+        TContext
+      > => {
+      return useMutation(getRequestEvidenceUploadUrlMutationOptions(options));
+    }
+
+export const getCompleteEvidenceUploadUrl = (projectId: number,
+    evidenceId: number,) => {
+
+
+
+
+  return `/api/projects/${projectId}/evidence/${evidenceId}/complete`
+}
+
+export const completeEvidenceUpload = async (projectId: number,
+    evidenceId: number,
+    evidenceCompleteRequest?: EvidenceCompleteRequest, options?: Parameters<typeof customFetch>[1]): Promise<EvidenceItem> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<EvidenceItem>(getCompleteEvidenceUploadUrl(projectId,evidenceId),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(evidenceCompleteRequest)
+  }
+);}
+
+
+
+
+
+export const getCompleteEvidenceUploadMutationKey = () => ['completeEvidenceUpload'] as const;
+
+export const getCompleteEvidenceUploadMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof completeEvidenceUpload>>, TError,CompleteEvidenceUploadMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof completeEvidenceUpload>>, TError,CompleteEvidenceUploadMutationVariables, TContext> => {
+
+const mutationKey = getCompleteEvidenceUploadMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof completeEvidenceUpload>>, CompleteEvidenceUploadMutationVariables> = (props) => {
+          const {projectId,evidenceId,data} = props ?? {};
+
+          return  completeEvidenceUpload(projectId,evidenceId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CompleteEvidenceUploadMutationResult = NonNullable<Awaited<ReturnType<typeof completeEvidenceUpload>>>
+    export type CompleteEvidenceUploadMutationBody = BodyType<EvidenceCompleteRequest> | undefined
+    export type CompleteEvidenceUploadMutationError = ErrorType<unknown>
+    export type CompleteEvidenceUploadMutationVariables = {projectId: number;evidenceId: number;data?: BodyType<EvidenceCompleteRequest>}
+
+    export const useCompleteEvidenceUpload = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof completeEvidenceUpload>>, TError,CompleteEvidenceUploadMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof completeEvidenceUpload>>,
+        TError,
+        CompleteEvidenceUploadMutationVariables,
+        TContext
+      > => {
+      return useMutation(getCompleteEvidenceUploadMutationOptions(options));
+    }
+
+export const getListEvidenceUrl = (projectId: number,) => {
+
+
+
+
+  return `/api/projects/${projectId}/evidence`
+}
+
+export const listEvidence = async (projectId: number, options?: Parameters<typeof customFetch>[1]): Promise<EvidenceItem[]> => {
+
+  return customFetch<EvidenceItem[]>(getListEvidenceUrl(projectId),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getListEvidenceQueryKey = (projectId: number,) => {
+    return [
+    `/api/projects/${projectId}/evidence`
+    ] as const;
+    }
+
+
+export const getListEvidenceQueryOptions = <TData = Awaited<ReturnType<typeof listEvidence>>, TError = ErrorType<unknown>>(projectId: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listEvidence>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListEvidenceQueryKey(projectId);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listEvidence>>> = ({ signal }) => listEvidence(projectId, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: projectId !== null && projectId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listEvidence>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ListEvidenceQueryResult = NonNullable<Awaited<ReturnType<typeof listEvidence>>>
+export type ListEvidenceQueryError = ErrorType<unknown>
+
+
+
+export function useListEvidence<TData = Awaited<ReturnType<typeof listEvidence>>, TError = ErrorType<unknown>>(
+ projectId: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listEvidence>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getListEvidenceQueryOptions(projectId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getGetEvidenceUrl = (projectId: number,
+    evidenceId: number,) => {
+
+
+
+
+  return `/api/projects/${projectId}/evidence/${evidenceId}`
+}
+
+export const getEvidence = async (projectId: number,
+    evidenceId: number, options?: Parameters<typeof customFetch>[1]): Promise<EvidenceDetail> => {
+
+  return customFetch<EvidenceDetail>(getGetEvidenceUrl(projectId,evidenceId),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetEvidenceQueryKey = (projectId: number,
+    evidenceId: number,) => {
+    return [
+    `/api/projects/${projectId}/evidence/${evidenceId}`
+    ] as const;
+    }
+
+
+export const getGetEvidenceQueryOptions = <TData = Awaited<ReturnType<typeof getEvidence>>, TError = ErrorType<void>>(projectId: number,
+    evidenceId: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getEvidence>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetEvidenceQueryKey(projectId,evidenceId);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getEvidence>>> = ({ signal }) => getEvidence(projectId,evidenceId, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: projectId !== null && projectId !== undefined && evidenceId !== null && evidenceId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getEvidence>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetEvidenceQueryResult = NonNullable<Awaited<ReturnType<typeof getEvidence>>>
+export type GetEvidenceQueryError = ErrorType<void>
+
+
+
+export function useGetEvidence<TData = Awaited<ReturnType<typeof getEvidence>>, TError = ErrorType<void>>(
+ projectId: number,
+    evidenceId: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getEvidence>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetEvidenceQueryOptions(projectId,evidenceId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getGetEvidenceContentUrl = (projectId: number,
+    evidenceId: number,) => {
+
+
+
+
+  return `/api/projects/${projectId}/evidence/${evidenceId}/content`
+}
+
+export const getEvidenceContent = async (projectId: number,
+    evidenceId: number, options?: Parameters<typeof customFetch>[1]): Promise<Blob> => {
+
+  return customFetch<Blob>(getGetEvidenceContentUrl(projectId,evidenceId),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetEvidenceContentQueryKey = (projectId: number,
+    evidenceId: number,) => {
+    return [
+    `/api/projects/${projectId}/evidence/${evidenceId}/content`
+    ] as const;
+    }
+
+
+export const getGetEvidenceContentQueryOptions = <TData = Awaited<ReturnType<typeof getEvidenceContent>>, TError = ErrorType<void>>(projectId: number,
+    evidenceId: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getEvidenceContent>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetEvidenceContentQueryKey(projectId,evidenceId);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getEvidenceContent>>> = ({ signal }) => getEvidenceContent(projectId,evidenceId, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: projectId !== null && projectId !== undefined && evidenceId !== null && evidenceId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getEvidenceContent>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetEvidenceContentQueryResult = NonNullable<Awaited<ReturnType<typeof getEvidenceContent>>>
+export type GetEvidenceContentQueryError = ErrorType<void>
+
+
+
+export function useGetEvidenceContent<TData = Awaited<ReturnType<typeof getEvidenceContent>>, TError = ErrorType<void>>(
+ projectId: number,
+    evidenceId: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getEvidenceContent>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetEvidenceContentQueryOptions(projectId,evidenceId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
 
 export const getListProposalsUrl = (projectId: number,) => {
 

@@ -249,6 +249,154 @@ export interface CaptureResult {
   items: ProductionItem[];
 }
 
+export type EvidenceKind = typeof EvidenceKind[keyof typeof EvidenceKind];
+
+
+export const EvidenceKind = {
+  photo: 'photo',
+  audio: 'audio',
+} as const;
+
+export type EvidenceStatus = typeof EvidenceStatus[keyof typeof EvidenceStatus];
+
+
+export const EvidenceStatus = {
+  uploaded: 'uploaded',
+  processing: 'processing',
+  ready: 'ready',
+  manual_review: 'manual_review',
+  failed: 'failed',
+} as const;
+
+export type EvidenceCheckSeverity = typeof EvidenceCheckSeverity[keyof typeof EvidenceCheckSeverity];
+
+
+export const EvidenceCheckSeverity = {
+  info: 'info',
+  warning: 'warning',
+  blocking: 'blocking',
+} as const;
+
+export interface EvidenceCheck {
+  code: string;
+  passed: boolean;
+  severity: EvidenceCheckSeverity;
+  message: string;
+}
+
+export type EvidenceAuditEventDetails = { [key: string]: unknown };
+
+export interface EvidenceAuditEvent {
+  id: number;
+  eventType: string;
+  actor: string;
+  details: EvidenceAuditEventDetails;
+  createdAt: string;
+}
+
+export interface EvidenceItem {
+  id: number;
+  projectId: number;
+  crewDayId: number;
+  /** @nullable */
+  productionItemId?: number | null;
+  siteId: number;
+  crewId: number;
+  externalId: string;
+  kind: EvidenceKind;
+  objectPath: string;
+  contentType: string;
+  byteSize: number;
+  sha256: string;
+  /** @nullable */
+  verifiedAt: string | null;
+  source: string;
+  /** @nullable */
+  originalName?: string | null;
+  capturedAt: string;
+  /** @nullable */
+  latitude?: string | null;
+  /** @nullable */
+  longitude?: string | null;
+  uploaderContext: string;
+  retentionPolicy: string;
+  /** @nullable */
+  retentionUntil?: string | null;
+  status: EvidenceStatus;
+  /** @nullable */
+  candidateQuantity?: string | null;
+  /** @nullable */
+  candidateWorkTypeId?: number | null;
+  /** @nullable */
+  candidateUnit?: string | null;
+  /** @nullable */
+  confidence?: string | null;
+  /** @nullable */
+  identityConfidence?: string | null;
+  /** @nullable */
+  explanation?: string | null;
+  /** @nullable */
+  transcript?: string | null;
+  checks: EvidenceCheck[];
+  /** @nullable */
+  errorMessage?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type EvidenceDetail = EvidenceItem & {
+  auditEvents: EvidenceAuditEvent[];
+};
+
+export interface EvidenceUploadRequest {
+  /**
+     * @minLength 1
+     * @maxLength 160
+     */
+  externalId: string;
+  /**
+     * @minLength 1
+     * @maxLength 120
+     */
+  captureExternalId: string;
+  kind: EvidenceKind;
+  /**
+     * @minLength 1
+     * @maxLength 120
+     */
+  contentType: string;
+  /**
+     * @minimum 1
+     * @maximum 52428800
+     */
+  byteSize: number;
+  /** @pattern ^[a-fA-F0-9]{64}$ */
+  sha256: string;
+  capturedAt: string;
+  /** @maxLength 255 */
+  originalName?: string;
+}
+
+export interface EvidenceUploadResponse {
+  evidenceId: number;
+  externalId: string;
+  uploadRequired: boolean;
+  /** @nullable */
+  uploadURL: string | null;
+  objectPath: string;
+  status: EvidenceStatus;
+}
+
+export interface EvidenceCompleteRequest {
+  /** @maxLength 120 */
+  actor?: string;
+}
+
+export interface EvidenceConflict {
+  error: string;
+  existingEvidenceId: number;
+}
+
 export type ReviewInputDecision = typeof ReviewInputDecision[keyof typeof ReviewInputDecision];
 
 
@@ -256,6 +404,20 @@ export const ReviewInputDecision = {
   confirm: 'confirm',
   correct: 'correct',
   refuse: 'refuse',
+} as const;
+
+export type ReviewInputReasonCode = typeof ReviewInputReasonCode[keyof typeof ReviewInputReasonCode];
+
+
+export const ReviewInputReasonCode = {
+  duplicate: 'duplicate',
+  wrong_site: 'wrong_site',
+  wrong_crew: 'wrong_crew',
+  wrong_work_type: 'wrong_work_type',
+  implausible_quantity: 'implausible_quantity',
+  unreadable_evidence: 'unreadable_evidence',
+  duplicate_capture: 'duplicate_capture',
+  other: 'other',
 } as const;
 
 export interface ReviewInput {
@@ -267,6 +429,7 @@ export interface ReviewInput {
   actor: string;
   /** @maxLength 1000 */
   reason?: string;
+  reasonCode?: ReviewInputReasonCode;
   /** @exclusiveMinimum 0 */
   quantity?: number;
 }

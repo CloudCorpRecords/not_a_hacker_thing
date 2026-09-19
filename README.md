@@ -11,7 +11,7 @@ Built at [The Executable World](https://luma.com/exruwpkp), San Francisco, 19 Se
 |---|---|
 | **Live app** | https://walkthelin3.replit.app/ |
 | **Write-up** | https://claude.ai/artifact/7zpNEbGd88rbQGuLsEFFBJ |
-| **Locate inventory + API** | https://jymiller.github.io/milbird-walk-the-line/ |
+| **Locate API v2** | https://jymiller.github.io/milbird-walk-the-line/api/summary.json — [integration guide](docs/LOCATE_API.md) |
 | **Capture pipeline** | https://github.com/jymiller/milbird-walk-the-line |
 
 A fibre contractor runs eight build stages across hundreds of sites. Seven of the eight reach no
@@ -59,36 +59,72 @@ stage that has to be read off the ground: utility locates, the spray-paint marks
 buried where.
 
 A 405-second walk, filmed on an iPhone, sampled one frame per second and thresholded in HSV against
-the **APWA Uniform Color Code**:
+the **APWA Uniform Color Code**. The first version of this reported **53 locate marks**.
+
+> ### Correction — the 53 marks were not marks
+>
+> Before publishing, we opened the four largest detections. All four were false positives:
+>
+> | Frame | The detector said | What it actually was |
+> |---|---|---|
+> | t=97s | orange — communications / fibre, 47,729px | a red-painted doorstep and terracotta tile |
+> | t=359s | blue — potable water, 148,948px | a USPS mailbox |
+> | t=110s | yellow — gas, oil, steam, 6,046px | fallen autumn leaves on a stairway |
+> | t=190s | red — electric, 5,759px | a STOP sign |
+>
+> This README previously said *"orange dominating is what a fibre job should look like — it falls
+> out of the colour code, which is why it is evidence rather than decoration."* That was inferred
+> from a tally without opening a single frame. **It is withdrawn.** Orange dominates because San
+> Francisco has a great deal of terracotta.
+>
+> A colour threshold answers *"are there orange pixels here"*, not *"is this a locate mark"*, and
+> the one geometric assumption — that the bottom 45% of the frame is pavement — fails the moment
+> the camera points at a doorway.
+
+### Stage two: seven classifiers
+
+The fix was not a bigger model. Every region the colour pass produces now goes through seven cheap,
+named, independent rules over the same pixels. Nothing learned, nothing over the network.
+
+| Rule | Rejects, and why paint is different | Fired |
+|---|---|---|
+| `stroke_width` | Paint is a stroke a few inches wide. The largest circle that fits inside a mark is small; inside a mailbox it is 195px. | 51 |
+| `on_pavement` | Dilate the region, subtract it, read the ring. A locate sits in bare grey concrete; a doorstep sits in terracotta. | 98 |
+| `not_vegetation` | Excess-green index. Chlorophyll reflects hard in green; marking paint does not. | 43 |
+| `ground_band` | Where the region sits in the full frame. Too high and it cannot be on the ground. | 21 |
+| `pigment_coherence` | Hue spread and saturation. Paint is one bright pigment; leaf litter is a gradient. | 18 |
+| `not_a_slab` | Large, solid and rectangular is street furniture. | 1 |
+| `flat_film` | Paint lies flat and is evenly lit; a curled leaf shades itself. | 0 |
+
+`flat_film` firing zero times is reported, not hidden. It has not yet earned its place.
 
 ```
-405s walked · 419 frames sampled · 53 locate marks found
-
-communications / fibre   25   ████████████████████
-gas, oil, steam          14   ███████████
-potable water             6   █████
-sewer, drain              4   ███
-electric                  4   ███
+124 colour regions  →  122 rejected by rule  →  2 to human review  →  0 confirmed locates
 ```
 
-Orange dominating is what a fibre job should look like. It was not tuned for — it falls out of the
-colour code, which is why it is evidence rather than decoration.
+All four known false positives are rejected by name. The rules removed 98% of the noise with no
+trained parameters. The final two — a wet patch beside some leaves, and a conference table filmed
+when the camera kept rolling back indoors — a human removed in about ten seconds.
+
+**The finding is that this block has not been marked.** That is not a failed run: it is the answer
+that stops a crew mobilising over unlocated fibre, and the first version said the opposite.
 
 Detections enter the same write path as every other capture: they land as `proposed` against
-Stage 2, never `confirmed`, and a named reviewer decides. The per-crew-day plausibility ceiling
-applies to them exactly as it does to a typed quantity.
+Stage 2, never `confirmed`, and a named reviewer decides. **Every one of those 53 wrong answers was
+`proposed`. Not one could reach a production record on its own** — which is why this cost a web page
+instead of a dispatched crew.
 
 ### Provenance per field
 
-Each detection states which of its own values are evidence and which are inference.
+Each region states which of its own values are evidence and which are inference.
 
 | Field | Status | How |
 |---|---|---|
 | Timestamp | **measured** | frame index ÷ frame rate |
-| Colour & utility class | **measured** | HSV threshold against the APWA colour code |
-| Region count & area | **measured** | contour detection in the ground plane |
+| Colour match | **measured** | HSV threshold against the APWA colour code |
+| Classifier values | **measured** | stroke width, extent, pavement surround, hue spread, excess-green, value spread, position |
 | Coordinates | **derived** | interpolated along the street axis from one ±7 m GPS anchor in the clip metadata — **not surveyed** |
-| Confirmation | **absent** | no human has confirmed these; the record says so |
+| Verdict | **human** | every surviving candidate was inspected by eye; none was a locate mark |
 
 The iPhone writes a single ISO6709 point per clip, not a track — the six timed-metadata streams
 carry Cinematic-mode focus data, not GPS. Coordinates are therefore labelled derived rather than
@@ -102,19 +138,38 @@ semantic description instead. Where two independent methods agree, the mark is e
 disagree, a human looks — that disagreement *is* the review queue.
 
 The integration is built and tested against the live API. It did not run on the day: the account
-balance was `$0` and every billed call returns `quota_exceeded`. The 53 marks above are therefore
-**uncorroborated** — one detector is an assertion, two that agree is evidence.
+balance was `$0` and every billed call returns `quota_exceeded`.
+
+This is no longer an abstract gap. **A model asked "is there utility locate paint in this frame?"
+would have said no to a mailbox immediately.** The second opinion was not a nice-to-have lost to a
+billing problem — it was load-bearing, and its absence is visible in the output. The seven
+classifiers are what we built in its place, and they are weaker: they encode our guesses about
+paint rather than recognising paint.
+
+**The honest limit:** every threshold is calibrated on the *reject* side. This clip contains no true
+positives, so nothing here shows the detector can recognise a real locate mark — only that it now
+refuses things that obviously are not one. The first thing to fix is footage of a block that *is*
+marked.
 
 ### The capture as an API
 
-The detections are served as data, so a front end reads facts rather than being told about them:
+The whole pipeline is served as data — not just the detections, but what each rule rejected and
+why, so a front end can explain a verdict instead of showing a confidence score.
+
+**Integration guide with worked TypeScript: [`docs/LOCATE_API.md`](docs/LOCATE_API.md).**
+Static JSON, CORS-open, no key. Base: `https://jymiller.github.io/milbird-walk-the-line/api/`
 
 | Endpoint | Returns |
 |---|---|
-| [`/`](https://jymiller.github.io/milbird-walk-the-line/) | the locate inventory — 53 marks, each with its frame, filterable by APWA colour |
-| [`/api/locates.json`](https://jymiller.github.io/milbird-walk-the-line/api/locates.json) | GeoJSON FeatureCollection, 53 features, each carrying its own provenance |
-| [`/api/summary.json`](https://jymiller.github.io/milbird-walk-the-line/api/summary.json) | tallies by colour and utility class, plus what is measured and what is derived |
-| [`/api/stage2.json`](https://jymiller.github.io/milbird-walk-the-line/api/stage2.json) | the proposed Stage 2 record, marked `requiresHumanDecision` |
+| [`/api/summary.json`](https://jymiller.github.io/milbird-walk-the-line/api/summary.json) | the funnel — 124 in, 122 rejected, 2 to review, 0 confirmed — plus rejections by rule and provenance |
+| [`/api/rules.json`](https://jymiller.github.io/milbird-walk-the-line/api/rules.json) | the seven classifiers, their thresholds, and how many regions each rejected |
+| [`/api/locates.json`](https://jymiller.github.io/milbird-walk-the-line/api/locates.json) | GeoJSON FeatureCollection, 124 features — every region with its `verdict` and the measurements behind it |
+| [`/api/stage2.json`](https://jymiller.github.io/milbird-walk-the-line/api/stage2.json) | the proposed Stage 2 record — `quantity: 0`, `requiresHumanDecision` |
+
+> **Breaking change from v1.** `locates.json` now returns **124 features, not 53**, and they are not
+> all locates — check `properties.verdict` (`"candidate"` or `"rejected"`) before plotting. Geometry
+> is unchanged, so an existing map layer keeps working; filter first. Nothing in this dataset is
+> `confirmed`.
 
 This was built for **Tencent EdgeOne Makers** — Blob for the frames, Cloud Functions for the API — and
 that implementation is in the pipeline repo under `makers/`, correct against their documented SDK. A

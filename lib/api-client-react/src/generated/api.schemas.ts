@@ -175,6 +175,16 @@ export interface CaptureInput {
   workDate: string;
   capturedAt: string;
   /**
+     * @minimum -90
+     * @maximum 90
+     */
+  latitude?: number;
+  /**
+     * @minimum -180
+     * @maximum 180
+     */
+  longitude?: number;
+  /**
      * @minItems 1
      * @maxItems 20
      */
@@ -214,6 +224,10 @@ export interface ProductionItem {
   siteId: number;
   crewId: number;
   workDate: string;
+  /** @nullable */
+  latitude: string | null;
+  /** @nullable */
+  longitude: string | null;
   workTypeId: number;
   externalId: string;
   quantity: string;

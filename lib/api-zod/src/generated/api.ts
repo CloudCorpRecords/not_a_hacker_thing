@@ -244,6 +244,12 @@ export const SubmitCaptureParams = zod.object({
 
 export const submitCaptureBodyExternalIdMax = 120;
 
+export const submitCaptureBodyLatitudeMin = -90;
+export const submitCaptureBodyLatitudeMax = 90;
+
+export const submitCaptureBodyLongitudeMin = -180;
+export const submitCaptureBodyLongitudeMax = 180;
+
 export const submitCaptureBodyItemsItemExternalIdMax = 120;
 
 export const submitCaptureBodyItemsItemQuantityExclusiveMin = 0;
@@ -261,6 +267,8 @@ export const SubmitCaptureBody = zod.object({
   "crewId": zod.number().int(),
   "workDate": zod.coerce.date(),
   "capturedAt": zod.coerce.date(),
+  "latitude": zod.number().min(submitCaptureBodyLatitudeMin).max(submitCaptureBodyLatitudeMax).optional(),
+  "longitude": zod.number().min(submitCaptureBodyLongitudeMin).max(submitCaptureBodyLongitudeMax).optional(),
   "items": zod.array(zod.object({
   "externalId": zod.string().min(1).max(submitCaptureBodyItemsItemExternalIdMax),
   "workTypeId": zod.number().int(),
@@ -280,6 +288,8 @@ export const SubmitCaptureResponse = zod.object({
   "siteId": zod.number().int(),
   "crewId": zod.number().int(),
   "workDate": zod.coerce.date(),
+  "latitude": zod.string().nullable(),
+  "longitude": zod.string().nullable(),
   "workTypeId": zod.number().int(),
   "externalId": zod.string(),
   "quantity": zod.string(),
@@ -315,6 +325,8 @@ export const ListProposalsResponseItem = zod.object({
   "siteId": zod.number().int(),
   "crewId": zod.number().int(),
   "workDate": zod.coerce.date(),
+  "latitude": zod.string().nullable(),
+  "longitude": zod.string().nullable(),
   "workTypeId": zod.number().int(),
   "externalId": zod.string(),
   "quantity": zod.string(),
@@ -350,6 +362,8 @@ export const ListConfirmedFactsResponseItem = zod.object({
   "siteId": zod.number().int(),
   "crewId": zod.number().int(),
   "workDate": zod.coerce.date(),
+  "latitude": zod.string().nullable(),
+  "longitude": zod.string().nullable(),
   "workTypeId": zod.number().int(),
   "externalId": zod.string(),
   "quantity": zod.string(),
@@ -372,6 +386,43 @@ export const ListConfirmedFactsResponseItem = zod.object({
 }))
 })
 export const ListConfirmedFactsResponse = zod.array(ListConfirmedFactsResponseItem)
+
+
+export const ListFieldHistoryParams = zod.object({
+  "projectId": zod.coerce.number().int()
+})
+
+export const ListFieldHistoryResponseItem = zod.object({
+  "id": zod.number().int(),
+  "crewDayId": zod.number().int(),
+  "projectId": zod.number().int(),
+  "siteId": zod.number().int(),
+  "crewId": zod.number().int(),
+  "workDate": zod.coerce.date(),
+  "latitude": zod.string().nullable(),
+  "longitude": zod.string().nullable(),
+  "workTypeId": zod.number().int(),
+  "externalId": zod.string(),
+  "quantity": zod.string(),
+  "unit": zod.enum(['each', 'metres']),
+  "status": zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),
+  "note": zod.string(),
+  "refusalReason": zod.string().nullish(),
+  "confirmedAt": zod.coerce.date().nullish(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date(),
+  "auditEvents": zod.array(zod.object({
+  "id": zod.number().int(),
+  "decision": zod.enum(['submitted', 'proposed', 'routed_to_review', 'confirmed', 'corrected', 'refused']),
+  "actor": zod.string(),
+  "reason": zod.string().nullish(),
+  "previousStatus": zod.union([zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),zod.null()]).optional(),
+  "nextStatus": zod.enum(['captured', 'queued', 'proposed', 'needs_review', 'confirmed', 'refused']),
+  "metadata": zod.record(zod.string(), zod.unknown()),
+  "createdAt": zod.coerce.date()
+}))
+})
+export const ListFieldHistoryResponse = zod.array(ListFieldHistoryResponseItem)
 
 
 export const GetProgressSummaryParams = zod.object({
@@ -420,6 +471,8 @@ export const ReviewProductionItemResponse = zod.object({
   "siteId": zod.number().int(),
   "crewId": zod.number().int(),
   "workDate": zod.coerce.date(),
+  "latitude": zod.string().nullable(),
+  "longitude": zod.string().nullable(),
   "workTypeId": zod.number().int(),
   "externalId": zod.string(),
   "quantity": zod.string(),

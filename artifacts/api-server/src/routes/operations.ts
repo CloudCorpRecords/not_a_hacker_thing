@@ -21,6 +21,8 @@ import {
   GetProgressSummaryResponse,
   ListConfirmedFactsParams,
   ListConfirmedFactsResponse,
+  ListFieldHistoryParams,
+  ListFieldHistoryResponse,
   ListProposalsParams,
   ListProposalsResponse,
   ReviewProductionItemBody,
@@ -77,6 +79,8 @@ const hashCapturePayload = (input: {
   crewId: number;
   workDate: string;
   capturedAt: string;
+  latitude?: number;
+  longitude?: number;
   items: Array<{ externalId: string; workTypeId: number; quantity: string; unit: string; note: string }>;
 }) =>
   createHash("sha256")
@@ -130,6 +134,8 @@ const loadProductionItems = async (executor: DbExecutor, itemIds: number[]) => {
     siteId: crewDay.siteId,
     crewId: crewDay.crewId,
     workDate: crewDay.workDate,
+    latitude: crewDay.latitude,
+    longitude: crewDay.longitude,
     confirmedAt: item.confirmedAt?.toISOString() ?? null,
     createdAt: item.createdAt.toISOString(),
     updatedAt: item.updatedAt.toISOString(),
@@ -221,6 +227,8 @@ router.post("/projects/:projectId/captures", async (req, res): Promise<void> => 
     crewId: body.data.crewId,
     workDate: requestedWorkDate,
     capturedAt: new Date(body.data.capturedAt).toISOString(),
+    latitude: body.data.latitude,
+    longitude: body.data.longitude,
     items: normalizedItems.map((item) => ({
       externalId: item.externalId,
       workTypeId: item.workTypeId,
@@ -359,6 +367,8 @@ router.post("/projects/:projectId/captures", async (req, res): Promise<void> => 
           externalId: body.data.externalId,
           payloadHash,
           capturedAt: new Date(body.data.capturedAt),
+          latitude: body.data.latitude?.toFixed(6),
+          longitude: body.data.longitude?.toFixed(6),
         })
         .returning();
 
@@ -482,6 +492,22 @@ router.get("/projects/:projectId/facts", async (req, res): Promise<void> => {
       ),
     );
   res.json(ListConfirmedFactsResponse.parse(await loadProductionItems(db, ids.map((item) => item.id))));
+});
+
+router.get("/projects/:projectId/field-history", async (req, res): Promise<void> => {
+  const params = ListFieldHistoryParams.safeParse(req.params);
+  if (!params.success) {
+    res.status(400).json({ error: params.error.message });
+    return;
+  }
+  const ids = await db
+    .select({ id: productionItemsTable.id })
+    .from(productionItemsTable)
+    .innerJoin(crewDaysTable, eq(productionItemsTable.crewDayId, crewDaysTable.id))
+    .where(eq(crewDaysTable.projectId, params.data.projectId))
+    .orderBy(sql`${productionItemsTable.createdAt} desc`)
+    .limit(100);
+  res.json(ListFieldHistoryResponse.parse(await loadProductionItems(db, ids.map((item) => item.id))));
 });
 
 router.patch("/production-items/:productionItemId/review", async (req, res): Promise<void> => {

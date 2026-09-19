@@ -16,6 +16,10 @@ export interface ProductionItem {
   siteId: number;
   crewId: number;
   workDate: Date;
+  /** @nullable */
+  latitude: string | null;
+  /** @nullable */
+  longitude: string | null;
   workTypeId: number;
   externalId: string;
   quantity: string;

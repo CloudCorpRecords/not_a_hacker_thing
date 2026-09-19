@@ -9,6 +9,7 @@ import { Route, Switch, useLocation, Router as WouterRouter } from 'wouter';
 import { Shell } from '@/components/layout/Shell';
 import { Overview } from '@/pages/Overview';
 import { ProjectWorkspace } from '@/pages/ProjectWorkspace';
+import { FieldCaptureApp } from '@/pages/field/FieldCaptureApp';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,6 +21,20 @@ const queryClient = new QueryClient({
 });
 
 function Router() {
+  const [location] = useLocation();
+  const isFieldRoute = location.startsWith('/field/');
+
+  if (isFieldRoute) {
+    return (
+      <RoutedErrorBoundary>
+        <Switch>
+          <Route path="/field/:id" component={FieldCaptureApp} />
+          <Route component={NotFound} />
+        </Switch>
+      </RoutedErrorBoundary>
+    );
+  }
+
   return (
     <Shell>
       <RoutedErrorBoundary>

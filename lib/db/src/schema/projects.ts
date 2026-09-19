@@ -174,6 +174,8 @@ export const crewDaysTable = pgTable(
     externalId: text("external_id").notNull(),
     payloadHash: text("payload_hash").notNull().default(""),
     capturedAt: timestamp("captured_at", { withTimezone: true }).notNull(),
+    latitude: numeric("latitude", { precision: 9, scale: 6 }),
+    longitude: numeric("longitude", { precision: 9, scale: 6 }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [

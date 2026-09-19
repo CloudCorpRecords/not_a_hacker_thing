@@ -819,6 +819,77 @@ export function useListConfirmedFacts<TData = Awaited<ReturnType<typeof listConf
 
 
 
+export const getListFieldHistoryUrl = (projectId: number,) => {
+
+
+
+
+  return `/api/projects/${projectId}/field-history`
+}
+
+export const listFieldHistory = async (projectId: number, options?: Parameters<typeof customFetch>[1]): Promise<ProductionItem[]> => {
+
+  return customFetch<ProductionItem[]>(getListFieldHistoryUrl(projectId),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getListFieldHistoryQueryKey = (projectId: number,) => {
+    return [
+    `/api/projects/${projectId}/field-history`
+    ] as const;
+    }
+
+
+export const getListFieldHistoryQueryOptions = <TData = Awaited<ReturnType<typeof listFieldHistory>>, TError = ErrorType<unknown>>(projectId: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listFieldHistory>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListFieldHistoryQueryKey(projectId);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listFieldHistory>>> = ({ signal }) => listFieldHistory(projectId, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: projectId !== null && projectId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listFieldHistory>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ListFieldHistoryQueryResult = NonNullable<Awaited<ReturnType<typeof listFieldHistory>>>
+export type ListFieldHistoryQueryError = ErrorType<unknown>
+
+
+
+export function useListFieldHistory<TData = Awaited<ReturnType<typeof listFieldHistory>>, TError = ErrorType<unknown>>(
+ projectId: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listFieldHistory>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getListFieldHistoryQueryOptions(projectId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
 export const getGetProgressSummaryUrl = (projectId: number,) => {
 
 

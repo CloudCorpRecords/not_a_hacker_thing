@@ -231,51 +231,148 @@ One item — this is the USPS mailbox the first detector called potable water:
 — 49 frames, 720px wide, ~70KB each, `image/jpeg`, verified 200. Each one is the actual video frame
 with the detected region outlined.
 
-## Drop-in
+## CORRECTION — read this before you write any code
 
-```tsx
-const BASE = 'https://jymiller.github.io/milbird-walk-the-line';
+An earlier version of this doc (and a note John may have sent you) suggested a ~20-minute
+client-only integration: one new component, mounted in `EvidenceView` gated on
+`evidence.source !== 'field_capture'`. **That does not work, and would have cost you the demo.**
 
-const { proposal, summary, items } = await (await fetch(`${BASE}/api/evidence.json`)).json();
+`source` is `text("source").notNull().default("field_capture")` (`lib/db/src/schema/evidence.ts:58`)
+and that string appears **exactly once in the whole repo**. Nothing in your database has ever had a
+non-default source, so the gate is false for every row and the panel renders against nothing. You
+would add the file, click through, and see an empty pane.
 
-// These are NOT evidence-only. Render them as linked.
-items.forEach(it => {
-  it.linkedTo === proposal.externalId;  // true for all 49
-});
+Two other corrections while I am at it:
+
+- **The NEW badge on the stage cards is dead code.** `ProjectWorkspace.tsx:252` derives it from
+  `captured + queued`. Nothing in the codebase writes either status — the only INSERT hardcodes
+  `needs_review` (`operations.ts:387`), the only UPDATE writes `refused|confirmed` (`:639`). It shows
+  `-` for every work type on every project and always has. **Do not target it.**
+- **`POST /projects/:id/captures` cannot accept our finding.** `quantity: 0` is rejected twice:
+  `zod.number().gt(0)` (`lib/api-zod/src/generated/api.ts:275`) → 400, and `normalizeQuantity`'s
+  `value <= 0 → null` (`operations.ts:49-53`) → 422. Worse, one zero item fails the **whole batch**.
+
+What *does* work: `GET /projects/:projectId/proposals` filters on
+`inArray(status, ["captured","queued","proposed","needs_review"])` with **no quantity predicate**
+(`operations.ts:461-478`), and the ADJUDICATE badge is `reviewBacklog.length` — a **row count**, not a
+sum (`ProjectWorkspace.tsx:204`). So a `proposed` row with quantity 0 is admitted and increments the
+badge. Adjudication is the right surface; the stage cards are not.
+
+---
+
+# The live API
+
+Two hosts, same data. Use whichever suits you.
+
+| | URL | Use it for |
+|---|---|---|
+| **Worker** | `https://walk-the-line-api.john-2ea.workers.dev` | filtering, single-region lookup, recording decisions |
+| **Static** | `https://jymiller.github.io/milbird-walk-the-line/api/` | raw pipeline output, frame images |
+
+Both are CORS-open (`access-control-allow-origin: *`) and need no key.
+
+## The one endpoint that saves you the most work
+
+```
+GET https://walk-the-line-api.john-2ea.workers.dev/v1/checks
 ```
 
-For your extraction panel, swap the two fields:
+Returns the seven classifiers **already shaped as your `EvidenceCheck`** — `{code, passed, severity,
+message}`, exactly the type at `lib/api-spec/openapi.yaml:672-679`. No mapping layer, no transform:
 
-| Your panel shows today | Serve this instead |
+```json
+{ "code": "stroke_width", "passed": true, "severity": "info",
+  "message": "too thick to be a paint stroke — eliminated 51 of 124 regions" }
+```
+
+Nine entries: the seven rules, plus `human_review` (2 escalated, 0 confirmed) and a
+`coverage_partial` **warning** stating this is one pass along one side of one street.
+
+Drop straight into the Deterministic Checks list at `ProjectEvidence.tsx:397-423` — it already renders
+`c.message` with `{c.code} • {c.severity}` beneath, which is exactly this shape.
+
+> `passed` is `true` on every rule deliberately. These are filters that ran and stand, not pass/fail
+> tests of the claim. Marking `on_pavement` "failed" because it fired 98 times would invert its meaning.
+
+## The rest
+
+| Endpoint | Returns |
 |---|---|
-| `CONFIDENCE 0.0500` | `item.verdict` — `"candidate"` or `"rejected"`, plus `item.extraction.rulesFired.length` rules |
-| `IDENTITY MATCH 0.0500` | `item.extraction.colour` + `item.extraction.utilityClass` |
-| `AI EXPLANATION: "The provided evidence is unreadable/blank…"` | `item.explanation` — a derived sentence naming each rule and the number that triggered it |
+| `GET /v1/proposal` | the production proposal — `quantity: 0`, `requiresHumanDecision: true` |
+| `GET /v1/evidence` | 49 exhibits linked to the proposal, plus `source`, `subject`, `coverage` |
+| `GET /v1/evidence?verdict=candidate` | just the 2 that reached a human |
+| `GET /v1/evidence/:regionId` | one region with all seven measurements |
+| `GET /v1/summary` | the funnel — 124 → 122 → 2 → 0 — and provenance |
+| `GET /v1/rules` | the rule bank with its thresholds |
+| `POST /v1/decisions` | **record a signed decision** (see below) |
+| `GET /v1/decisions` | the decision log with its hash chain |
 
-`confidence` is deliberately `null`. A reviewer can argue with *"194.9px against a limit of 15.1"*.
-Nobody can argue with `0.05`.
+`GET /v1/evidence` now answers the four questions your Provenance block asks
+(`ProjectEvidence.tsx:425-452`):
 
-## What the adjudicator is being asked to decide
+```jsonc
+"source":  { "file": "IMG_2104.MOV",
+             "sha256": "6ef6297733a3b39056e248cf08dbf6c93962a683f40e1e5274086593a0a3debf",
+             "capturedAt": "2026-09-19T20:56:56Z", "durationSeconds": 404.1 },
+"subject": { "street": "Pine St, San Francisco", "workTypeCode": "LOCATE",
+             "gpsAnchor": { "lat": 37.7912, "lon": -122.4078, "accuracyMetres": 7.0 } },
+"coverage":{ "kind": "partial",
+             "note": "One pass along one side of one street. Evidence about what the camera saw, not a survey." }
+```
 
-The proposal is `quantity: 0` — **this block has not been marked.** The 49 items are the evidence
-behind that zero: 124 colour-matched regions examined, 122 rejected by named rule, 2 escalated to a
-human, none confirmed. The decision in front of the reviewer is *"do you accept that no utility
-locate marking exists on this segment?"* — and every frame that produced that answer is one click away.
+`subject.workTypeCode` is there so you resolve ids instead of hard-coding them — `workTypeId: 2` is a
+serial surrogate key, not the stage number.
 
-**Watch out:** a `quantity: 0` proposal is easy to render as nothing. If your card logic does
-`{qty && <Badge/>}` or filters `quantity > 0`, our entire finding disappears from the UI. The zero
-is the point — it has to be visible.
+## Recording a decision
 
-## Endpoint summary
+```bash
+curl -X POST https://walk-the-line-api.john-2ea.workers.dev/v1/decisions \
+  -H 'content-type: application/json' \
+  -d '{"decision":"refused","reviewer":"A Name","reason":"Why"}'
+```
 
-| URL | What |
-|---|---|
-| `/api/evidence.json` | **49 adjudicable evidence items**, each linked to the proposal |
-| `/api/stage2.json` | the production proposal itself — `quantity: 0`, `requiresHumanDecision: true` |
-| `/api/summary.json` | the funnel: 124 → 122 rejected → 2 to human → 0 confirmed |
-| `/api/rules.json` | the seven classifiers, thresholds, and how many each rejected |
-| `/api/locates.json` | GeoJSON, all 124 regions with geometry + measurements (for a map layer) |
-| `/frames/tNNNN.jpg` | the frame images, 720px, ~70KB |
+`decision` is `confirmed | refused | corrected`. **A reviewer name is required** — an unsigned decision
+is rejected. **A refusal or correction requires a reason.** Entries are append-only and hash-chained;
+`GET /v1/decisions` re-walks the chain and reports `chainIntact`. Refusals are kept beside
+confirmations, with their reasons, so the record shows judgement being exercised rather than data being
+entered.
 
-Ping John with anything that does not fit your schema — the generator is a 120-line Python file and
-the shape can change in minutes.
+This mirrors what your Postgres trigger already enforces — it exists so the machine-side record has the
+same property, not to replace yours.
+
+## Two ways in, pick by how much time you have
+
+**Fast (client only, ~20 min).** New `WalkTheLinePanel.tsx` that fetches `/v1/summary` and `/v1/checks`
+and renders the funnel plus the nine checks in the Deterministic Checks visual grammar. Mount it in
+`EvidenceView` (`ProjectEvidence.tsx:351-355`) **unconditionally, or behind a `?wtl=1` query param —
+not behind `evidence.source`**, which is the mistake above. It renders immediately with no server work.
+
+**Real (server, ~45–60 min).** New `POST /api/projects/:projectId/external-findings` route that, in one
+transaction, resolves site `PROJECT-{id}` / crew `CREW-C1` / work type `LOCATE` (all seeded in
+`operational-foundation.ts`), inserts a `productionItemsTable` row with `quantity: "0.00"` (the column is
+`numeric(14,2).notNull()` — zero is legal at the DB, `projects.ts:205`) and `status: "proposed"`, writes
+a `productionAuditEventsTable` row with `actor: "pipeline:walk-the-line"`, and inserts an
+`evidenceItemsTable` row with `productionItemId` set and `checks` from `/v1/checks`.
+
+Do **not** route it through `/captures` — see the correction above. The three existing unique indexes on
+`externalId` make re-ingest idempotent for free.
+
+> **Heads up either way:** `productionItemId` must be non-null on the evidence row. If it stays null the
+> item becomes a standalone `ev-` card that dead-ends at *"This evidence is not linked to a production
+> proposal. Adjudication cannot be performed directly."* (`ProjectEvidence.tsx:88-94, 300-303`).
+
+## Context — why the number is zero
+
+The first detector thresholded video frames for APWA locate colours and reported 53 marks. Before
+publishing, we opened the four largest: a red-painted doorstep, a USPS mailbox, a drift of fallen leaves,
+and a STOP sign. A colour threshold answers *"are there orange pixels here"*, not *"is this a locate
+mark"*.
+
+Stage two adds the seven classifiers and rejects 122 of 124. The last two — a wet patch by some leaves,
+and a conference table filmed when the camera kept rolling indoors — a human removed by eye.
+
+**The honest finding is that this block has not been marked.** For a contractor that is the answer that
+stops a crew mobilising over unlocated fibre, and the first version said the opposite.
+
+Full write-up: https://claude.ai/artifact/7zpNEbGd88rbQGuLsEFFBJ
+Pipeline source: https://github.com/jymiller/milbird-walk-the-line

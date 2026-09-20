@@ -97,7 +97,7 @@ type Verdict = 'candidate' | 'rejected';
 interface RegionProps {
   t: number;                 // seconds into the clip
   colour: string;            // orange | red | yellow | green | blue
-  utility: string;           // APWA class, e.g. "communications / fibre"
+  utility: string;           // APWA class, e.g. "communications / fiber"
   area: number;              // px
   bbox: [number, number, number, number];
   verdict: Verdict;
@@ -161,7 +161,7 @@ rejects 122 of 124. The last two — a wet patch by some leaves, and a conferenc
 when the camera kept rolling indoors — a human removed by eye.
 
 The honest finding is that **this block has not been marked**. For a contractor that is the
-answer that stops a crew mobilising over unlocated fibre, and the first version said the
+answer that stops a crew mobilising over unlocated fiber, and the first version said the
 opposite.
 
 Full write-up: https://claude.ai/artifact/7zpNEbGd88rbQGuLsEFFBJ
@@ -230,6 +230,13 @@ One item — this is the USPS mailbox the first detector called potable water:
 **The images are real and they load.** `https://jymiller.github.io/milbird-walk-the-line/frames/tNNNN.jpg`
 — 49 frames, 720px wide, ~70KB each, `image/jpeg`, verified 200. Each one is the actual video frame
 with the detected region outlined.
+
+## Spelling change, 20 Sep — one published value moved
+
+`utility` strings are now US-spelled: **`"communications / fiber"`**, previously
+`"communications / fibre"`. Display text only; nothing in the integration keys on it — you read
+`colour` and `verdict`. Flagging it because it is a change to a published value, not a typo fix,
+so anything matching that exact string stops matching.
 
 ## CORRECTION — read this before you write any code
 
@@ -372,7 +379,7 @@ Stage two adds the seven classifiers and rejects 122 of 124. The last two — a 
 and a conference table filmed when the camera kept rolling indoors — a human removed by eye.
 
 **The honest finding is that this block has not been marked.** For a contractor that is the answer that
-stops a crew mobilising over unlocated fibre, and the first version said the opposite.
+stops a crew mobilising over unlocated fiber, and the first version said the opposite.
 
 Full write-up: https://claude.ai/artifact/7zpNEbGd88rbQGuLsEFFBJ
 Pipeline source: https://github.com/jymiller/milbird-walk-the-line

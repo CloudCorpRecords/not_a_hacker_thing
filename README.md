@@ -14,7 +14,7 @@ Built at [The Executable World](https://luma.com/exruwpkp), San Francisco, 19 Se
 | **Locate API v2** | https://jymiller.github.io/milbird-walk-the-line/api/summary.json — [integration guide](docs/LOCATE_API.md) |
 | **Capture pipeline** | https://github.com/jymiller/milbird-walk-the-line |
 
-A fibre contractor runs eight build stages across hundreds of sites. Seven of the eight reach no
+A fiber contractor runs eight build stages across hundreds of sites. Seven of the eight reach no
 system at all — they happen on paper, and the office finds out weeks later. On the day, we captured
 one of them with a phone, on Pine Street, two blocks from the venue.
 
@@ -67,12 +67,12 @@ the **APWA Uniform Color Code**. The first version of this reported **53 locate 
 >
 > | Frame | The detector said | What it actually was |
 > |---|---|---|
-> | t=97s | orange — communications / fibre, 47,729px | a red-painted doorstep and terracotta tile |
+> | t=97s | orange — communications / fiber, 47,729px | a red-painted doorstep and terracotta tile |
 > | t=359s | blue — potable water, 148,948px | a USPS mailbox |
 > | t=110s | yellow — gas, oil, steam, 6,046px | fallen autumn leaves on a stairway |
 > | t=190s | red — electric, 5,759px | a STOP sign |
 >
-> This README previously said *"orange dominating is what a fibre job should look like — it falls
+> This README previously said *"orange dominating is what a fiber job should look like — it falls
 > out of the colour code, which is why it is evidence rather than decoration."* That was inferred
 > from a tally without opening a single frame. **It is withdrawn.** Orange dominates because San
 > Francisco has a great deal of terracotta.
@@ -107,7 +107,7 @@ trained parameters. The final two — a wet patch beside some leaves, and a conf
 when the camera kept rolling back indoors — a human removed in about ten seconds.
 
 **The finding is that this block has not been marked.** That is not a failed run: it is the answer
-that stops a crew mobilising over unlocated fibre, and the first version said the opposite.
+that stops a crew mobilising over unlocated fiber, and the first version said the opposite.
 
 Detections enter the same write path as every other capture: they land as `proposed` against
 Stage 2, never `confirmed`, and a named reviewer decides. **Every one of those 53 wrong answers was
@@ -323,7 +323,7 @@ The control room builds read models from sold plans, crew-days, production items
 - evidence processing coverage
 - latest capture and confirmation timestamps
 
-Only the `confirmed` quantity is used as actual production. Quantities are aggregated within a work type and its declared unit; metres and each are never combined into one total.
+Only the `confirmed` quantity is used as actual production. Quantities are aggregated within a work type and its declared unit; meters and each are never combined into one total.
 
 ### 8. Provenance drill-down and evidence packs
 
